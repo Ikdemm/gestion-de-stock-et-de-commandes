@@ -1,0 +1,51 @@
+.side{
+    flex: 1;
+    background-color:black;
+    color: white;
+    height: 100vh;
+    width:30vh;
+    text-decoration: none;
+    text-align: left;
+    padding:20px;
+    float: left;
+    margin-right: 100px;
+    
+}
+ul{
+    list-style: none;
+    margin: 0;
+    padding: 0;
+}
+li {
+    display: flex;
+    align-items: center;
+    padding: 5px;
+    cursor: pointer;
+
+   }
+   li:hover {
+    background-color: rgba(9, 255, 0, 0.237);
+  }
+.icon{
+    font-size:18px;
+    color: rgb(9, 255, 0);
+    padding: 8px
+}
+.top {
+    height: 50px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+
+  }
+  .logo {
+    font-size: 20px;
+    font-weight: bold;
+    color: rgb(9, 255, 0);
+    
+  }
+link{
+  text-decoration: 'none';
+  color: white;
+}
