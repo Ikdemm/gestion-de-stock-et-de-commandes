@@ -1,12 +1,14 @@
 const mongoose = require("mongoose");
 const Joi = require("joi");
 Joi.objectId = require("joi-objectid")(Joi);
+const {ObjectId} = mongoose.Schema;
+
 const productSchema = mongoose.Schema({
   title: { type: String, required: true, unique: true },
   description: { type: String, required: false },
   categorie: {
     categorie_id: {
-      type: mongoose.Schema.Types.ObjectId,
+      type: ObjectId,
       ref: "Categorie",
       required: true,
     },
@@ -14,27 +16,13 @@ const productSchema = mongoose.Schema({
   price_a: { type: Number, required: true },
   price_v: { type: Number, required: true },
 
-  stock: {
-    //stock_id: { type: mongoose.Schema.Types.ObjectId, ref: "Stock" },
-      stock_initial:{type:Number, required:true, default:0},
-      quantite_entree:{type: Number, required: true, default:0},
-      quantite_sortie:{type: Number, required: true, default:0} ,
-      stock_final:{type:Number, required:false,
-    default:function(){
-var SF=this.stock_final      
-var SI=this.stock.stock_initial;
-console.log(SI)
-var E=this.stock.quantite_entree;
-console.log(E)
-var S=this.stock.quantite_sortie;
-console.log(S)
-var SF= SI+E-S
-console.log('SF', SF)
-return SF
-    }},
-    stock_min:{type:Number, required:true, default:20},
-    stock_max:{type:Number, required:true, default:100}
-  },
+  stock_initial: { type: Number, required: true, default: 0 },
+  quantite_entree: { type: Number, required: true, default: 0 },
+  quantite_sortie: { type: Number, required: true, default: 0 },
+
+  stock_final: { type: Number, required: false, default:0 },
+  stock_min: { type: Number, required: true, default: 20 },
+  stock_max: { type: Number, required: true, default: 100 },
 });
 /* let product_validator=Joi.object({
     title:Joi.string().required(),
@@ -47,5 +35,18 @@ return SF
     stock_min: Joi.number().integer().positive(),
 })
  */
+
+productSchema.methods.calculStockFinal = function () {
+  SI = this.stock_initial;
+  console.log("SI", SI);
+  E = this.quantite_entree;
+  console.log("E", E);
+  S = this.quantite_sortie;
+  console.log("S", S);
+  SF=SI + E - S
+  console.log("SF", SF);
+  return SF;
+};
+
 module.exports = mongoose.model("Produit", productSchema);
 //module.exports.product_validator= product_validator;

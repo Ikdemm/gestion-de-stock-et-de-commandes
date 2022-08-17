@@ -1,6 +1,6 @@
 const express = require("express");
 const router = express.Router();
-const ligneAchatsCtrl = require("../controllers/lignesAchat");
+const ligneAchatsCtrl = require("../controllers/lignesAvoirAchat");
 
 router.post("/", ligneAchatsCtrl.createLigneAchat);
 router.get("/:id", ligneAchatsCtrl.getLineById);

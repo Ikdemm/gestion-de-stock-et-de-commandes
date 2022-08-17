@@ -1,5 +1,5 @@
-const Facture = require('../models/FactureClient');
-const Line = require("../models/LigneFactureVente");
+const Facture = require('../models/FactAvoirSurVente');
+const Line = require("../models/LigneAvoirVente");
 const _ = require("lodash");
 
 

@@ -1,10 +1,12 @@
 const mongoose = require('mongoose');
-const Produit = require('../models/Produit')
+const Produit = require('../models/Produit');
+const {ObjectId} = mongoose.Schema;
+
 const categorieSchema= new mongoose.Schema({
     name:{type:String, required : true},
     nb_produits:{type:Number, default:0},
     produits:[
-        {type: mongoose.Schema.Types.ObjectId ,ref: 'Produit' }
+        {type:ObjectId ,ref: 'Produit' }
     ]
     
 })

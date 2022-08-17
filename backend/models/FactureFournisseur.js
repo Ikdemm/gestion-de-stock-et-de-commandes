@@ -1,32 +1,50 @@
 const mongoose = require("mongoose");
+const moment= require("moment")
+const Ligne = require('../models/LigneFactureAchat')
+const crypto = require("crypto");
+const {ObjectId} = mongoose.Schema;
+
 const factureAchatSchema = new mongoose.Schema({
-  numFacture: { type: String, required: true },
-  dateFacture: { type: Date, default: Date.now },
-  fournisseur_id: { type: mongoose.Schema.Types.ObjectId, ref: "Fournisseur" },
+  numFacture: { type: String, required: true , default:function(){
+    return "FACT"+crypto.randomBytes(10).toString("hex")
+  }},
+  dateFacture: { type: Date,required: true, default:function(){
+    return moment().format('ll');
+
+   }},
+  fournisseur_id: { type: ObjectId, ref: "Fournisseur" },
   articles: [
     {
-      ligne_id: { type: mongoose.Schema.Types.ObjectId, ref: "LigneCdeAchat" },
-      total: { type: Number, required: true },
+      ligne_id: { type: ObjectId, ref: "LigneCdeAchat" },
+     total: { type: Number, required: true }, 
     },
   ],
-  net_a_payer: {
-    type: Number,
-    required: false,
-    default: function () {
-      this.net_a_payer = 0;
-      if (this.articles.length > 0) {
-        for (i = 0; i < articles.total.length; i++)
-           (this.net_a_payer += this.articles.total);
-      } else  (this.net_a_payer = 0);
-return this.net_a_payer
-    },
-  },
-  dateEcheance: { type: Date, required: false },
+  frais_de_livraison: {type: Number,required: false, default:0},
+  net_a_payer: {type: Number,required: false, default:0},
+  dateEcheance: { type: Date, required: false},
   mode_de_paiement: {
     type: String,
     required: true,
     enum: ["Comptant", "à crédit", "autres"],
     default: "Comptant",
   },
+
 });
+factureAchatSchema.pre('remove', async function(next){
+  const facture= this
+  await Ligne.deleteMany({facture_id:facture._id})
+  next()
+})
+factureAchatSchema.methods.calculNetaPayer=function () {
+   let sum = 0;
+    if (this.articles.length > 0) {
+      console.log('length', this.articles.length)
+      for (i = 0; i < this.articles.length; i++) { 
+        console.log('ssss',this.articles[i].total) 
+        sum += this.articles[i].total}
+    } 
+    console.log('sum', sum)
+return sum +this.frais_de_livraison
+  }
+
 module.exports = mongoose.model("FactureAchat", factureAchatSchema);

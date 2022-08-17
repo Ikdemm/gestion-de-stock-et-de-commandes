@@ -1,6 +1,6 @@
 const express = require("express");
 const router = express.Router();
-const factVenteCtrl = require("../controllers/factures_vente");
+const factVenteCtrl = require("../controllers/avoirs_vente");
 
 router.post("/", factVenteCtrl.createInvoice);
 router.get("/:id", factVenteCtrl.getInvoiceById);

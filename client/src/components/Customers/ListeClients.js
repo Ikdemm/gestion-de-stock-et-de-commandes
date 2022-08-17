@@ -1,9 +1,10 @@
 import React, { useContext } from 'react'
 import styles from '../Liste.module.css'
 import  '../Form.module.css'
-import { FaEdit ,FaTrash } from 'react-icons/fa';
+//import { FaEdit ,FaTrash } from 'react-icons/fa';
 import { Link } from 'react-router-dom';
 import { clientCtx } from './../../store/clientContext';
+import OneCustomer from './OneCustomer';
 
 export default function ListeClients() {
   let cctx=useContext(clientCtx)
@@ -23,17 +24,7 @@ export default function ListeClients() {
 
   {
       listeC.map((c)=>{
-        return <tr>
-          <td>{c.nom_complet} </td>
-          <td>{c.numero_de_tel} </td>
-          <td>{c.adresse} </td>
-          <td >
-        <FaEdit  />
-      </td>
-      <td>
-        <FaTrash/>
-      </td>
-        </tr>
+        return <OneCustomer client={c} key={c._id}></OneCustomer>
       })
     }
 

@@ -1,12 +1,10 @@
 const mongoose = require('mongoose');
+
 const clientSchema= new mongoose.Schema({
     nomClient: {type: String, required:true},
-    numero_de_tel:{type: Number, required:true},
+    numero_de_tel:{type: Number, required:true, unique:true, length:8},
     adresse: {type: String, required:true},
-    email: {type: String, required:true},
-    commandes:[
-        {type: mongoose.Schema.Types.ObjectId ,ref: 'FactureVente' }
-    ]
+    email: {type: String, required:true, unique:true}
   
 })
 

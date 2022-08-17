@@ -1,22 +1,16 @@
 const mongoose = require("mongoose");
+const {ObjectId} = mongoose.Schema;
+
 const LigneArticleVenteSchema = new mongoose.Schema({
   article: {
-    article_id: { type: mongoose.Schema.Types.ObjectId, ref: "Produit" },
-    title: { type: String, required: false },
-    price_v: { type: Number, required: false },
-    qte_en_stock: { type: Number, required: false },
+    article_id: { type: ObjectId, ref: "Produit" }
   },
-  quantite: { type: Number, required: true, default: 1 },
-  total: {
-    type: Number,
-    required: false,
-    default: function () {
-   
-      return this.article.price_v * this.quantite;
-    },
-  },
-
-  facture_id: { type: mongoose.Schema.Types.ObjectId, ref: "FactureVente" },
+  quantite_s: { type: Number, required: true, default: 1 },
+  total: { type: Number,  required: false },
+  facture_id: { type: ObjectId, ref: "FactureVente" },
 });
-
+LigneArticleVenteSchema.methods.calculTotal=function(){
+ 
+  return this.article.price_a * this.quantite_a
+}
 module.exports = mongoose.model("LigneCdeVente", LigneArticleVenteSchema);

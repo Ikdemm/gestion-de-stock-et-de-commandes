@@ -3,9 +3,9 @@ import { createContext, useState } from "react";
 export const fournisseurtCtx = createContext({
   tabFournisseurs: [],
   addNewFournisseur: () => {},
-  //removeOneFournisseur: () => {},
+  removeOneFournisseur: () => {},
   getFournisseurById: () => {},
-  //updateFournisseur: () => {},
+  updateFournisseur: () => {},
   getAllFournisseurs: () => {},
 });
 

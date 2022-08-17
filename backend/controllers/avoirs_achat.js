@@ -1,5 +1,5 @@
-const Facture = require("../models/FactureFournisseur");
-const Line = require("../models/LigneFactureAchat");
+const Facture = require("../models/FactAvoirSurAchat");
+const Line = require("../models/LigneAvoirAchat");
 const _ = require("lodash");
 exports.createInvoice = async (req, res) => {
   let newFacture = new Facture(req.body);

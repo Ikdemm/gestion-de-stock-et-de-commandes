@@ -1,10 +1,12 @@
 const mongoose = require('mongoose');
-const Employee =require('../models/Employe')
+const Employee =require('../models/Employe');
+const {ObjectId} = mongoose.Schema;
+
 const directionSchema= new mongoose.Schema({
     name: {type:String, required : true},
     nb_employes:{type:Number, default:0},
     employes:[
-        {type: mongoose.Schema.Types.ObjectId ,ref: 'Employe' }]
+        {type:ObjectId ,ref: 'Employe' }]
 })
 directionSchema.pre('remove', async function(next){
     const direction= this

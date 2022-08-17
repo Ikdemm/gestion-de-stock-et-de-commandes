@@ -1,5 +1,4 @@
 var Categorie = require('../models/Categorie');
-
 const _ = require('lodash');
 
 exports.createCategorie =  (req, res, next) => {
@@ -25,11 +24,9 @@ exports.getAllCategories= async (req, res) => {
 catch (err) {
     console.log(err);
 }
-   
   };
 exports.getOneCategorie= async (req, res)=>{
   const cId = req.params.id;
-
   Categorie.findById(cId)
       .then(categorie => {
           if (!categorie) {
@@ -42,7 +39,6 @@ exports.getOneCategorie= async (req, res)=>{
       .catch(err => {
           console.log(err);
       })
-
 }
 exports.updateCategory= (req,res)=>{
   const cId= req.params['id'];
@@ -54,7 +50,6 @@ exports.updateCategory= (req,res)=>{
         throw error;
     }
     categorie = _.merge(categorie, req.body)
-
     return categorie.save();
 }) 
 .then(result => {
@@ -69,24 +64,13 @@ exports.updateCategory= (req,res)=>{
 }
 exports.deleteCategory= async (req, res) => {
   try {
- 
     if (!req.params.id) res.send("missing id");
     else {
-    
-
      const categoryToDelete = await Categorie.findById(req.params.id);
-    
       await categoryToDelete.remove();
-
-      res.send("category deleted");
-
-  
+      res.send("Category and all products deleted");
   }
-
   } catch (error) {
     res.status(400).json({ error: error.message });
   }
-
-
-
 }

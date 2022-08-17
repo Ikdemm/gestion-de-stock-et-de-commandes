@@ -3,19 +3,15 @@ const Categorie = require("../models/Categorie");
 const Joi = require("joi");
 Joi.objectId = require("joi-objectid")(Joi);
 //const produit_validator = require("../models/Produit");
-const Stock = require("../models/Stock")
 const _ = require("lodash");
-
+//const Stock = require("../models/Stock");
 
 //creer un nouveau produit
 exports.createProduit = async (req, res) => {
- /*  let res_validation = produit_validator.validate(req.body);
+  /*  let res_validation = produit_validator.validate(req.body);
   if (res_validation.error)
     return res.status(400).send(res_validation.error.details[0].message); */
-/*  let stockId=  req.body.stock_id;
-  console.log('L1' , stockId);
-  let stock=await Stock.findById(stockId); */
- // console.log('L2' , stock); 
+
   let categorieId = req.body.categorie;
   let categorie = await Categorie.findById(categorieId);
   if (!categorie) return res.status(400).send("Categorie Id not Found");
@@ -25,7 +21,13 @@ exports.createProduit = async (req, res) => {
     description: req.body.description,
     price_a: req.body.price_a,
     price_v: req.body.price_v,
-    stock:req.body.stock,
+    stock_initial: req.body.stock_initial,
+    quantite_entree: req.body.quantite_entree,
+    quantite_sortie: req.body.quantite_sortie,
+    stock_final: req.body.stock_final,
+    stock_min: req.body.stock_min,
+    stock_max: req.body.stock_max,
+
     categorie: {
       categorie_id: categorie._id,
     },
@@ -57,19 +59,17 @@ exports.updateOneProduit = async (req, res) => {
   var old_category_id;
   var category;
   let produit = await Produit.findById(req.params.id);
-  if (!produit) 
-       return res.status(404).send(`Product with this id is missing`);
+  if (!produit) return res.status(404).send(`Product with this id is missing`);
 
   if (req.body.categorie.categorie_id) {
     old_category_id = produit.categorie.categorie_id;
-    category = await Categorie.findById(req.body.categorie.categorie_id)
+    category = await Categorie.findById(req.body.categorie.categorie_id);
     if (!category)
       return res.status(400).send(`Category not found for the given ID`);
   }
 
   produit = _.merge(produit, req.body);
   try {
-  
     const saved_produit = await produit.save();
     category.nb_produits += 1;
     await category.save();
@@ -86,12 +86,10 @@ exports.updateOneProduit = async (req, res) => {
 exports.deleteOneProduit = async (req, res) => {
   const produit = await Produit.findByIdAndRemove({ _id: req.params.id });
   if (!produit)
-    return res
-      .status(404)
-      .json({
-        message:
-          "Aucun produit est trouvé avec cet ID, veuillez vérifier le ID !",
-      });
+    return res.status(404).json({
+      message:
+        "Aucun produit est trouvé avec cet ID, veuillez vérifier le ID !",
+    });
   const category = await Categorie.findById(produit.categorie.categorie_id);
   category.nb_produits -= 1;
   var index = category.produits.indexOf((emp) => emp.id == _id);
