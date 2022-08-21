@@ -46,26 +46,33 @@ exports.getAllLignes= async(req, res)=>{
 }
 
 exports.deleteOneLine = async(req,res)=>{ 
-    let articleId = req.body.article_id;
-    //console.log('L3', articleId)
+    //const line=await Ligne.findByIdAndRemove({ _id: req.params.id });
+    const line=await Ligne.findOne({ _id: req.params.id });
+    console.log('ligne',line)
+    let articleId = line.article.article_id;
+    console.log('articleId', articleId)
     let article = await Produit.findById(articleId)
-    const line=await Ligne.findByIdAndRemove({ _id: req.params.id });
-    //console.log('ligne',line)
+    console.log('article', article)
     if(!line){
      res.status(404).json({ message: "Aucune ligne d'achat n'est trouvée avec cet ID, veuillez vérifier le ID !"});
     }
-    
-    const invoice =await Facture.findById(line.facture_id);
-    //console.log('invoice1',invoice)
-    var index = invoice.articles.indexOf(ligne=>ligne.id==_id);
-    invoice.articles.splice(index);
-    invoice.net_a_payer=invoice.calculNetaPayer();
-    article.quantite_entree-=line.quantite_a;
-    article.stock_final=article.calculStockFinal()
-    await article.save()
-    await invoice.save();
-    //console.log('invoice2',invoice)
-    res.send(line)
+    try{
+        const invoice =await Facture.findById(line.facture_id);
+        //console.log('invoice1',invoice)
+        var index = invoice.articles.indexOf(ligne=>ligne.id==_id);
+        invoice.articles.splice(index);
+        invoice.net_a_payer=invoice.calculNetaPayer();
+        article.quantite_entree-=line.quantite_a;
+        article.stock_final=article.calculStockFinal()
+        await article.save()
+        await invoice.save();
+        await line.remove();
+        //console.log('invoice2',invoice)
+        res.send(line)
+    } catch (err) {
+        res.status(400).send(`Error : ${err.message}`);
+      }
+
 }
  //update ligne d'achat
 exports.updateOneLine= async (req, res)=>{
@@ -163,5 +170,5 @@ exports.getLineById= async (req,res)=>{
     let line = await Ligne.findById(req.params.id)
     if(!line)
     return res.status(404).send('line not found')
-    res.sen(line)
+    res.send(line)
 }

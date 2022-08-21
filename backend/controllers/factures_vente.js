@@ -26,8 +26,8 @@ exports.updateInvoice = async (req, res) => {
           error.statusCode = 404;
           throw error;
       }
-   
       f = _.merge(f, req.body)
+      f.net_a_payer=f.calculNetaPayer()
 
       return f.save();
   })
@@ -39,6 +39,10 @@ exports.updateInvoice = async (req, res) => {
   })
   .catch(err => {
       console.log(err);
+      res.status(400).json({
+        message: err
+        
+    });
   })
 
   

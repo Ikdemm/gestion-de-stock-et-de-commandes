@@ -1,41 +1,74 @@
-const bcrypt = require("bcrypt");
-const User = require('../models/User')
-
+const bcrypt = require("bcryptjs");
+const User = require("../models/User");
 const jwt = require("jsonwebtoken");
-exports.signup = (req, res, next) => {
-  bcrypt.hash(req.body.password, 10)
-    .then(hash => {
-      const user = new User({
-        email: req.body.email,
-        role:req.body.role,
-        password: hash
-      });
-      user.save()
-        .then(() => res.status(201).json({ message: 'Utilisateur créé !' }))
-        .catch(error => res.status(400).json({ error }));
-    })
-    .catch(error => res.status(500).json({ error }));
-};
-exports.login = (req, res, next) => {
-  User.findOne({ email: req.body.email })
-    .then((user) => {
-      if (!user) {
-        return res.status(401).json({ error: "Utilisateur non trouvé !" });
-      }
-      bcrypt
-        .compare(req.body.password, user.password)
-        .then((valid) => {
-          if (!valid) {
-            return res.status(401).json({ error: "Mot de passe incorrect !" });
-          }
-          res.status(200).json({
-            userId: user._id,
-            token: jwt.sign({ userId: user._id }, "RANDOM_TOKEN_SECRET", {
-              expiresIn: "24h",
-            }),
-          });
+
+exports.register = (req, res) => {
+    const email = req.body.email;
+    const password = req.body.password;
+    const role = req.body.role;
+
+    bcrypt.hash(password, 12)
+        .then(hashedPwd => {
+            const user = new User({
+                email: email,
+                role: role,
+                password: hashedPwd
+            });
+            console.log(user);
+            return user.save();
         })
-        .catch((error) => res.status(500).json({ error }));
-    })
-    .catch((error) => res.status(500).json({ error }));
-};
+        .then(result => {
+            res.status(201).json({
+                message: 'User successfully created',
+                userId: result['_id'],
+                user: result
+            })
+        })
+        .catch(err => {
+            console.log(err);
+        })
+}
+
+exports.login = (req, res, next) => {
+    const email = req.body.email;
+    const password = req.body.password;
+
+    User.findOne({ email: email })
+        .then(u => {
+            if (!u) {
+                const error = new Error("A user with this mail could not be found");
+                error.statusCode = 401;
+                throw error;
+            }
+            loadedUser = u;
+            return bcrypt.compare(password, loadedUser.password)
+        })
+        .then(isEqual => {
+            if (!isEqual) {
+                const error = new Error("Wrong Password");
+                error.statusCode = 401;
+                throw error;
+            }
+            const token = jwt.sign({
+                email: loadedUser.email,
+                userId: loadedUser._id.toString()
+            }, 'supersecretcode', { expiresIn: '12h' });
+            res.status(200).json({
+                message: 'User Logged',
+                token: token
+            })
+
+        })
+        .catch(err => {
+            console.log(err);
+            next();
+        })
+
+
+/* exports.logout=(req, res)=>{
+    res.clearCookie("jwt", {path : '/'})
+    res.status(200).send("User Logged Out")
+  } */
+
+
+}

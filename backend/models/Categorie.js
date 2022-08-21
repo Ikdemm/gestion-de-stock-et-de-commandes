@@ -3,7 +3,7 @@ const Produit = require('../models/Produit');
 const {ObjectId} = mongoose.Schema;
 
 const categorieSchema= new mongoose.Schema({
-    name:{type:String, required : true},
+    name:{type:String, required : true, unique:true},
     nb_produits:{type:Number, default:0},
     produits:[
         {type:ObjectId ,ref: 'Produit' }

@@ -7,11 +7,11 @@ const LigneAvoirVenteSchema = new mongoose.Schema({
   },
   quantite_s: { type: Number, required: true, default: 1 },
   total: {type: Number, required: false},
-  avoir_id: { type: mongoose.Schema.Types.ObjectId, ref: "FactureVente" },
+  avoir_id: { type: mongoose.Schema.Types.ObjectId, ref: "AvoirVente" },
 
   
 });
-LigneArticleAchatSchema.methods.calculTotal=function(){
+LigneAvoirVenteSchema.methods.calculTotal=function(){
  
           return this.article.price_a * this.quantite_a
 }

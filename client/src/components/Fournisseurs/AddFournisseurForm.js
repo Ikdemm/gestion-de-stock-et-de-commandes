@@ -1,11 +1,8 @@
-import React, { useContext, useId, useRef } from 'react'
-import styles from '../Liste.module.css'
-import  '../Form.module.css'
+import React, { useContext, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { fournisseurtCtx } from '../../store/fournisseurContext';
 
 export default function AddFournisseurForm() {
-  const idGenerate=useId();
   let navigate= useNavigate()
   const fctx=useContext(fournisseurtCtx)
   const refNom=useRef('')
@@ -14,16 +11,16 @@ export default function AddFournisseurForm() {
   function submitHandler(e){
     e.preventDefault()
     let newFournisseur={
-      id: idGenerate,
       nom_commercial: refNom.current.value,
       numero_de_tel: refTel.current.value,
       adresse: refAdresse.current.value,
           }
+          
        fctx.addNewFournisseur(newFournisseur)
        navigate('/listFournisseurs')
   }
   return (
-    <div className={styles.container}>  
+    <div>  
       <p>Ajouter un fournisseur</p>
       <form onSubmit={submitHandler} method="post">
         <label htmlFor='nom_commercial' >Nom Commercial</label><br/>

@@ -22,7 +22,7 @@ const champsCommandeSchema = new Schema({
   commentaire: { type: String, required: false },
 });
 const commandeFournisseurSchema = new Schema({
-  champs: [champsCommandeSchema],
+  champs: champsCommandeSchema ,
   fournisseur_id: { type: ObjectId, ref: "Fournisseur" },
   articles: [
     {

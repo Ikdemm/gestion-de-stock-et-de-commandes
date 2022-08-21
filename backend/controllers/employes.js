@@ -1,8 +1,8 @@
 const Employe = require ("../models/Employe");
 const Direction = require("../models/Direction");
 const Joi = require('joi');
-Joi.objectId = require('joi-objectid')(Joi);
-const employe_validator = require("../models/Employe");
+//Joi.objectId = require('joi-objectid')(Joi);
+//const employe_validator = require("../models/Employe");
 //const id_not_valid_fun = require("../models/Employe");
 const fs = require('fs');
 const _ = require('lodash');
@@ -11,28 +11,28 @@ const _ = require('lodash');
 //creer un nouveau employé
 exports.createEmploye = async (req, res) => {
   
-  let res_validation= employe_validator.validate(req.body);
+/*   let res_validation= employe_validator.validate(req.body);
   if(res_validation.error)
-  return res.status(400).send(res_validation.error.details[0].message)
+  return res.status(400).send(res_validation.error.details[0].message)  */
   let directionId= req.body.direction;
-  console.log(directionId)
+  console.log("directionId",directionId)
   let direction =await Direction.findById(directionId);
-  console.log(direction)
+  console.log("direction",direction)
   if(!direction)
-  return  res.status(400).send('Direction Id not Found');
+  return  res.status(400).send('Direction Id not Found'); 
    var newEmploye = new Employe({
     nom: req.body.nom,
     prenom:req.body.prenom,
-    imageUrl: `${req.protocol}://${req.get('host')}/images/employes/${req.file.filename}`,
+    //imageUrl: `${req.protocol}://${req.get('host')}/images/employes/${req.file.filename}`,
+    imageUrl: req.file.filename,
     adresse:req.body.adresse,
-    date_de_naissance:new Date (req.body.date_de_naissance),
-    date_de_recrutement:new Date (req.body.date_de_recrutement),
+    date_de_naissance:req.body.date_de_naissance,
+    date_de_recrutement:req.body.date_de_recrutement,
+    numCIN:req.body.numCIN,
     poste :req.body.poste,
-    active:req.body.active,
     direction: {
-                direction_id:direction._id ,
-                name: direction.name
-              }
+                direction_id:directionId
+              } 
   }) 
 
  try{
@@ -41,10 +41,11 @@ exports.createEmploye = async (req, res) => {
     direction.nb_employes+=1;
     direction.employes.push(saved_employee);
     await direction.save();
-    res.status(201).json({ message: 'Le nouveau employé est bien ajouté !'})
+    res.status(201).json({ message: 'Le nouveau employé est bien ajouté !', result: saved_employee})
    
 }catch(err){
-  res.status(400).send(`Error : ${err.message}`);
+  console.log("employee not submitted",err)
+  //res.status(400).send(`Error : ${err.message}`);
 }
 } 
  
@@ -66,13 +67,14 @@ exports.updateOneEmploye=(req,res,next)=>{
         prenom:req.body.prenom,
         imageUrl: `${req.protocol}://${req.get('host')}/images/employes/${req.file.filename}`,
         adresse:req.body.adresse,
-        date_de_naissance:new Date (req.body.date_de_naissance),
-        date_de_recrutement:new Date (req.body.date_de_recrutement),
+        date_de_naissance:req.body.date_de_naissance,
+        date_de_recrutement:req.body.date_de_recrutement,
         poste :req.body.poste,
         active:req.body.active,
+        numCIN:req.body.numCIN,
         direction: {
           direction_id:direction._id ,
-          name: direction.name
+      
         }
        
     } : { ...req.body };

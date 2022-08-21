@@ -20,7 +20,7 @@ const AvoirtAchatRoutes= require('./routers/AvoirSurAchat');
 const AvoirLigneAchatRoutes= require('./routers/LigneAvoirAchat');
 const AvoirFactVenteRoutes= require('./routers/AvoirVente');
 const AvoirLigneVenteRoutes= require('./routers/LigneAvoirVente');
-//const cmdFrsRoutes= require('./routers/commandeFournisseurs');
+const cmdFrsRoutes= require('./routers/commandeFournisseurs');
 const userRoutes=require('./routers/users');
 
 var cors = require('cors');
@@ -45,24 +45,36 @@ app.use((req, res, next) => {
 
 
 app.use('/images/', express.static(path.join(__dirname, 'images/')));
+app.get("/getfile/:imageUrl", function (req, res) {
+  res.sendFile(__dirname + "/images/employes/" + req.params.imageUrl);
+});
+/*--------------------------GESTION DES UTILISATEURS-----------------------------------*/
+app.use('/api/auth', userRoutes);
 app.use('/api/staff',staffRoutes);
+app.use('/api/demandes',demandesRoutes);
 app.use('/api/directions',directionRoutes);
+
+//gestion des catégories
+app.use('/api/categories',categoriesRoutes);
+//gestion des produits
+app.use('/api/produits',produitsRoutes);
+app.use('/api/commandes/achat',cmdFrsRoutes);
+/*--------------------------GESTION DES FACTURES-----------------------------------*/
 app.use('/api/fournisseurs',FrsRoutes);
 app.use('/api/clients',ClientsRoutes);
-app.use('/api/demandes',demandesRoutes);
-app.use('/api/appelDoffres',appelDoffresRoutes);
-app.use('/api/categories',categoriesRoutes);
-app.use('/api/produits',produitsRoutes);
-//app.use('/api/commandes/achat',cmdFrsRoutes);
+//gestion des factures d'achats
 app.use('/api/factures/achat',FactAchatRoutes);
 app.use('/api/achat/addToInvoice',LigneAchatRoutes);
+//gestion des factures de ventes
 app.use('/api/factures/vente',FactVenteRoutes);
 app.use('/api/vente/addToInvoice',LigneVenteRoutes);
-
+//gestion des appels d'offres
+app.use('/api/appelDoffres',appelDoffresRoutes);
+//gestion des factures AVOIR sur les achats
 app.use('/api/avoirs/achat',AvoirtAchatRoutes);
 app.use('/api/avoirSurachat/addToInvoice',AvoirLigneAchatRoutes);
+//gestion des factures AVOIR sur les ventes
 app.use('/api/avoirs/vente',AvoirFactVenteRoutes);
 app.use('/api/avoirSurvente/addToInvoice',AvoirLigneVenteRoutes);
-app.use('/api/auth', userRoutes);
 
 app.listen(port, ()=> console.log(`Server is listening on ${port}`));

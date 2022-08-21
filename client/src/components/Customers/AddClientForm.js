@@ -1,11 +1,9 @@
-import React, { useContext, useId, useRef } from 'react'
-import styles from '../Liste.module.css'
-import  '../Form.module.css'
+import React, { useContext, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { clientCtx } from './../../store/clientContext';
 
 export default function AddClientForm() {
-  const idGenerate=useId();
+
   let navigate= useNavigate()
   const cctx=useContext(clientCtx)
   const refNom=useRef('')
@@ -14,7 +12,6 @@ export default function AddClientForm() {
   function submitHandler(e){
     e.preventDefault()
     let newClient={
-      id: idGenerate,
       nom_complet: refNom.current.value,
       numero_de_tel: refTel.current.value,
       adresse: refAdresse.current.value,
@@ -23,7 +20,7 @@ export default function AddClientForm() {
        navigate('/listClients')
   }
   return (
-    <div className={styles.container}>  
+    <div>  
       <p>Ajouter un client</p>
       <form onSubmit={submitHandler} method="post">
         <label htmlFor='nom_complet' >Nom Complet</label><br/>

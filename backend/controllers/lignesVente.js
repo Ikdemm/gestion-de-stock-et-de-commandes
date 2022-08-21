@@ -6,9 +6,9 @@ exports.createLigneVente= async(req, res)=>{
     let factureId = req.body.facture_id;
     let facture = await Facture.findById(factureId);
     let articleId = req.body.article_id;
-    //console.log(articleId)
+    console.log("articleId",articleId)
     let article= await Produit.findById(articleId)
-    //console.log(produit)
+    console.log("article",article)
     let prixDeVente= article.price_v
     if(!facture)
     return res.status(400).send("Cet Id de facture de vente n'existe pas")
@@ -18,10 +18,10 @@ exports.createLigneVente= async(req, res)=>{
       
     },
     quantite_s:req.body.quantite_s,
-    total:prixDeVente * req.body.quantite_a,
+    total:prixDeVente * req.body.quantite_s,
     facture_id:req.body.facture_id
 })
-if(newLigne.article.stock_final>=newLigne.quantite_s){
+if(article.stock_final>=newLigne.quantite_s){
     try{
 
         const saved_Line= await newLigne.save() ;
@@ -41,7 +41,7 @@ if(newLigne.article.stock_final>=newLigne.quantite_s){
 
 else  
 //console.log({message: `La quantité commandée : ${newLigne.quantite} est supérieure à la quantité en stock : ${newLigne.article.qte_en_stock}`});
-return res.status(400).send(`La quantité commandée : ${newLigne.quantite} est supérieure à la quantité en stock : ${newLigne.article.qte_en_stock}`);
+return res.status(400).send(`La quantité commandée : ${newLigne.quantite_s} est supérieure à la quantité en stock : ${article.stock_final}`);
 }
 
 
@@ -51,26 +51,33 @@ exports.getAllLignes= async(req, res)=>{
     res.send(lignes)
 }
 exports.deleteOneLine = async(req,res)=>{ 
-    let articleId = req.body.article_id;
-    //console.log('L3', articleId)
+    const line=await Ligne.findOne({ _id: req.params.id });
+    console.log('ligne',line)
+    let articleId = line.article.article_id;
+    console.log('articleId', articleId)
     let article = await Produit.findById(articleId)
-    const line=await Ligne.findByIdAndRemove({ _id: req.params.id });
-    //console.log('ligne',line)
+    console.log('article', article)
     if(!line){
      res.status(404).json({ message: "Aucune ligne de vente n'est trouvée avec cet ID, veuillez vérifier le ID !"});
     }
-    
-    const invoice =await Facture.findById(line.facture_id);
-    //console.log('invoice1',invoice)
-    var index = invoice.articles.indexOf(ligne=>ligne.id==_id);
-    invoice.articles.splice(index);
-    invoice.net_a_payer=invoice.calculNetaPayer();
-    article.quantite_sortie-=line.quantite_s;
-    article.stock_final=article.calculStockFinal()
-    await article.save()
-    await invoice.save();
-    //console.log('invoice2',invoice)
-    res.send(line)
+    try{
+        const invoice =await Facture.findById(line.facture_id);
+        //console.log('invoice1',invoice)
+        var index = invoice.articles.indexOf(ligne=>ligne.id==_id);
+        invoice.articles.splice(index);
+        invoice.net_a_payer=invoice.calculNetaPayer();
+        article.quantite_sortie-=line.quantite_s;
+        article.stock_final=article.calculStockFinal()
+        await article.save()
+        await invoice.save();
+        await line.remove();
+        //console.log('invoice2',invoice)
+        res.send(line)
+    } catch (err) {
+        res.status(400).send(`Error : ${err.message}`);
+      }
+
+
 }
 //update ligne d'achat
 exports.updateOneLine= async (req, res)=>{
@@ -101,7 +108,7 @@ exports.updateOneLine= async (req, res)=>{
          console.log('total 1',line.total)
          line.article.article_id=produit
          line.total=0;
-         line.total=produit.price_a*line.quantite_s
+         line.total=produit.price_v*line.quantite_s
          var saved_Line = await line.save()
          var indexOfLine= invoice.articles.findIndex((l) => l.id == saved_Line._id)
          console.log('indexOfLine',indexOfLine)
@@ -167,6 +174,6 @@ exports.updateOneLine= async (req, res)=>{
      let line = await Ligne.findById(req.params.id)
      if(!line)
      return res.status(404).send('line not found')
-     res.sen(line)
+     res.send(line)
  }
  

@@ -2,7 +2,7 @@ const mongoose = require('mongoose');
 
 const clientSchema= new mongoose.Schema({
     nomClient: {type: String, required:true},
-    numero_de_tel:{type: Number, required:true, unique:true, length:8},
+    numero_de_tel:{type: Number, required:true, unique:true},
     adresse: {type: String, required:true},
     email: {type: String, required:true, unique:true}
   

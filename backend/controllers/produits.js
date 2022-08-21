@@ -12,7 +12,7 @@ exports.createProduit = async (req, res) => {
   if (res_validation.error)
     return res.status(400).send(res_validation.error.details[0].message); */
 
-  let categorieId = req.body.categorie;
+  let categorieId = req.body.categorie_id;
   let categorie = await Categorie.findById(categorieId);
   if (!categorie) return res.status(400).send("Categorie Id not Found");
 
@@ -56,33 +56,44 @@ exports.getOneProduit = (req, res, next) => {
 };
 //modifier un employé
 exports.updateOneProduit = async (req, res) => {
-  var old_category_id;
-  var category;
+ 
   let produit = await Produit.findById(req.params.id);
   if (!produit) return res.status(404).send(`Product with this id is missing`);
 
-  if (req.body.categorie.categorie_id) {
-    old_category_id = produit.categorie.categorie_id;
-    category = await Categorie.findById(req.body.categorie.categorie_id);
-    if (!category)
+  if (req.body.categorie_id) {
+
+    let old_category_id = produit.categorie.categorie_id;
+    console.log("old_category_id",old_category_id)
+
+    let old_category=await Categorie.findById(old_category_id);
+    console.log("old_category",old_category)
+    old_category.nb_produits -= 1;
+    let index=old_category.produits.indexOf((p)=>p.id==produit._id);
+    old_category.produits.splice(index)
+    await old_category.save()
+    console.log("old_category_id",old_category_id)
+    let newCategory = await Categorie.findById(req.body.categorie_id);
+    newCategory.nb_produits += 1;
+    newCategory.produits.push(produit)
+    produit.categorie.categorie_id=newCategory;
+    await newCategory.save()
+
+    console.log("category",newCategory)
+    if (!newCategory)
       return res.status(400).send(`Category not found for the given ID`);
   }
 
   produit = _.merge(produit, req.body);
   try {
-    const saved_produit = await produit.save();
-    category.nb_produits += 1;
-    await category.save();
-    //decrement of products in category
-    category = await Categorie.findById(old_category_id);
-    category.nb_produits -= 1;
-    await category.save();
-    res.status(200).send(saved_produit);
+
+    await produit.save();
+
+    res.status(200).send(produit);
   } catch (err) {
     res.status(400).send(`Error : ${err.message}`);
   }
 };
-//supprimer un employé
+//supprimer un produit
 exports.deleteOneProduit = async (req, res) => {
   const produit = await Produit.findByIdAndRemove({ _id: req.params.id });
   if (!produit)

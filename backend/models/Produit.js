@@ -16,11 +16,13 @@ const productSchema = mongoose.Schema({
   price_a: { type: Number, required: true },
   price_v: { type: Number, required: true },
 
-  stock_initial: { type: Number, required: true, default: 0 },
-  quantite_entree: { type: Number, required: true, default: 0 },
-  quantite_sortie: { type: Number, required: true, default: 0 },
+  stock_initial: { type: Number, required: false, default: 0 },
+  quantite_entree: { type: Number, required: false, default: 0 },
+  quantite_sortie: { type: Number, required: false, default: 0 },
 
-  stock_final: { type: Number, required: false, default:0 },
+  stock_final: { type: Number, required: false, default:function(){
+    return this.stock_initial+this.quantite_entree-this.quantite_sortie
+  } },
   stock_min: { type: Number, required: true, default: 20 },
   stock_max: { type: Number, required: true, default: 100 },
 });

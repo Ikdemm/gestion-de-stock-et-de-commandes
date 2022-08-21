@@ -53,18 +53,22 @@ exports.deleteOneLine = async(req,res)=>{
     if(!line){
      res.status(404).json({ message: "Aucune ligne d'achat n'est trouvée avec cet ID, veuillez vérifier le ID !"});
     }
-    
-    const invoice =await Facture.findById(line.facture_id);
-    //console.log('invoice1',invoice)
-    var index = invoice.articles.indexOf(ligne=>ligne.id==_id);
-    invoice.articles.splice(index);
-    invoice.somme_a_recevoir=invoice.calculNetaPayer();
-    article.quantite_entree+=line.quantite_a;
-    article.stock_final=article.calculStockFinal()
-    await article.save()
-    await invoice.save();
-    //console.log('invoice2',invoice)
-    res.send(line)
+    try{
+        const invoice =await Facture.findById(line.avoir_id);
+        console.log('invoice1',invoice)
+        var index = invoice.articles.indexOf((ligne)=>ligne.id==_id);
+        invoice.articles.splice(index);
+        invoice.somme_a_recevoir=invoice.calculNetaPayer();
+        article.quantite_entree+=line.quantite_a;
+        article.stock_final=article.calculStockFinal()
+        await article.save()
+        await invoice.save();
+        //console.log('invoice2',invoice)
+        res.send(line)
+    }
+    catch (err) {
+        res.status(400).send(`Error : ${err.message}`);
+      }
 }
  //update ligne d'achat
 exports.updateOneLine= async (req, res)=>{
@@ -90,11 +94,10 @@ exports.updateOneLine= async (req, res)=>{
     return res.status(400).send(`Product not found for the given ID`);
 
     try{
-        const invoice =await Facture.findById(line.facture_id);
+        const invoice =await Facture.findById(line.avoir_id);
         console.log('net a payer', invoice.somme_a_recevoir)
         console.log('total 1',line.total)
         line.article.article_id=produit
-        line.total=0;
         line.total=produit.price_a*line.quantite_a
         var saved_Line = await line.save()
         var indexOfLine= invoice.articles.findIndex((l) => l.id == saved_Line._id)
@@ -148,7 +151,7 @@ exports.updateOneLine= async (req, res)=>{
         const invoice =await Facture.findById(line.facture_id);
         var indexOfLine= invoice.articles.findIndex((l) => l.id == saved_Line._id)
         invoice.articles[indexOfLine].total=saved_Line.total
-        invoice.net_a_payer=invoice.calculNetaPayer()
+        invoice.somme_a_recevoir=invoice.calculNetaPayer()
         invoice.save()
         res.status(200).json({message: " Vous avez bien changé la quantité à acheter"})
      } catch (err) {
@@ -161,5 +164,5 @@ exports.getLineById= async (req,res)=>{
     let line = await Ligne.findById(req.params.id)
     if(!line)
     return res.status(404).send('line not found')
-    res.sen(line)
+    res.send(line)
 }

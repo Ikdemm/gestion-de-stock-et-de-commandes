@@ -1,5 +1,4 @@
 const Facture = require("../models/FactureFournisseur");
-const Line = require("../models/LigneFactureAchat");
 const _ = require("lodash");
 exports.createInvoice = async (req, res) => {
   let newFacture = new Facture(req.body);
@@ -12,10 +11,6 @@ exports.createInvoice = async (req, res) => {
 };
 exports.updateInvoice = async (req, res) => {
   const FactureId=req.params.id;
-  let line;
-  let old_line_id ;
-
-
 
   Facture.findById(FactureId)
   .then(f => {
@@ -24,8 +19,9 @@ exports.updateInvoice = async (req, res) => {
           error.statusCode = 404;
           throw error;
       }
-   
+    
       f = _.merge(f, req.body)
+      f.net_a_payer=f.calculNetaPayer()
 
       return f.save();
   })

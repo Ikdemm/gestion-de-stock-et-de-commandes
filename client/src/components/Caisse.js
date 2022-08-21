@@ -3,8 +3,8 @@ import classes from './Stock.module.css'
 
 export default function Caisse() {
   return (
-<div className={classes.c}>
-    <div className={classes.title}>Etat de caisse</div>
+<div>
+    <p className='display-4'>Etat de caisse</p>
         <div className={classes.card}>
  
   <div className={classes.container}>
