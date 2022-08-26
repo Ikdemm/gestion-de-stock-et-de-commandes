@@ -21,7 +21,7 @@ export default function AddProductForm() {
   let refSMax = useRef("");
   function submitHandler(e) {
     e.preventDefault();
-    const c = listeCategories.find((p) => p.name == refC.current.value);
+    const c = listeCategories.find((p) => p.name === refC.current.value);
     let newProduct = {
       title: refT.current.value,
       description: refD.current.value,
@@ -43,9 +43,7 @@ export default function AddProductForm() {
   }, []);
   return (
     <div>
-      <h6 className="display-6" style={{ color: "#4125D9" }}>
-        Ajouter un produit
-      </h6>
+      <h6 className="display-6">  Ajouter un produit </h6>
       <form
         onSubmit={submitHandler}
         method="post"

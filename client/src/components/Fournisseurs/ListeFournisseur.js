@@ -12,20 +12,13 @@ export default function ListeFournisseur() {
   }, []);
   return (
     <div>
-      <p className="display-4">Liste Fournisseurs </p>
-      <table>
-        <tr>
-          <th>Nom du Founisseur</th>
-          <th>Numéro de téléphone</th>
-          <th>Adresse</th>
-          <th>Modifier</th>
-          <th>Supprimer</th>
-        </tr>
-
+      <h6 className="display-4">Liste Fournisseurs </h6>
+   
+      <ol className='list-group'>
         {listeF.map((f) => {
           return <OneFournisseur fournisseur={f} key={f._id}></OneFournisseur>;
         })}
-      </table>
+    </ol>
     </div>
   );
 }

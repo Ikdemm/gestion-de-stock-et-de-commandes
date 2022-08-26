@@ -13,7 +13,7 @@ export default function ListeProduits() {
   return (
 
     <div>    
-    <h6 className='display-4'  style={{color:"#4125D9"}}>Liste des Produits</h6>  
+    <h6 className='display-4'>Liste des Produits</h6>  
     <ol className='list-group'>
       
  { listeP.map((p)=>{

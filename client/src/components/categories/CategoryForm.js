@@ -28,7 +28,7 @@ export default function CategoryForm() {
   }
   return (
     <div>
-       <h6 className='display-6'  style={{color:"#4125D9"}}>Ajout de catégorie</h6>  
+       <h6 className='display-6'>Ajout de catégorie</h6>  
        <div className="container shadow p-3">
       <form onSubmit={submitHandler} method="post">
         <div >

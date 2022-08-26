@@ -65,7 +65,7 @@ let navigate= useNavigate()
     <div style={{ display: "flex" }}>
             <div className="container" style={{ padding: 50 + "px" }}>
 
-        <h6 className='display-5'  style={{color:"#4125D9"}}>Ajouter un employé</h6> 
+        <h6 className='display-5' >Ajouter un employé</h6> 
    <form method="post" >  
     
 

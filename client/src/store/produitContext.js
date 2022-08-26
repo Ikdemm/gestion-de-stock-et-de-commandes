@@ -42,7 +42,6 @@ function AddNewProduitContextProvider(props) {
         alert("erreur inconnue");
       });
  
-        getAllProduits()
   
     ;
   }
@@ -82,7 +81,6 @@ function AddNewProduitContextProvider(props) {
         alert("erreur inconnue");
       });
 
-        getAllProduits()
     }
   const context = {
     tabProduits: tabProduits,

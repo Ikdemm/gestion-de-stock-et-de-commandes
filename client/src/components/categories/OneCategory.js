@@ -4,9 +4,8 @@ import Modal from "@mui/material/Modal";
 import Typography from "@mui/material/Typography";
 import React, { useContext } from "react";
 import { FaEdit, FaRegEye, FaTrash } from "react-icons/fa";
-import { Link, useNavigate, useParams } from "react-router-dom";
+import { Link } from "react-router-dom";
 import { categorieCtx } from "../../store/categoryContext";
-import { produitCtx } from "../../store/produitContext";
 
 const style = {
   position: "absolute",
@@ -24,10 +23,8 @@ export default function OneCategory(props) {
   const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
   let ctx = useContext(categorieCtx);
-  let pctx = useContext(produitCtx);
-  let { _id } = useParams();
+  //let { _id } = useParams();
 
-  let navigate = useNavigate();
   function removeC() {
     ctx.removeOneCategorie(props.categorie._id);
 

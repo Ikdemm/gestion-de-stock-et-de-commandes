@@ -1,7 +1,7 @@
 const Demande = require("../models/Demande");
 const Employe = require("../models/Employe");
 const _ = require("lodash");
-
+var mongoose = require('mongoose');
 
 //creer une nouvelle demande
 exports.createDemande = async (req, res) => {
@@ -9,6 +9,8 @@ exports.createDemande = async (req, res) => {
 
   let employeeId = req.body.employe_id;
   let employee = await Employe.findById(employeeId);
+  mongoose.Types.ObjectId.isValid(employeeId);
+
   if (!employee) return res.status(400).send("Employee Id not Found");
 
   var newDemande = new Demande({
@@ -16,7 +18,7 @@ exports.createDemande = async (req, res) => {
     objet:req.body.objet,
     detailsDemande:req.body.detailsDemande,
     etat:req.body.etat,
-    employe_id:employee._id
+    employe_id:employeeId
    
   });
 
@@ -33,12 +35,17 @@ exports.createDemande = async (req, res) => {
 };
 //récupérer une demande
 exports.getOneDemande = (req, res, next) => {
-  Demande.findOne({ _id: req.params.id })
-    .then((demande) => res.status(200).json(demande))
+  let id=req.params.id
+  Demande.findOne({ _id: id})
+  if (id.match(/^[0-9a-fA-F]{24}$/)) 
+    then((demande) => res.status(200).json(demande))
     .catch((err) => {
       console.log(err);
       next();
     });
+  
+
+ 
 };
 //modifier une demande
 exports.updateOneDemande = async (req, res) => {

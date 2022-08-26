@@ -1,9 +1,9 @@
-//const dotenv = require("dotenv");
-require('./db/connect')
+const dotenv = require("dotenv");
 const express = require('express');
-//const cookieParser = require("cookie-parser");
+const cookieParser = require("cookie-parser");
 const morgan = require('morgan');
 const path = require('path');
+require('./db/connect')
 const staffRoutes = require('./routers/employes');
 const directionRoutes = require('./routers/directions');
 const demandesRoutes = require('./routers/demandes');
@@ -20,19 +20,20 @@ const AvoirtAchatRoutes= require('./routers/AvoirSurAchat');
 const AvoirLigneAchatRoutes= require('./routers/LigneAvoirAchat');
 const AvoirFactVenteRoutes= require('./routers/AvoirVente');
 const AvoirLigneVenteRoutes= require('./routers/LigneAvoirVente');
-const cmdFrsRoutes= require('./routers/commandeFournisseurs');
+//const cmdFrsRoutes= require('./routers/commandeFournisseurs');
 const userRoutes=require('./routers/users');
+const authenticate= require('./middlewares/is-auth')
 
 var cors = require('cors');
 
 
 const app = express();
-//dotenv.config({ path: "./config.env" });
+dotenv.config({ path: "./config.env" });
 const port = process.env.PORT || 4000;
 app.use(cors());
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
-//app.use(cookieParser());
+app.use(cookieParser());
 
 app.use(morgan("dev"));
 
@@ -58,7 +59,7 @@ app.use('/api/directions',directionRoutes);
 app.use('/api/categories',categoriesRoutes);
 //gestion des produits
 app.use('/api/produits',produitsRoutes);
-app.use('/api/commandes/achat',cmdFrsRoutes);
+//app.use('/api/commandes/achat',cmdFrsRoutes);
 /*--------------------------GESTION DES FACTURES-----------------------------------*/
 app.use('/api/fournisseurs',FrsRoutes);
 app.use('/api/clients',ClientsRoutes);
@@ -76,5 +77,12 @@ app.use('/api/avoirSurachat/addToInvoice',AvoirLigneAchatRoutes);
 //gestion des factures AVOIR sur les ventes
 app.use('/api/avoirs/vente',AvoirFactVenteRoutes);
 app.use('/api/avoirSurvente/addToInvoice',AvoirLigneVenteRoutes);
+app.use('/auth', authenticate, (req,res)=>{
+
+})
+app.get('/logout', (req, res)=>{
+  res.clearCookie("jwt", {path : '/'})
+  res.status(200).send("User Logged Out")
+})
 
 app.listen(port, ()=> console.log(`Server is listening on ${port}`));

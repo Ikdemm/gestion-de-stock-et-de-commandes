@@ -10,7 +10,7 @@ export default function ListeCategories() {
     },[])
   return (
     <div>    
-    <h6 className='display-6'  style={{color:"#4125D9"}}>Liste des catégories</h6>  
+    <h6 className='display-6'>Liste des catégories</h6>  
     <ol className='list-group'>
       {  listeP.map((p)=>{
         

@@ -16,8 +16,11 @@ const employeSchema = mongoose.Schema({
     direction:{
         direction_id:  { type: mongoose.Schema.Types.ObjectId ,ref: 'Direction'}
       
-    } 
-  
+    } ,
+    demandes:[
+        { type: mongoose.Schema.Types.ObjectId ,ref: 'DemandeEmploye'}
+    ],
+    user_id:  { type: mongoose.Schema.Types.ObjectId ,ref: 'User'}
 })
 /* let employe_validator=Joi.object({
     nom:Joi.string().min(3).max(20).required(),

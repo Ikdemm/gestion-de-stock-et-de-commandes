@@ -9,27 +9,33 @@ export default function AddClientForm() {
   const refNom=useRef('')
   const refTel=useRef('')
   const refAdresse=useRef('')
+  const refEmail=useRef('')
   function submitHandler(e){
     e.preventDefault()
     let newClient={
-      nom_complet: refNom.current.value,
+      nomClient: refNom.current.value,
       numero_de_tel: refTel.current.value,
       adresse: refAdresse.current.value,
+      email: refEmail.current.value,
           }
           cctx.addNewClient(newClient)
-       navigate('/listClients')
+          e.target.reset()
+       navigate('/clients')
   }
   return (
     <div>  
-      <p>Ajouter un client</p>
-      <form onSubmit={submitHandler} method="post">
-        <label htmlFor='nom_complet' >Nom Complet</label><br/>
-        <input type="text" name="nom_complet" ref={refNom}/><br/>
-        <label htmlFor="numero_de_tel">Numéro de téléphone</label><br/>
-        <input type="number" name="numero_de_tel" ref={refTel} /><br/>
-        <label htmlFor="adresse">Adresse</label><br/>
-      <input type="text" name="adresse" ref={refAdresse}/>
-      <button type="submit">Ajouter</button>
+      <h6 className="display-6">  Ajouter un client </h6>
+      <form onSubmit={submitHandler} method="post"  className="container shadow p-3">
+        <label htmlFor='nomClient' >Nom Complet du Client</label>
+        <input type="text" name="nomClient" ref={refNom}className="form-control"/>
+        <label htmlFor="numero_de_tel">Numéro de téléphone</label>
+        <input type="number" name="numero_de_tel" ref={refTel}className="form-control" />
+        <label htmlFor="adresse">Adresse de livraiosn</label>
+      <input type="text" name="adresse" ref={refAdresse}className="form-control"/>
+        <label htmlFor="email">Email</label>
+      <input type="email" name="email" ref={refEmail}className="form-control"/>
+      <button type="submit"  className="btn btn-outline-dark rounded-pill my-2 form-control"
+>Ajouter</button>
 
       </form>
     </div>

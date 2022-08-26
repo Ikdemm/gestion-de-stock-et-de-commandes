@@ -1,5 +1,6 @@
 const Employe = require ("../models/Employe");
 const Direction = require("../models/Direction");
+const User=require("../models/User")
 const Joi = require('joi');
 //Joi.objectId = require('joi-objectid')(Joi);
 //const employe_validator = require("../models/Employe");
@@ -20,6 +21,12 @@ exports.createEmploye = async (req, res) => {
   console.log("direction",direction)
   if(!direction)
   return  res.status(400).send('Direction Id not Found'); 
+  let userId= req.body.user_id;
+  console.log("user_id",user_id)
+  let user =await user.findById(user);
+  console.log("userId",userId)
+  if(!user)
+  return  res.status(400).send('User Id not Found'); 
    var newEmploye = new Employe({
     nom: req.body.nom,
     prenom:req.body.prenom,
@@ -31,8 +38,9 @@ exports.createEmploye = async (req, res) => {
     numCIN:req.body.numCIN,
     poste :req.body.poste,
     direction: {
-                direction_id:directionId
-              } 
+      direction_id:directionId
+    } ,
+    user_id :user._id
   }) 
 
  try{
@@ -65,7 +73,7 @@ exports.updateOneEmploye=(req,res,next)=>{
     {
         nom: req.body.nom,
         prenom:req.body.prenom,
-        imageUrl: `${req.protocol}://${req.get('host')}/images/employes/${req.file.filename}`,
+        imageUrl: req.file.filename,
         adresse:req.body.adresse,
         date_de_naissance:req.body.date_de_naissance,
         date_de_recrutement:req.body.date_de_recrutement,
@@ -73,13 +81,14 @@ exports.updateOneEmploye=(req,res,next)=>{
         active:req.body.active,
         numCIN:req.body.numCIN,
         direction: {
-          direction_id:direction._id ,
+          direction_id:req.body.direction.direction._id ,
       
         }
        
     } : { ...req.body };
     
 Employe.updateOne({_id: req.params.id}, {...emp, _id:req.params.id})
+
 .then(() => res.status(200).json({ message: 'Employé modifié !'}))
 .catch(err => {
     console.log(err);

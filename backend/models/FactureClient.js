@@ -36,13 +36,13 @@ await Ligne.deleteMany({facture_id:facture._id})
 next()
 })
 factureVenteSchema.methods.calculNetaPayer=function () {
- let sum = 0;
+ let sum = 0+this.frais_de_livraison;
   if (this.articles.length > 0) {
     console.log('length', this.articles.length)
     for (i = 0; i < this.articles.length; i++) { 
       sum += this.articles[i].total}
   } 
   console.log('sum', sum)
-return sum +this.frais_de_livraison
+return sum 
 }
 module.exports=mongoose.model('FactureVente',factureVenteSchema );

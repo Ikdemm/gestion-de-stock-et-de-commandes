@@ -42,9 +42,12 @@ factureAchatSchema.methods.calculNetaPayer=function () {
       for (i = 0; i < this.articles.length; i++) { 
         console.log('ssss',this.articles[i].total) 
         sum += this.articles[i].total}
-    } 
-    console.log('sum', sum)
-return sum +this.frais_de_livraison
+        return sum +this.frais_de_livraison
+    } if (this.articles.length = 0){
+      return sum+= this.frais_de_livraison
+
+    }
+
   }
 
 module.exports = mongoose.model("FactureAchat", factureAchatSchema);

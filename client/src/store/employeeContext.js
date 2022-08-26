@@ -117,7 +117,7 @@ function AddNewEmployeeContextProvider(props) {
     fetch(`/api/staff/${id}`, {
       method: "PUT",
       body: JSON.stringify(updatedC),
-      headers: {  "Content-Type": "multipart/form-data" },
+   /*    headers: {  "Content-Type": "multipart/form-data" }, */
     })
       .then((res) => {
         alert("l'employé est modifié");

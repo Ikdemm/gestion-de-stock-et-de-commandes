@@ -1,4 +1,4 @@
-import React from 'react'
+import React from 'react';
 import { Link } from 'react-router-dom'
 import ListeEmployes from './ListeEmployes'
 
@@ -7,7 +7,7 @@ export default function HolderEmployees() {
     <div>
 <h1 className='display-4'>Employés</h1> <hr/>
 
-<div className='row'>
+{/* <div className='row'>
 <div className='d-flex align-items-center'>
  
   <div className='col-9'>
@@ -21,7 +21,7 @@ export default function HolderEmployees() {
     </Link>
   </div>
   </div>
-</div>
+</div> */}
 <br/>
 <div className='row'>
     <ListeEmployes></ListeEmployes>

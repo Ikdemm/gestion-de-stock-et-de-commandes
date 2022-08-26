@@ -1,8 +1,34 @@
 .list-group-item:hover{
     font-weight: bolder;
 }
+h6{
+    color:#4125D9
+}
 
 
 
 
 
+h5{
+    color:#F779B0;
+   text-decoration:underline;
+}
+.inner-addon {
+    position: relative;
+  }
+  
+  /* style glyph */
+  .inner-addon .glyphicon {
+    position: absolute;
+    padding: 10px;
+    pointer-events: none;
+  }
+  
+  /* align glyph */
+  .left-addon .glyphicon  { left:  0px;}
+  .right-addon .glyphicon { right: 0px;}
+  
+  /* add padding  */
+  .left-addon input  { padding-left:  30px; }
+  .right-addon input { padding-right: 30px; }
+  
