@@ -1,13 +1,22 @@
-import React, { useContext, useRef } from "react";
+import emailjs from '@emailjs/browser';
+import axios from "axios";
+import React, { useContext, useEffect, useRef, useState } from "react";
+import { BiMailSend } from 'react-icons/bi';
+import { FaBan, FaSave } from 'react-icons/fa';
 import { useNavigate } from "react-router-dom";
 import { appelOffreCtx } from './../../../store/appelOffreContext';
-import { produitCtx } from './../../../store/produitContext';
+const _ = require ('lodash');
 
 export default function NewAppelOffreForm() {
   let navigate = useNavigate();
   const apoCtx = useContext(appelOffreCtx);
-  const pdtCtx=useContext(produitCtx);
-  const tabPdts=pdtCtx.tabProduits
+  const [tabProduits, settabProduits] = useState([]);
+
+  useEffect(() => {
+    axios.get(`/api/produits`).then((response) => {
+      settabProduits(response.data);
+    });
+  }, []);
   const refRef = useRef("");
   const refdateAPO = useRef("");
   const refObjet = useRef("");
@@ -16,24 +25,46 @@ export default function NewAppelOffreForm() {
   const refcommentaire = useRef("");
   const refdateLimiteDeReponse = useRef("");
   const refdateDeCommandePlanifiee = useRef("");
-  function submitHandler(e) {
+  const refDestinataire = useRef("");
+  const tabNotFiltred=_.map(apoCtx.tabAppelOffres,"ref")
+  //const form = useRef();
+  const sendEmail = (e) => {
     e.preventDefault();
-    const c = tabPdts.find((p) => p.title === refproduit_id.current.value);
- 
+
+    emailjs.sendForm('service_4d727vz', 'template_buichrq', e.target, 'MLOcpsLxRpw0wWQtg')
+      .then((result) => {
+        alert("Votre appel d'offre a été envoyé par email au destinataire, vous pouvre le renvoyer vers un atre destinataire ou l'enregistrer dans la BD")
+          console.log("send email",result.text);
+      }, (error) => {
+          console.log("send email ERROR",error.text);
+      });
+  };
+  function submitHandler(e) {
+
+    e.preventDefault();
+    const c = tabProduits.find((p) => p.title === refproduit_id.current.value);
+
     let newAppelOffre = {
       ref: refRef.current.value,
       dateAPO: refdateAPO.current.value,
       objet: refObjet.current.value,
+      destinataire:refDestinataire.current.value,
       produit_id:c._id,
       quantite: refquantite.current.value,
       commentaire: refcommentaire.current.value,
       dateLimiteDeReponse: refdateLimiteDeReponse.current.value,
       dateDeCommandePlanifiee: refdateDeCommandePlanifiee.current.value,
     };
+    if(!tabNotFiltred.includes(newAppelOffre.ref)){
 
     apoCtx.addNewAppelOffre(newAppelOffre);
     navigate("/historique-appel-doffre");
+    e.target.reset();
   }
+  else
+  alert('cette référence existe déjà, veuillez entrer une référence différente')
+
+}
   return (
     <div style={{display:"flex"}}>
                 <div className="container" >
@@ -42,7 +73,7 @@ export default function NewAppelOffreForm() {
       <hr />
       <div  >
         
-      <form onSubmit={submitHandler} method="post">
+      <form  method="post" className="card bg-white shadow p-3" /* ref={form} */onSubmit={sendEmail} >
         <label htmlFor="ref">Référence de l'appel d'offre</label>
         <input
           type="text"
@@ -65,47 +96,74 @@ export default function NewAppelOffreForm() {
           className="form-control"
           />
   
-        <label htmlFor="produit_id">Produits</label>
-        <select name="select" className="form-control">
-          <option selected>--veuillez choisir le produit--</option>
-          {tabPdts.map((f) => {
-            return <option ref={refproduit_id} key={f._id}>{f.title}</option>;
+        <label htmlFor="objet">Destinataire(s) [Entrez les e-mails (séparés par des virgules)] </label>
+        <input
+          type="email"
+          multiple
+          name="destinataire"
+          ref={refDestinataire}
+          className="form-control"
+          placeholder='abc@gmail.com,xyz@gmail.com'
+          />
+  
+        <label htmlFor="produit_id">Produit</label>
+        <select name="produit_id" className="form-select" >
+          <option>--veuillez choisir le produit--</option>
+          {tabProduits.map((f) => {
+            return <option  key={f._id}ref={refproduit_id}>{f.title}</option>;
           })}
         </select>
-        <label htmlFor="quantite">quantite</label>
+        <label htmlFor="quantite">Quantite</label>
         <input
           type="number"
           name="quantite"
           ref={refquantite}
           className="form-control"
           />
-        <label htmlFor="commentaire">commentaire</label>
+        <label htmlFor="commentaire">Commentaire</label>
         <input
           type="text"
           name="commentaire"
           ref={refcommentaire}
           className="form-control"
           />
-        <label htmlFor="dateLimiteDeReponse">dateLimiteDeReponse</label>
+        <label htmlFor="dateLimiteDeReponse">Date Limite De Reponse</label>
         <input
           type="date"
           name="dateLimiteDeReponse"
           ref={refdateLimiteDeReponse}
           className="form-control"
           />
-        <label htmlFor="dateDeCommandePlanifiee">dateDeCommandePlanifiee</label>
+        <label htmlFor="dateDeCommandePlanifiee">Date De Commande Planifiée</label>
         <input
           type="date"
           name="dateDeCommandePlanifiee"
           ref={refdateDeCommandePlanifiee}
           className="form-control"
           />
+
+<div className='d-flex flex-row-reverse'>
         <button
-          type="submit"
-          className="btn btn-outline-dark rounded-pill my-2 form-control"
+        type='submit'
+          className="btn bg-blue  m-2 "
           >
-          Ajouter
+         Envoyer en email <BiMailSend></BiMailSend>
         </button>
+        <button
+          className="btn bg-green  m-2"
+          onClick={submitHandler} 
+          type="submit"
+          >
+          Enregitrer L'appel d'offre <FaSave></FaSave>
+        </button>
+<button
+          type="submit"
+          className="btn btn-danger  m-2 "
+          >
+          Annuler <FaBan></FaBan>
+        </button>
+               </div>
+
       </form>
           </div>
           </div>

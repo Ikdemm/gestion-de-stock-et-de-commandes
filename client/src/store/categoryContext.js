@@ -17,13 +17,11 @@ function AddNewCategorieContextProvider(props) {
       method: "POST",
       body: JSON.stringify(newCategorie),
       headers: { "Content-Type": "application/json" },
-    })
-      .then((res) => {
-
-        alert("la Categorie est bien ajoutée");
+    }).then((res) => {
+        getAllCategories();
+        alert("la nouvelle categorie est bien ajoutée");
         console.log(res);
-      })
-      .catch((err) => {
+      }).catch((err) => {
         alert("erreur avec addNewCategorie");
         console.log(err);
       });
@@ -34,21 +32,18 @@ function AddNewCategorieContextProvider(props) {
   function removeOneCategorie(id) {
     fetch(`/api/categories/${id}`, {
       method: "DELETE",
-      body: JSON.stringify(),
       headers: { "Content-Type": "application/json" },
-    })
-      .then((res) => {
+    }).then((res) => {
+        getAllCategories()
         alert("la Categorie est bien supprimée");
         console.log(res);
 
 
-      })
-      .catch((err) => {
+      }).catch((err) => {
         alert("erreur removeOneCategorie");
         console.log(err);
       });
  
-        getAllCategories()
   
     ;
   }
@@ -62,17 +57,12 @@ function AddNewCategorieContextProvider(props) {
   }
   function getAllCategories() {
 
-
-    fetch("/api/categories", {
-      method: "GET",
-      headers: { "Content-Type": "application/json" },
-    })
-      .then((res) => {
-
-
-        return res.json();
-      })
-      .then((data) => setTabCategories(data));
+    fetch("/api/categories")
+      .then((res) =>  res.json())
+      .then((data) => {
+      console.log('allCategories', data);
+      setTabCategories(data)
+    });
   }
 
   function updateCategorie(id, updatedC) {
@@ -80,15 +70,16 @@ function AddNewCategorieContextProvider(props) {
       method: "PUT",
       body: JSON.stringify(updatedC),
       headers: { "Content-Type": "application/json" },
-    })
-      .then((res) => {
-        alert("le Categorie est modifié");
+    }).then((res) => {
+        getAllCategories()
+        alert("la Categorie est modifiée");
+        console.log('res', res)
       })
       .catch((err) => {
         alert("erreur inconnue");
+        console.log('err', err)
       });
 
-        getAllCategories()
     }
   const context = {
     tabCategories: tabCategories,

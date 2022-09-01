@@ -1,12 +1,7 @@
 import React from "react";
 import {
-  FcCalendar,
-  FcCalculator,
-  FcMultipleSmartphones,
-  FcHighPriority,
-  FcPlus,
-  FcViewDetails,
-  FcSearch
+  FcCalculator, FcCalendar, FcHighPriority,
+  FcPlus, FcSearch, FcViewDetails
 } from "react-icons/fc";
 import { Link } from "react-router-dom";
 export default function HolderVentes() {
@@ -69,7 +64,7 @@ export default function HolderVentes() {
                 <FcCalendar size={70}></FcCalendar>
               </div>
               <div className="col-7">
-                <h3 className="display-4"> Echéances à venir</h3>
+                <h3 className="display-4">Suivi de paiement</h3>
               </div>
               <div className="col-3">
               <Link to="/echeances-vente" className="nav-link">

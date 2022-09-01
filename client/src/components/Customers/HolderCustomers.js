@@ -1,19 +1,21 @@
-import React from 'react'
-import AddClientForm from './AddClientForm';
+import React from 'react';
 import ListeClients from './ListeClients';
 
 export default function HolderCustomers() {
   return (
-    <div>
-    <h1 className='display-3'>Clients</h1><hr/>
-    <div className='row'>
-        <div className='col-5'>
-            <AddClientForm></AddClientForm>
-        </div>
-        <div className='col-7'>
-            <ListeClients></ListeClients>
-        </div>
+    <div className="col">
+    <div className="row p-2">
+      <div className="col-md-12 p-0">
+        <h1 className="display-3">Clients</h1>
+        <hr />
+      </div>
+    
+      <div className=" card col ml-0 my-3 ">
+      <ListeClients></ListeClients>
+  
+      </div>
     </div>
-</div>
+  </div>
+
   )
 }

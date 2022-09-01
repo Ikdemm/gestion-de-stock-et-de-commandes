@@ -1,7 +1,4 @@
-input , label{
-    width: 70%;
-    
-}
+
 label{
     font-weight: bold;
 text-align: left;
@@ -12,11 +9,3 @@ input:focus {
     border: 3px solid #555;
 
   }
-  input{
-    height: 150%;
-  }
-.container{
-  padding-top: 80px;
-  display:flexbox
-
-}

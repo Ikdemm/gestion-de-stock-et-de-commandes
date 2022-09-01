@@ -1,11 +1,9 @@
-import React from 'react'
-import { FaEdit ,FaTrash } from 'react-icons/fa';
-import { useContext } from 'react';
-import { employeeCtx } from '../../../store/employeeContext';
-import { Link, useParams, useNavigate } from 'react-router-dom';
-import { useEffect } from 'react';
 import moment from 'moment';
 import 'moment/locale/fr';
+import React, { useContext } from 'react';
+import { FaEdit, FaTrash } from 'react-icons/fa';
+import { Link, useNavigate, useParams } from 'react-router-dom';
+import { employeeCtx } from '../../../store/employeeContext';
 import { directionCtx } from './../../../store/directionContext';
 export default function OneEmploye() {
   let {_id}=useParams()
@@ -21,7 +19,7 @@ console.log("tabEmployes", tabEmployes);
 },[])   */
 var selectedEmployee=empCtx.getEmployeeById(_id)
 console.log("selectedEmployee",selectedEmployee);
-var dir=tabDirections.find((d)=>d._id==selectedEmployee.direction.direction_id)
+var dir=tabDirections.find((d)=>d._id===selectedEmployee.direction.direction_id)
 console.log("dir",dir);
 let navigate=useNavigate()
 function removeC(){
@@ -36,8 +34,8 @@ navigate('/employes')
   <div className='row'>
     
     <div className='col-6'>
-     <img src={`http://localhost:4000/getfile/${selectedEmployee.imageUrl}`} alt="avatar"className='img-responsive rounded-circle' style={{height:80+'vh', width:55+"vh"}}/>    
-      
+     <img src={`http://localhost:4000/getfile/${selectedEmployee.imageUrl}`} alt="avatar"className='img-responsive rounded-circle mt-5 ' style={{height:60+'vh', width:45+"vh"}}/>    
+      <button className='btn btn-warning'>Changer la photo</button>
     </div>
     <div className='col-6' style={{marginTop:25+"vh"}}>
       

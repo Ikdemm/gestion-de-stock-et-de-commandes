@@ -1,41 +1,77 @@
-import moment from 'moment';
-import 'moment/locale/fr';
-import React, { useContext } from "react";
-import { AiOutlineDownload, AiTwotoneEdit } from "react-icons/ai";
-import { fournisseurtCtx } from './../../store/fournisseurContext';
+import axios from "axios";
+import moment from "moment";
+import "moment/locale/fr";
+import React, { useContext, useEffect, useState } from "react";
+import { AiTwotoneEdit } from "react-icons/ai";
+import { BsCardHeading } from "react-icons/bs";
+import { FaCheck, FaSpinner } from "react-icons/fa";
+import { FcCancel } from "react-icons/fc";
+import { Link } from "react-router-dom";
+import { achatFactCtx } from "../../store/achatFactContext";
+
+
 export default function OneFactureAchat(props) {
-  let ctx=useContext(fournisseurtCtx);
+ let ctx=useContext(achatFactCtx)
+  let date = props.facture.dateFacture;
+  const [tabLignes, setTabLignes] = useState([]);
+  useEffect(() => {
+    axios.get(`/api/achat/addToInvoice`).then((response) => {
+      setTabLignes(response.data);
+    });
+  }, []);
+  var tabLignesFiltred=tabLignes.filter((l)=>l.facture_id===props.facture._id)
+  function UpdateFacture() {
 
-  let tabF=ctx.tabFournisseurs
-  console.log("tabF", tabF);
+    if(props.facture.etat==="non_payee")
+     { props.facture.etat="payee"}
+   
+    else{
+      props.facture.etat="non_payee"
+   
+    }
+ctx.updateAchatFact(props.facture._id, props.facture)
+window.location.reload()
 
-  let date=props.facture.dateFacture;
-  let fournisseurID=props.facture.fournisseur_id;
-  let fournisseur=tabF.find((f)=> f._id==fournisseurID)
-  console.log("fournisseur",fournisseur)
-  console.log('rtrt');
+    } 
+if(tabLignesFiltred){
   return (
-    <tr>    
-      <td scope="col">{
-        moment(date).locale('fr').format('LL')
-      }
-       
-        </td>
-    <td scope="col">{props.facture.numFacture}</td>
-    <td scope="col">{fournisseur.nom_commercial}</td>
-    <td scope="col">{props.facture.net_a_payer} dt</td>
-      <td scope="col">{
-        moment(props.facture.dateEcheance).locale('fr').format('LL')
-      }
-       
-        </td>
-    <td scope="col">  <button className='btn btn-light'><AiTwotoneEdit></AiTwotoneEdit></button></td>
-    <td scope="col">
-      <button className='btn btn-light'>
-
-      <AiOutlineDownload></AiOutlineDownload>
-      </button>
+    <>
+    <tr>
+      <td>{moment(date).locale("fr").format("L")}</td>
+      <td  >{props.facture.numFacture}</td>
+      
+      <td  >{props.facture.net_a_payer} dt</td>
+      <td  >{moment(props.facture.dateEcheance).locale("fr").format("L")}</td>
+      <td  >
+     
+        <button className="btn btn-light">
+          <AiTwotoneEdit></AiTwotoneEdit>
+        </button>
       </td>
-</tr>
-  )
+      <td  >
+      <Link to={"/facture-achat/"+props.facture._id+"/details"} className=' btn btn-outline-dark mx-1'> <BsCardHeading /></Link> 
+
+      </td>
+      <td >
+      <button
+          className="btn bg-white border-dark mx-1"
+          onClick={UpdateFacture}
+        >
+         {props.facture.etat=== "non_payee" ?<div className="text-success">Marquer comme payée <FaCheck className='mx-2 '/></div> : <div className="text-danger">Marquer comme non payée     <FcCancel ></FcCancel>
+ </div> }
+          
+         
+        </button>
+      </td>
+    </tr>
+   
+    </>
+  )}
+  else{
+    return (
+      <div className="fetching">      
+      <FaSpinner className="spinner"></FaSpinner>
+            </div>
+    )
+    }
 }

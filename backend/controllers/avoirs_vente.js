@@ -53,13 +53,11 @@ exports.updateInvoice = async (req, res) => {
         next();
       });
   };
-  exports.getInvoiceById = (req, res, next) => {
-    Facture.findOne({ _id: req.params.id })
-      .then((facture) => res.status(200).json(facture))
-      .catch((err) => {
-        console.log(err);
-        next();
-      });
+  exports.getInvoiceById =async (req, res) => {
+    let facture = await Facture.findById(req.params.id)
+    if(!facture)
+    return res.status(404).send('facture not found')
+    res.send(facture)
   };
   //not allowed => creation de facture d'avoir
 /*   exports.deleteInvoice = async (req, res) => {

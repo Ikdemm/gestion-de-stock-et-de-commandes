@@ -1,11 +1,11 @@
 import Box from "@mui/material/Box";
-import Button from "@mui/material/Button";
 import Modal from "@mui/material/Modal";
 import Typography from "@mui/material/Typography";
-import React, { useContext } from "react";
-import { FaEdit, FaRegEye, FaTrash } from "react-icons/fa";
-import { useNavigate, useParams , Link} from "react-router-dom";
+import React, { useContext, useRef } from "react";
+import { FaEdit, FaInfoCircle, FaTrash } from "react-icons/fa";
+import { IoPeopleCircleSharp } from "react-icons/io5";
 import { directionCtx } from "../../../store/directionContext";
+const _ = require ('lodash')
 
 const style = {
   position: "absolute",
@@ -19,52 +19,66 @@ const style = {
   p: 4,
 };
 export default function OneDirection(props) {
-    let {_id}=useParams() 
-    let navigate=useNavigate()
 
-    //modal view more details
+
     const [open, setOpen] = React.useState(false);
     const handleOpen = () => setOpen(true);
     const handleClose = () => setOpen(false);
     let ctx = useContext(directionCtx);
+    const tabNotFiltred=_.map(ctx.tabDirections,"name")
+
     function removeC() {
         ctx.removeOneDirection(props.direction._id);
     
         window.location.reload();
       }
+    const refName=useRef('')
 
+      function submitHandler(e){
+        e.preventDefault()
+        let uDirection={
+          name: refName.current.value,
+        }  
+        if(!tabNotFiltred.includes(uDirection.name)){
+    
+          ctx.updateDirection(props.direction._id,uDirection);
+          e.target.reset()
+         window.location.reload()
+    }else
+        alert('ce nom de direction existe déjà, veuillez entrer un nom différent')
+      }
 
   return (
 <div>
-      <li
-        className="list-group-item my-1 shadow p-3"
-        style={{ backgroundColor: "#F5FAFF" }}
-      >
-        <div className="row">
-          <div className="col-8">{props.direction.name}</div>
-          <Button
-            className="col-1 btn btn-outline-dark mx-1"
-            onClick={handleOpen}
-          >
-           
-            <FaRegEye />
-          </Button>
-          <Link
-            className="col-1 btn btn-outline-success mx-1"
-            to={"/directions/" + props.direction._id + "/edit"}
-          >
-           
-            <FaEdit />
-          </Link> 
+<div className="row mb-1 mr-0 custom-border ">
+<div className="col-md-2 custom-border-right p-1 text-center">
+          <img src={require("../../../assets/images/direction.jpg")} alt="direction static" width="100px" height="100px" />
+        </div>
+        <div className="col-md-4 custom-border-right py-3  text-left">
+          <div>
+            <FaInfoCircle></FaInfoCircle> Libellé: {props.direction.name}
+          </div>
+          <div>
+            <IoPeopleCircleSharp></IoPeopleCircleSharp> Nombre des employés:{" "}
+            {props.direction.nb_employes}
+          </div>
+        </div>
+        <div className="col-md-3 custom-border-right py-4 text-center">
           <button
-            className="col-1 btn btn-outline-danger mx-1"
-            onClick={removeC}
+            className=" btn btn-outline-success "
+            onClick={handleOpen}
+
           >
-           
-            <FaTrash />
+            Mettre à jour  <FaEdit />
           </button>
         </div>
-      </li>
+        <div className="col-md-3 my-4 px-4 text-center">
+          <button className=" btn btn-outline-danger" onClick={removeC}>
+            Supprimer <FaTrash />
+          </button>
+        </div>
+      </div>
+  
       <Modal
         keepMounted
         open={open}
@@ -72,15 +86,20 @@ export default function OneDirection(props) {
         aria-labelledby="keep-mounted-modal-title"
         aria-describedby="keep-mounted-modal-description"
       >
-        <Box sx={style}>
-          <Typography id="keep-mounted-modal-title" variant="h6" component="h2">
-            Titre: {props.direction.name}
-          </Typography>
-          <Typography id="keep-mounted-modal-description" sx={{ mt: 2 }}>
-            Nombre des employés: {props.direction.nb_employes}
-           
-          </Typography>
-        </Box>
+              <Box sx={style}>
+            <Typography id="keep-mounted-modal-title" variant="h6" component="h2">
+            <b>Modifier le libellé de la direction</b> 
+            </Typography>
+            <form    onSubmit={submitHandler}>
+
+            
+                 <label htmlFor="name" className="my-2">Nouveau Libellé</label>
+                 <input className="form-control" type="text" name="name" defaultValue={props.direction.name} ref={refName} ></input>
+                 
+               <button className="btn btn-success my-3" type="submit">Modifier</button>
+
+            </form>
+          </Box>
       </Modal>
     
     </div>

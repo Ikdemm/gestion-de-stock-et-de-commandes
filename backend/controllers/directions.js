@@ -1,5 +1,5 @@
-const Direction = require("../models/Direction")
-
+const Direction = require("../models/Direction");
+const _ =require ('lodash');
 exports.createDirection = async (req, res) => {
 let newDirection = new Direction(req.body)
 try{
@@ -24,6 +24,28 @@ exports.getOneDirection= async (req, res, next)=>{
         console.log(err);
         next();
     })
+}
+exports.updateDirection= (req,res)=>{
+  const cId= req.params['id'];
+  Direction.findById(cId)
+  .then(direction => {
+    if (!direction) {
+        const error = new Error('Could not find this direction');
+        error.statusCode = 404;
+        throw error;
+    }
+    direction = _.merge(direction, req.body)
+    return direction.save();
+}) 
+.then(result => {
+  res.status(200).json({
+      message: 'Direction updated successfully',
+      result: result
+  });
+})
+.catch(err => {
+  console.log(err);
+})
 }
 exports.deleteDirection = async (req, res) => {
   try {

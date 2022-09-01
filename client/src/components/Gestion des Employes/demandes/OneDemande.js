@@ -2,13 +2,11 @@ import Box from "@mui/material/Box";
 import Button from "@mui/material/Button";
 import Modal from "@mui/material/Modal";
 import Typography from "@mui/material/Typography";
-import React, { useContext , useState} from "react";
-import { FaCheck, FaRegEye, FaTrash } from "react-icons/fa";
-import { Link } from "react-router-dom";
+import React, { useContext } from "react";
+import { FaCheck, FaRegEye } from "react-icons/fa";
 import { demandeCtx } from './../../../store/demandeContext';
 
 import {
-  FcApproval,
   FcCancel
 } from "react-icons/fc";
 const style = {
@@ -35,7 +33,7 @@ export default function OneDemande(props) {
       } */
    function UpdateDemande() {
 
-      if(props.demande.etat=="non_traitee")
+      if(props.demande.etat==="non_traitee")
        { props.demande.etat="traitee"}
      
       else{
@@ -67,7 +65,7 @@ return
           className="col-4 btn bg-white border-dark mx-1"
           onClick={UpdateDemande}
         >
-         {props.demande.etat== "non_traitee" ?<div className="text-success">Marquer comme traitée <FaCheck className='mx-2 '/></div> : <div className="text-danger">Marquer comme non traitée     <FcCancel ></FcCancel>
+         {props.demande.etat=== "non_traitee" ?<div className="text-success">Marquer comme traitée <FaCheck className='mx-2 '/></div> : <div className="text-danger">Marquer comme non traitée     <FcCancel ></FcCancel>
  </div> }
           
          

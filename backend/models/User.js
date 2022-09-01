@@ -3,6 +3,7 @@ const uniqueValidator=require('mongoose-unique-validator');
 const bcryptjs =require('bcryptjs')
 const jwt = require('jsonwebtoken')
 const userSchema=mongoose.Schema({
+    username:{type: String, required: true},
     email:{type: String, required: true, unique: true},
     role: {type: String, required:true, enum:['magasinier_appro','magasinier_bati','chef_serv_achat','chef_serv_vente','directeur_direction','employe','admin']},
     password:{type: String, required: true},

@@ -22,7 +22,7 @@ exports.createLigneAchat= async(req, res)=>{
            },
     quantite_a:req.body.quantite_a,
     total: prixDachat * req.body.quantite_a,
-    avoir_id:req.body.avoir_id
+    avoir_id:facture._id
 })
 try{
     const saved_Line= await newLigne.save();

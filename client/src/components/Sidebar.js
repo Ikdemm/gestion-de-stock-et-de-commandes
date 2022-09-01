@@ -1,26 +1,18 @@
 import {
-  BsSpeedometer2,
-  BsPeople,
-  BsShop,
-  BsList,
-  BsCalculatorFill,
-  BsFillPersonBadgeFill,
-  BsCart4,
-  BsBoxArrowLeft,
-  BsFillPeopleFill,
-  BsBoxSeam,
-  BsFillGearFill,
-  BsFileEarmark,
-  BsFillFileEarmarkArrowDownFill
+  AiOutlineHome
+} from "react-icons/ai";
+import {
+  BsBoxArrowLeft, BsBoxSeam, BsCalculatorFill, BsCart4, BsFileEarmark,
+  BsFillFileEarmarkArrowDownFill, BsFillGearFill, BsFillPeopleFill, BsFillPersonBadgeFill, BsList, BsPeople,
+  BsShop, BsSpeedometer2
 } from "react-icons/bs";
-import { GiTakeMyMoney } from "react-icons/gi";
 import { FaRegBuilding } from "react-icons/fa";
-import styles from "./Sidebar.module.css";
 import { Link } from "react-router-dom";
+import styles from "./Sidebar.module.css";
 function Sidebar(props) {
 if(!props.auth)
   return (
-
+<>
     <div className="d-flex flex-column flex-shrink-0 p-3 text-white col-3"style={{height:100+'vh',  float:"left", backgroundColor: "black", marginRight:7+'vh'}} >
       <div>
         <span className="display-6 fs-2" style={{color: "#09ff00" }}>  Nodes-Storage-Manager </span>
@@ -30,6 +22,15 @@ if(!props.auth)
       <div>
 
         <ul className="nav nav-pills flex-column mb-auto">
+            <li className="nav-item" >
+          <Link to="/welcome-page" className="nav-link text-white">
+              <span className={styles.icon}>  
+              <AiOutlineHome />
+
+              </span>
+           <span className="ms-1"> Page d'accueil</span>  
+          </Link>
+            </li>
             <li className="nav-item" >
           <Link to="/dashboard" className="nav-link text-white">
               <span className={styles.icon}>  
@@ -44,7 +45,7 @@ if(!props.auth)
           <span className={styles.icon}>
             <BsBoxSeam />
             </span>    
-              <span className="ms-1"> Stock </span>
+              <span className="ms-1"> Inventaire </span>
           </Link>
             </li>
             <li className="nav-item">
@@ -84,12 +85,7 @@ if(!props.auth)
               <span className="ms-1"> Achats </span>
           </Link>
             </li>
-            <li className="nav-item">
-          <Link to="/caisse"className="nav-link text-white">
-          <span className={styles.icon}>    <GiTakeMyMoney /></span>
-              <span className="ms-1"> Caisse </span>
-          </Link>
-            </li>
+       
             <li className="nav-item">
           <Link to="/directions"className="nav-link text-white">
           <span className={styles.icon}>  <FaRegBuilding /></span>
@@ -129,8 +125,15 @@ if(!props.auth)
         </ul>
       </div>
       </div>
-     
-   
+{/*      <header  style={{display:"flex" }} className="sticky-top" >
+      <div className="container-fluid mt-3"  style={{ float: "right"}}>
+        <div className="card my-3 p-3">
+     <p className="text-right">Bonjour username</p> 
+
+        </div>
+      </div>
+     </header> */}
+      </>
   )
    else
    return(

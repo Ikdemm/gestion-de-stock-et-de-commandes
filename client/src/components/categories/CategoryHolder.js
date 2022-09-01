@@ -1,19 +1,21 @@
 import React from 'react'
-import CategoryForm from './CategoryForm'
 import ListeCategories from './ListeCategories'
 
 export default function CategoryHolder() {
   return (
-    <div>
-        <h1 className='display-1'>Catégories</h1><hr/>
-        <div className='row'>
-            <div className='col-5'>
-                <CategoryForm></CategoryForm>
-            </div>
-            <div className='col-7'>
-                <ListeCategories></ListeCategories>
-            </div>
-        </div>
+    <div className="col">
+    <div className="row p-2">
+      <div className="col-md-12 p-0">
+        <h1 className="display-3">Catégories</h1>
+        <hr />
+      </div>
+    
+      <div className=" card col ml-0 my-3 ">
+      <ListeCategories></ListeCategories>
+  
+      </div>
     </div>
+  </div>
+
   )
 }

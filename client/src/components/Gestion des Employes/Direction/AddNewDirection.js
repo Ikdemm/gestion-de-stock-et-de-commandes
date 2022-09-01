@@ -1,11 +1,9 @@
-import React, { useContext, useRef } from 'react'
-import { directionCtx } from '../../../store/directionContext'
-import { useNavigate } from 'react-router-dom';
+import React, { useContext, useRef } from 'react';
+import { directionCtx } from '../../../store/directionContext';
 const _ = require ('lodash')
 
 export default function AddNewDirection() {
     const dCtx=useContext(directionCtx)
-    const navigate=useNavigate()
 
     const refName=useRef('')
     const tabNotFiltred=_.map(dCtx.tabDirections,"name")
@@ -20,8 +18,7 @@ export default function AddNewDirection() {
     
             dCtx.addNewDirection(newD);
           e.target.reset()
-          navigate('/directions')    
-    
+window.location.reload()    
     }else
         alert('ce nom de catégorie existe déjà, veuillez entrer un nom différent')
       }

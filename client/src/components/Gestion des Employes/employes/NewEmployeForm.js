@@ -1,11 +1,10 @@
-import React, { useContext, useEffect, useState } from 'react'
+import React, { useContext, useEffect, useState } from 'react';
+import { FaBan, FaSave } from 'react-icons/fa';
+import { Link, useNavigate } from 'react-router-dom';
 import { directionCtx } from '../../../store/directionContext';
-import { employeeCtx } from '../../../store/employeeContext';
-import { useNavigate } from 'react-router-dom';
 
 export default function NewEmployeForm() {
 
-  //let empCtx=useContext(employeeCtx)
   let dctx = useContext(directionCtx);
   let listeDirections = dctx.tabDirections
   console.log("listeDirections", listeDirections);
@@ -22,7 +21,8 @@ let navigate= useNavigate()
     date_de_naissance: '',
     date_de_recrutement: '',
     poste: '',
-    direction: '',
+    direction_id: '',
+    user_id: '',
 
     })
     const [imageUrl, setimageUrl] = useState(null)
@@ -49,52 +49,98 @@ let navigate= useNavigate()
     data.append("date_de_naissance",Employee.date_de_naissance);
     data.append("date_de_recrutement",Employee.date_de_recrutement);
     data.append("poste",Employee.poste);
-    data.append("direction",Employee.direction);
+    data.append("direction_id",Employee.direction_id);
+    data.append("user_id",Employee.user_id);
     console.log('data', data)
-    //empCtx.addNewEmployee(data)
   await  fetch('/api/staff',{
       method: 'POST',
       body: data,
     })
     alert('employé ajouté')
     navigate('/employes')
-   // console.log('tabEmlpyes', empCtx.tabEmployees)
 
 }
   return (
+    <div className="container">
     <div style={{ display: "flex" }}>
-            <div className="container" style={{ padding: 50 + "px" }}>
-
-        <h6 className='display-5' >Ajouter un employé</h6> 
-   <form method="post" >  
-    
-
-        <label htmlFor="numCIN">N° de CIN</label>
+  <div className="container-fluid">
+      <h6 className="display-6 mb-4"> Ajouter un employé </h6>
+      <hr />
+   <form method="post" className="container shadow p-4 bg-light">  
+    <div className='row mb-2'>
+    <div className="col-md-6">
+    <label htmlFor="numCIN">N° de CIN</label>
         <input className='form-control' type="text" name='numCIN' onChange={handleChange}  ></input>
-        <label htmlFor="imageUrl">Photo</label>
+    </div>
+    <div className="col-md-6">
+    <label htmlFor="imageUrl">Photo</label>
         <input className='form-control' type="file" name='imageUrl' onChange={(e) => setimageUrl(e.target.files[0]) } /* console.log("hedhy",e.target.files[0].name) } */  accept="image/*" ></input> 
-     {/*    <input className='form-control' type="file" name='imageUrl' onChange={(e) => setimageUrl(e.target.files[0].name) }  accept="image/*" ></input> */}
-        <label htmlFor='nom'>Nom</label>
-        <input className='form-control' type="text" name='nom' onChange={handleChange} ></input>
-        <label htmlFor='prenom'>Prénom</label>
+   
+    </div>
+    </div>
+    <div className='row mb-2'>
+    <div className="col-md-6">
+    <label htmlFor='prenom'>Prénom</label>
         <input className='form-control' type="text" name='prenom' onChange={handleChange} ></input>
-        <label htmlFor='date_de_naissance'>Date de naissance</label>
+    </div>
+    <div className="col-md-6">
+    <label htmlFor='nom'>Nom</label>
+        <input className='form-control' type="text" name='nom' onChange={handleChange} ></input>
+    </div>
+    </div>
+    <div className='row mb-2'>
+    <div className="col-md-6">
+    <label htmlFor='date_de_naissance'>Date de naissance</label>
         <input className='form-control' type="date" name='date_de_naissance' onChange={handleChange} ></input>
-        <label htmlFor='adresse'>Adresse</label>
+    </div>
+    <div className="col-md-6">
+    <label htmlFor='adresse'>Adresse</label>
         <input className='form-control' type="text" name='adresse' onChange={handleChange} ></input>
-        <label htmlFor='date_de_recrutement'>Date de recrutement</label>
+    </div>
+    </div>
+    <div className='row mb-2'>
+    <div className="col-md-6">
+
+    <label htmlFor='date_de_recrutement'>Date de recrutement</label>
         <input className='form-control' type="date" name='date_de_recrutement' onChange={handleChange} ></input>
-        <label htmlFor='direction_id'>Direction</label>
-        <select name="direction" className="form-control"  onChange={handleChange} >
+    </div>
+    <div className="col-md-6">
+
+    <label htmlFor='direction_id'>Direction</label>
+        <select name="direction_id" className="form-select"  onChange={handleChange} >
+          <option > -- Veuillez choisir la direction --</option>
           {listeDirections.map((f) => {
             return <option  key={f._id} value={f._id}>{f.name}</option>;
           })}
         </select>
-        <label htmlFor='poste'>Poste</label>
+    </div>
+    </div>
+    <div className='row mb-2'>
+    <div className="col-md-6">
+    <label htmlFor='poste'>Poste</label>
         <input className='form-control' type="text"  name='poste' onChange={handleChange} ></input>
+    </div>
+    <div className="col-md-6">
+    <label htmlFor='user_id'>ID d'utilisateur</label>
+        <input className='form-control' type="text"  name='user_id' onChange={handleChange} ></input>
+     
+    </div>
+    </div>
+
        
-        <button type="button" onClick={handleEmployee} className='btn text-light form-control my-2' style={{backgroundColor:"#4125D9"}} >Valider</button>
+    <div className='d-flex flex-row-reverse'>
+                <div className='p-2'>
+             <button className="btn bg-green my-2 " type="submit" onClick={handleEmployee}>Confirmer <FaSave></FaSave></button>    
+                </div>
+                <div className='p-2'>
+             <Link to="/employes" className="btn btn-danger my-2 mr-2">Annuler <FaBan></FaBan> </Link>
+                </div>
+                
+               </div>
+      
+      
       </form>
+    </div>
     </div>
     </div>
   )

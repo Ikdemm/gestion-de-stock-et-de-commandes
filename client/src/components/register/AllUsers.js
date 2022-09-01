@@ -1,40 +1,35 @@
-import React from 'react'
-import { useEffect } from 'react';
-import { useState } from 'react';
+import React, { useEffect, useState } from 'react';
+import UsersList from './UsersList';
 
 export default function AllUsers() {
-    const [tabUsers, setTabUsers] = useState([]);
+const [tabUsers, setListeUsers] = useState([]);
 
-useEffect(()=>{
+  useEffect(()=>{
+    fetch('/api/auth/all-users')
+    .then(res => {return res.json()})
+    .then(data => {
+              
+      for (const key in data) {
+          data[key]._id = key;
+          setListeUsers((prev)=>{
+              return [...prev, data[key]]
+          })
 
-    fetch("/api/auth/all-users", {
-      method: "GET",
-      headers: { "Content-Type": "application/json" },
-    })
-      .then((res) => {
-  
-  
-        return res.json();
-      })
-      .then((data) => setTabUsers(data));
-},[])
-  
+      }}
+      )
+   
+  },[])
+
+ 
     
+
   return (
     <div>    
          
 
     <h6 className='display-6'>Liste des utilisateurs</h6>  
-  <ol className='list-group'>
 
-      { tabUsers.map((u)=>{
-          
-          return   <li className='list-group-item'>{u.email} | {u.role}</li>
-          
-        })
-    }
-    </ol>
-
+<UsersList listOfUsers={tabUsers}></UsersList>
    
    
    

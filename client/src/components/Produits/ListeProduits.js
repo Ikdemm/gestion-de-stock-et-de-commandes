@@ -1,27 +1,53 @@
-import React, { useContext, useEffect } from 'react';
-import '../Form.module.css';
-import { produitCtx } from './../../store/produitContext';
-import OneProduct from './OneProduct';
+import axios from "axios";
+import React, { useEffect, useState } from "react";
+import { BiAddToQueue } from "react-icons/bi";
+import { FaSpinner } from "react-icons/fa";
+import { Link } from "react-router-dom";
+import "../Form.module.css";
+import OneProduct from "./OneProduct";
 
 export default function ListeProduits() {
-  let pctx=useContext(produitCtx)
-    let listeP=pctx.tabProduits
-    console.log(listeP, "tab Pdts");
-    useEffect(()=>{
-      pctx.getAllProduits()
-    },[])
-  return (
+  const [tabProduits, settabProduits] = useState([]);
 
-    <div>    
-    <h6 className='display-4'>Liste des Produits</h6>  
-    <ol className='list-group'>
-      
- { listeP.map((p)=>{
-    return <OneProduct produit={p} key={p._id}></OneProduct>
-  })
-} 
-    </ol>
-    </div>
+  useEffect(() => {
+    axios.get(`/api/produits`).then((response) => {
+      settabProduits(response.data);
+    });
+  }, []);
 
-  )
+  if (tabProduits) {
+    return (
+      <div>
+        <div className="row d-flex">
+          <h6 className="col-md-9 flex-fill display-4">Liste des Produits</h6>
+
+          <div className="col-md-2">
+            <Link to="/addProduit" className="btn bg-blue m-4 p-2">
+              Ajouter <BiAddToQueue></BiAddToQueue>
+            </Link>
+          </div>
+        </div>
+        {tabProduits.length > 0 ? (
+          <div className="card col m-3 px-2">
+            {tabProduits.map((p) => {
+              return <OneProduct produit={p} key={p._id}></OneProduct>;
+            })}
+          </div>
+        ) : (
+          <div className="text-center">
+            <img
+              src={require("../../assets/images/nothing.png")}
+              alt="nothing to display"
+            />{" "}
+          </div>
+        )}
+      </div>
+    );
+  } else {
+    return (
+      <div className="fetching">
+        <FaSpinner className="spinner"></FaSpinner>
+      </div>
+    );
+  }
 }

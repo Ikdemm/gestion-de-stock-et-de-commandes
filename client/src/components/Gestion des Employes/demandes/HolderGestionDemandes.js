@@ -1,18 +1,25 @@
-import React, { useContext,useEffect } from "react";
+import axios from "axios";
+import React, { useEffect, useState } from "react";
+import { FaSpinner } from "react-icons/fa";
 import {
   FcApproval,
   FcCancel
 } from "react-icons/fc";
 import { Link } from "react-router-dom";
-import { demandeCtx } from './../../../store/demandeContext';
 export default function HolderGestionDemandes() {
-  const dCtx=useContext(demandeCtx)
-  var tabDemandes=dCtx.tabDemandes
-  var tabFiltredNonTraitee=tabDemandes.filter((d)=>d.etat=="non_traitee")
-  var tabFiltredTraitee=tabDemandes.filter((d)=>d.etat=="traitee")
-  useEffect(()=>{
-    dCtx.getAllDemandes()
-  },[])
+  const [tabDemandes, setTtabDemandes] = useState([]);
+
+
+  useEffect(() => {
+   axios.get(`/api/demandes`).then((response) => {
+    setTtabDemandes(response.data);
+   });
+ }, []); 
+ 
+  var tabFiltredNonTraitee=tabDemandes.filter((d)=>d.etat==="non_traitee")
+  var tabFiltredTraitee=tabDemandes.filter((d)=>d.etat==="traitee")
+  if(tabDemandes && tabFiltredNonTraitee && tabFiltredTraitee){
+
   return (
     <div>
           <h1 className='display-1'>Gestion des demandes</h1><hr/>
@@ -51,4 +58,12 @@ export default function HolderGestionDemandes() {
       </div>
     </div>
   )
+}else
+{
+  return (
+    <div className="fetching">      
+    <FaSpinner className="spinner"></FaSpinner>
+          </div>
+  )
+}
 }

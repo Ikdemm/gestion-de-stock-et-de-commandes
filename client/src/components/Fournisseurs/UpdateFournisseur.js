@@ -1,51 +1,76 @@
-import React, { useContext, useState } from 'react';
-import { useNavigate, useParams } from 'react-router-dom';
-import editPhoto from '../../assets/images/pen.gif';
-import { fournisseurtCtx } from './../../store/fournisseurContext';
+import axios from "axios";
+import React, { useContext, useEffect, useRef, useState } from "react";
+import { FaSpinner } from "react-icons/fa";
+import { Link, useNavigate, useParams } from "react-router-dom";
+import { fournisseurtCtx } from "./../../store/fournisseurContext";
 
 export default function UpdateFournisseur() {
-  let {_id}=useParams()
-  const fourCtx= useContext(fournisseurtCtx)
-let selectedFour= fourCtx.getFournisseurById(_id)
-const [fournisseur, setFournisseur]=useState(selectedFour)
-function handleInputChange ( event) {
-  const { name, value } = event.target
+  let { _id } = useParams();
+  const fourCtx = useContext(fournisseurtCtx);
+  const [tabFournisseurs, setTabFournisseurs] = useState([]);
+  useEffect(() => {
+    axios.get(`/api/fournisseurs`).then((response) => {
+      setTabFournisseurs(response.data);
+    });
+  }, []); 
+  let selectedFour =tabFournisseurs.find((c)=>c._id===_id)
+  let navigate = useNavigate();
+  const nomFrstValue = useRef();
+  const numero_de_telValue = useRef();
+  const adresseValue = useRef();
+  const emailValue = useRef();
+  function submitHandler(event) {
+    event.preventDefault();
+    const uFour= {
+      nom_commercial: nomFrstValue.current.value,
+      numero_de_tel: numero_de_telValue.current.value,
+      adresse: adresseValue.current.value,
+      email: emailValue.current.value,
+    }
+    fourCtx.updateFournisseur(_id,uFour);
+    navigate('/fournisseurs');
+}   
+  if (selectedFour) {
+    return (
+      <div  style={{display: "flex"}}>
 
-  setFournisseur({ ...fournisseur, [name]: value })
-}
-  let navigate=useNavigate()
-  return (
-    <div  style={{display: "flex"}}>
-
-    <div className="container" style={{ padding: 50 + "px" }}>
-           <div className="row d-flex justify-content-center">   
-               <div className="col-md-4">
-               <img src={editPhoto} alt="editPhoto"  style={{height: 55+"vh",marginTop: 20+"vh"}}/> 
-               </div> 
-               <div className="col-md-8" style={{marginTop: 20+"vh"}}>
-        <h6 className='display-6'  style={{color:"#4125D9"}}>Mettre à jour le fournisseur</h6>  
-           <form onSubmit={event => {
-               event.preventDefault()
-               fourCtx.updateFournisseur(_id,fournisseur);
-              navigate('/fournisseurs') }
-             }>
-          
-                 <label htmlFor="nom_commercial">Nom du Fournisseur</label>
-                 <input className="form-control" type="text" name="nom_commercial" value={fournisseur.nom_commercial} onChange={handleInputChange} ></input>
-                 <label htmlFor="numero_de_tel">Numéro de téléphone</label>
-                 <input className="form-control" type="number" name="numero_de_tel" value={fournisseur.numero_de_tel} onChange={handleInputChange} ></input>
-                 <label htmlFor="adresse">Adresse</label>
-                 <input className="form-control" type="text" name="adresse" value={fournisseur.adresse} onChange={handleInputChange} ></input>
-                 <label htmlFor="email">Email</label>
-                 <input className="form-control" type="email" name="email" value={fournisseur.email} onChange={handleInputChange} ></input>
-              
-               
-             <button className="btn btn-success my-2" type="submit">Modifier le Fournisseur</button>
-             </form>
-               </div>
-               </div>
-           </div>
-           </div>
-         
-  )
+      <div className="container" style={{ padding: 50 + "px" }}>
+             <div className="row d-flex justify-content-center">   
+             
+                 <div className="col" >
+          <h6 className='display-3'>Mettre à jour le fournisseur</h6>  <hr/>
+             <form className='card p-3 shadow container-fluid'>
+            
+                   <label htmlFor="nom_commercial">Nom commercial</label>
+                   <input className="form-control" type="text" name="nom_commercial" defaultValue={selectedFour.nom_commercial} ref={nomFrstValue} ></input>
+                   <label htmlFor="numero_de_tel">Numéro de téléphone</label>
+                   <input className="form-control" type="number" name="numero_de_tel" defaultValue={selectedFour.numero_de_tel} ref={numero_de_telValue} ></input>
+                   <label htmlFor="adresse">Adresse</label>
+                   <input className="form-control" type="text" name="adresse" defaultValue={selectedFour.adresse} ref={adresseValue} ></input>
+                   <label htmlFor="email">Email</label>
+                   <input className="form-control" type="email" name="email" defaultValue={selectedFour.email} ref={emailValue} ></input>
+                
+                 <div className='d-flex justify-content-center'>
+                  <div className='p-2'>
+               <Link to="/fournisseurs" className="btn btn-outline-danger my-2 mr-2 rounded-pill" type="submit">Annuler</Link>
+                  </div>
+                  <div className='p-2'>
+               <button className="btn btn-outline-success my-2 rounded-pill" type="submit" onClick={submitHandler}>Confirmer</button>
+                    
+                  </div>
+                  
+                 </div>
+               </form>
+                 </div>
+                 </div>
+             </div>
+             </div>
+    );
+  } else {
+    return (
+      <div className="fetching">
+        <FaSpinner className="spinner"></FaSpinner>
+      </div>
+    );
+  }
 }

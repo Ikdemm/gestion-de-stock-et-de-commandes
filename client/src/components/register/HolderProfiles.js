@@ -1,8 +1,8 @@
-import { default as React, useContext, useEffect, useState } from "react";
+import { default as React } from "react";
 import { Link } from "react-router-dom";
-import axios from "axios";
 import RegisterForm from './RegisterForm';
 export default function HolderProfiles() {
+  
   return (
     <div className="container">
       <div className="row  pt-3">

@@ -12,7 +12,9 @@ dateAPO: { type: Date,required: true, default:function(){
     
        }},
 objet:{type: String,default:"Demande de prix"},
+destinataire:{type: String, required: true},
 produit_id:{type: ObjectId ,ref: 'Produit'},
+
 quantite:{type: Number, required: true},        
 commentaire: { type: String, required: false},
 dateLimiteDeReponse: { type: Date, required: true},

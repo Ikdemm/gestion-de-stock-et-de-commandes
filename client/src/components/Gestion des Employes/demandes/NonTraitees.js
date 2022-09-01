@@ -1,14 +1,20 @@
-import React, { useContext,useEffect } from "react";
+import axios from "axios";
+import React, { useEffect, useState } from "react";
+import { FaSpinner } from "react-icons/fa";
 import OneDemande from './OneDemande';
-import { demandeCtx } from './../../../store/demandeContext';
 
 export default function NonTraitees() {
-    const dCtx=useContext(demandeCtx)
-    var tabDemandes=dCtx.tabDemandes
-    var tabFiltred=tabDemandes.filter((d)=>d.etat=="non_traitee")
-    useEffect(()=>{
-        dCtx.getAllDemandes()
-      },[])
+  const [tabDemandes, setTtabDemandes] = useState([]);
+
+
+  useEffect(() => {
+   axios.get(`/api/demandes`).then((response) => {
+    setTtabDemandes(response.data);
+   });
+ }, []); 
+    var tabFiltred=tabDemandes.filter((d)=>d.etat==="non_traitee")
+    if(tabDemandes && tabFiltred){
+
   return (
     <>
     <h6 className="display-5">Demandes non Traitées</h6> <hr/>
@@ -31,4 +37,12 @@ export default function NonTraitees() {
     
   </>
   )
+}else
+{
+  return (
+    <div className="fetching">      
+    <FaSpinner className="spinner"></FaSpinner>
+          </div>
+  )
+}
 }

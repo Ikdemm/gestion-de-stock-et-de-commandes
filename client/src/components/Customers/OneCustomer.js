@@ -1,72 +1,54 @@
 import React, { useContext } from "react";
-import { FaEdit, FaRegEye, FaTrash } from "react-icons/fa";
+import { FaEdit, FaTrash } from "react-icons/fa";
+import { FcHome, FcInfo, FcPhoneAndroid, FcSms } from "react-icons/fc";
 import { Link } from "react-router-dom";
-
-import Box from "@mui/material/Box";
-import Button from "@mui/material/Button";
-import Modal from "@mui/material/Modal";
-import Typography from "@mui/material/Typography";
 import { clientCtx } from './../../store/clientContext';
-const style = {
-  position: "absolute",
-  top: "50%",
-  left: "50%",
-  transform: "translate(-50%, -50%)",
-  width: 400,
-  bgcolor: "background.paper",
-  border: "2px solid #000",
-  boxShadow: 24,
-  p: 4,
-};
+
 
 export default function OneCustomer(props) {
-  const [open, setOpen] = React.useState(false);
-  const handleOpen = () => setOpen(true);
-  const handleClose = () => setOpen(false); 
+
   let ctx=useContext(clientCtx)
   function removeC(){
-    ctx.removeOneProduit(props.client._id)
- 
-window.location.reload()
-}
+    ctx.removeOneClient(props.client._id)
+     window.location.reload()
+  }
   
   return (
+<>
+  <div className="row mb-1 mr-0 custom-border ">
 
-      <div>
-    <li className='list-group-item my-1 shadow p-3' style={{backgroundColor:"#F5FAFF"}}>
-    <div className='row'>
-         
-     <div className='col-8'>{props.client.nomClient}</div> 
-     <Button className='col-1 btn btn-outline-dark mx-1'  onClick={handleOpen}> <FaRegEye /></Button> 
-   <Link className='col-1 btn btn-outline-success mx-1'  to={"/clients/" + props.client._id + "/edit"}> <FaEdit /></Link>
-    
- <button className='col-1 btn btn-outline-danger mx-1'onClick={removeC}> <FaTrash /></button>
-    </div>
-    
-     
-     </li>
-          <Modal
-          keepMounted
-          open={open}
-          onClose={handleClose}
-          aria-labelledby="keep-mounted-modal-title"
-          aria-describedby="keep-mounted-modal-description"
-        >
-          <Box sx={style}>
-            <Typography id="keep-mounted-modal-title" variant="h6" component="h2">
-              {props.client.nomClient}
-            </Typography>
-            <Typography id="keep-mounted-modal-description" sx={{ mt: 2 }}>
-               <ul>
+        <div className="col-md-2 custom-border-right p-1 text-center">
+          <img src={require("../../assets/images/person.jpg")} alt="client static" width="100px" height="100px" />
+        </div>
+        <div className="col-md-7 custom-border-right">
+        <div className="col my-1">
+            <div className="row">
+                    <div className="col-md-1">  <FcInfo></FcInfo></div>
+                    <div className="col-11">{props.client.nomClient}</div>
+            </div>
+          <div className="row">
+                  <div className="col-md-1">  <FcPhoneAndroid></FcPhoneAndroid></div>
+                  <div className="col-11">{props.client.numero_de_tel}</div>
+          </div>
+          <div className="row">
+                  <div className="col-md-1">  <FcSms></FcSms></div>
+                  <div className="col-11">{props.client.email}</div>
+          </div>
+          <div className="row">
+                  <div className="col-md-1"> <FcHome></FcHome></div>
+                  <div className="col-11">{props.client.adresse}</div>
+          </div>
+          </div>
+     </div>
+          <div className="col-md-3 my-4 px-4">
+            <div className="row px-3 d-flex  justify-content-between" >
+            <Link className=' btn btn-outline-success col-md-5'   to={"/clients/" + props.client._id + "/edit"}> <FaEdit /></Link> 
+            <button className=" btn btn-outline-danger col-md-5 " onClick={removeC}> <FaTrash /></button>        
+         </div>
+     </div>
+  </div>
 
-               <li>Numéro de téléphone: {props.client.numero_de_tel}</li>
-                <li>Adresse de livraison: {props.client.adresse}</li>
-                <li>Adresse mail: {props.client.email}</li>
-               </ul>
-            </Typography>
-          </Box>
-        </Modal>
       
-      </div>
+      </>
  )
 }

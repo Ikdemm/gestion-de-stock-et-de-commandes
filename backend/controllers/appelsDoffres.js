@@ -14,13 +14,12 @@ exports.getAllAppelDoffres = async (req, res) => {
   if (appelDoffres.length === 0) return res.status(204).end();
   res.send(appelDoffres);
 };
-exports.getOneAppelDoffre = async (req, res, next) => {
-  AppelDoffre.findOne({ _id: req.params.id })
-    .then((appelDoffre) => res.status(200).json(appelDoffre))
-    .catch((err) => {
-      console.log(err);
-      next();
-    });
+exports.getOneAppelDoffre = async (req, res) => {
+  let apo = await AppelDoffre.findById(req.params.id)
+  if(!apo)
+  return res.status(404).send('AppelDoffre not found')
+  res.send(apo)
+
 };
 exports.deleteAppelDoffre = async (req, res) => {
   try {

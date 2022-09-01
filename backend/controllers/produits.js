@@ -24,6 +24,7 @@ exports.createProduit = async (req, res) => {
     stock_initial: req.body.stock_initial,
     quantite_entree: req.body.quantite_entree,
     quantite_sortie: req.body.quantite_sortie,
+    image: req.body.image,
     stock_final: req.body.stock_final,
     stock_min: req.body.stock_min,
     stock_max: req.body.stock_max,

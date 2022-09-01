@@ -6,29 +6,41 @@ h6{
 }
 
 
-
-
-
 h5{
     color:#F779B0;
    text-decoration:underline;
 }
-.inner-addon {
-    position: relative;
+
+  .fetching{
+    position: fixed;
+    top: 0;
+    left: 0;
+    height: 100vh;
+    width: 100vw;
+    background-color: rgba(0, 0, 0, 0.5);
+    z-index: 1000;
+    display: flex;
+    color: rgb(9, 255, 0);
+    font-size: 5em;
+    justify-content: center;
+    align-items: center;
+}
+.spinner{
+    animation: spinner 1.5s linear infinite;
+}
+
+@keyframes spinner {
+    to {transform: rotate(360deg);}
   }
-  
-  /* style glyph */
-  .inner-addon .glyphicon {
-    position: absolute;
-    padding: 10px;
-    pointer-events: none;
-  }
-  
-  /* align glyph */
-  .left-addon .glyphicon  { left:  0px;}
-  .right-addon .glyphicon { right: 0px;}
-  
-  /* add padding  */
-  .left-addon input  { padding-left:  30px; }
-  .right-addon input { padding-right: 30px; }
-  
+.bg-blue{
+  background-color:  #4125D9;
+  color: white;
+}
+.bg-green{
+  background-color:  rgb(9, 255, 0);
+  color: #4125D9 ;
+}
+.color-green{
+  background-color: black;
+  color:  rgb(9, 255, 0);;
+}

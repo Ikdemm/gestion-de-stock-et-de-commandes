@@ -28,6 +28,13 @@ mode_de_paiement: {
   enum: ["Comptant", "à crédit", "autres"],
   default: "Comptant",
 },
+etat:{type: String,enum: ["payee", "non_payee"],
+  default: function(){
+    if(this.mode_de_paiement=="Comptant"){
+      return "payee"
+    }else
+    return "non_payee"
+  }}
 
 });
 factureVenteSchema.pre('remove', async function(next){

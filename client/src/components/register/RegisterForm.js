@@ -1,11 +1,12 @@
-import React, { useContext, useEffect, useRef,useState } from "react";
+import React, { useContext, useRef } from "react";
 import { useNavigate } from "react-router-dom";
+import { UserContext } from "../../store/userContext";
 export default function RegisterForm() {
   let navigate = useNavigate();
   let refemail = useRef("");
   let refrole = useRef("");
   let refpassword = useRef("");
-  const [tabUsers, setTabUsers] = useState([]);
+  let ctx=useContext(UserContext)
 
   function submitHandler(e) {
     e.preventDefault();
@@ -15,21 +16,7 @@ export default function RegisterForm() {
       password: refpassword.current.value,
   
     };
-    fetch("/api/auth/register",{
-      method: "POST",
-      body: JSON.stringify(newUser),
-      headers: { "Content-Type": "application/json" },  
-    }
-    ).then((res) => {
-
-      alert("le compte utilisateur est bien créé");
-    })
-    .catch((err) => {
-      alert("erreur inconnue");
-    });
-    setTabUsers((prev) => {
-      return [...prev, newUser];
-    });
+ ctx.addUser(newUser)
     e.target.reset();
     navigate("/register");
   }
@@ -43,7 +30,7 @@ export default function RegisterForm() {
           <label htmlFor="email">Email</label>
           <input className="form-control mb-4" type="email" ref={refemail} name="email"></input>
           <label htmlFor="password">Mot de passe</label>
-          <input className="form-control mb-4" type="password" ref={refpassword} name="password"></input>
+          <input className="form-control mb-4" type="password" ref={refpassword} name="password" autoComplete="on"></input>
           <label htmlFor="role">Role</label>
           <select name="role" className="form-control  mb-4" ref={refrole}>
           <option>--veuillez choisir le role--</option>

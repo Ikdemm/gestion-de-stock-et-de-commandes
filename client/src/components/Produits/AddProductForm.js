@@ -1,13 +1,21 @@
-import React, { useContext, useEffect, useRef } from "react";
-import { useNavigate } from "react-router-dom";
-import { categorieCtx } from "../../store/categoryContext";
+import axios from "axios";
+import React, { useContext, useEffect, useRef, useState } from "react";
+import { FaBan, FaSave, FaSpinner } from "react-icons/fa";
+import { Link, useNavigate } from "react-router-dom";
 import { produitCtx } from "../../store/produitContext";
+const _ = require("lodash");
+
 export default function AddProductForm() {
   let pctx = useContext(produitCtx);
+  const tabNotFiltred = _.map(pctx.tabProduits, "title");
 
-  let cCtx = useContext(categorieCtx);
-  let listeCategories = cCtx.tabCategories;
-  console.log("tabCategories", listeCategories);
+  const [tabCat, setTtabCat] = useState([]);
+  useEffect(() => {
+    axios.get(`/api/categories`).then((response) => {
+      setTtabCat(response.data);
+    });
+  }, []);
+
   let navigate = useNavigate();
   let refT = useRef("");
   let refD = useRef("");
@@ -19,9 +27,10 @@ export default function AddProductForm() {
   let refQE = useRef("");
   let refQS = useRef("");
   let refSMax = useRef("");
+  let refImage = useRef("");
   function submitHandler(e) {
     e.preventDefault();
-    const c = listeCategories.find((p) => p.name === refC.current.value);
+    const c = tabCat.find((p) => p.name === refC.current.value);
     let newProduct = {
       title: refT.current.value,
       description: refD.current.value,
@@ -33,102 +42,176 @@ export default function AddProductForm() {
       stock_max: refSMax.current.value,
       quantite_entree: refQE.current.value,
       quantite_sortie: refQS.current.value,
+      image: refImage.current.value,
     };
-    pctx.addNewProduit(newProduct);
-    e.target.reset();
-    navigate("/listProduits");
+    if (!tabNotFiltred.includes(newProduct.title)) {
+      pctx.addNewProduit(newProduct);
+      e.target.reset();
+      navigate("/listProduits");
+      window.location.reload();
+    } else
+      alert("ce nom de produit existe déjà, veuillez entrer un nom différent");
   }
-  useEffect(() => {
-    cCtx.getAllCategories();
-  }, []);
-  return (
-    <div>
-      <h6 className="display-6">  Ajouter un produit </h6>
-      <form
-        onSubmit={submitHandler}
-        method="post"
-        className="container shadow p-3"
-      >
-        <label htmlFor="title">Nom du produit</label>
-        <input type="text" name="title" ref={refT} className="form-control" />
-        <label htmlFor="categorie_id">Catégorie</label>
-        <select name="select" className="form-control">
-          <option selected>--veuillez choisir la catégorie--</option>
-          {listeCategories.map((f) => {
-            return <option ref={refC}>{f.name}</option>;
-          })}
-        </select>
 
-        <label htmlFor="description">Description</label>
-        <input
-          type="text"
-          name="description"
-          ref={refD}
-          className="form-control"
-        />
+  if (tabCat) {
+    return (
+      <div className="container">
+          <div style={{ display: "flex" }}>
+        <div className="container-fluid">
+            <h6 className="display-6 mb-4"> Ajouter un produit </h6>
+            <hr />
+            <form
+              onSubmit={submitHandler}
+              method="post"
+              className="container shadow p-4 bg-light"
+            >
+              <div className="row">
+                
+               <div className="col-md-6">
+                
+              <label htmlFor="title">Nom du produit</label>
+              <input
+                type="text"
+                name="title"
+                ref={refT}
+                className="form-control"
+                />
+                </div> 
+                <div className="col-md-6">
+                  
+              <label htmlFor="image">Image du produit</label>
+              <input
+                type="url"
+                name="image"
+                ref={refImage}
+                className="form-control"
+                placeholder="entrer un lien URL"
+                />
+                </div>
+                </div>
+                <div className="row">
+                <div className="col-md-6">
 
-        <label htmlFor="price_a">Prix d'achat</label>
-        <input
-          type="number"
-          step="0.001"
-          name="price_a"
-          ref={refPA}
-          className="form-control"
-        />
+              <label htmlFor="categorie_id">Catégorie</label>
+              <select name="categorie_id" className="form-control" ref={refC}>
+                <option>--Veuillez choisir la catégorie--</option>
+                {tabCat.map((f) => {
+                  return <option key={f._id}>{f.name}</option>;
+                })}
+              </select>
+              </div>
+              <div className="col-md-6">
 
-        <label htmlFor="price_v">Prix de vente</label>
-        <input
-          type="number"
-          step="0.001"
-          name="price_v"
-          ref={refPV}
-          className="form-control"
-        />
+              <label htmlFor="description">Description</label>
+              <input
+                type="text"
+                name="description"
+                ref={refD}
+                className="form-control"
+                />
+                </div>
+                </div>
+        <div className="row">
+        <div className="col-md-6">
 
-        <label htmlFor="stock_min">Stock Minimum</label>
-        <input
-          type="number"
-          name="stock_min"
-          ref={refSM}
-          className="form-control"
-        />
+              <label htmlFor="price_a">Prix d'achat</label>
+              <input
+                type="number"
+                step="0.001"
+                name="price_a"
+                ref={refPA}
+                className="form-control"
+                />
+</div>
+            <div className="col-md-6">
 
-        <label htmlFor="stock_max">Stock Maximum</label>
-        <input
-          type="number"
-          name="stock_max"
-          ref={refSMax}
-          className="form-control"
-        />
-        <label htmlFor="stock_initial">Stock Initial</label>
-        <input
-          type="number"
-          name="stock_initial"
-          ref={refSI}
-          className="form-control"
-        />
-        <label htmlFor="quantite_entree">Quantité entrée</label>
-        <input
-          type="number"
-          name="quantite_entree"
-          ref={refQE}
-          className="form-control"
-        />
-        <label htmlFor="quantite_sortie">Quantité sortie</label>
-        <input
-          type="number"
-          name="quantite_sortie"
-          ref={refQS}
-          className="form-control"
-        />
+              <label htmlFor="price_v">Prix de vente</label>
+              <input
+                type="number"
+                step="0.001"
+                name="price_v"
+                ref={refPV}
+                className="form-control"
+                />
+                </div>
+                </div>
+<div className="row">
+  <div className="col-md-6">
+  <label htmlFor="stock_min">Stock Minimum</label>
+              <input
+                type="number"
+                name="stock_min"
+                ref={refSM}
+                className="form-control"
+              />
+  </div>
+  <div className="col-md-6">
+    
+  <label htmlFor="stock_max">Stock Maximum</label>
+              <input
+                type="number"
+                name="stock_max"
+                ref={refSMax}
+                className="form-control"
+              />
+  </div>
+</div>
+<div className="row">
+  <div className="col-md-6">
+  <label htmlFor="quantite_entree">Quantité entrée</label>
+              <input
+                type="number"
+                name="quantite_entree"
+                ref={refQE}
+                className="form-control"
+                defaultValue={0}
 
-        <button
-          type="submit"
-          className="btn btn-outline-dark rounded-pill my-2 form-control"
-        >
-          Ajouter
-        </button>
-      </form>
-    </div>
-  );
+              />
+  </div>
+  <div className="col-md-6">
+  <label htmlFor="quantite_sortie">Quantité sortie</label>
+              <input
+                type="number"
+                name="quantite_sortie"
+                ref={refQS}
+                className="form-control"
+                defaultValue={0}
+
+              />
+  </div>
+</div>
+             
+
+              <label htmlFor="stock_initial">Stock Initial</label>
+              <input
+                type="number"
+                name="stock_initial"
+                ref={refSI}
+                className="form-control"
+                defaultValue={0}
+              />
+             
+         
+             <div className='d-flex flex-row-reverse'>
+                <div className='p-2'>
+             <button className="btn bg-green my-2 " type="submit">Confirmer <FaSave></FaSave></button>    
+                </div>
+                <div className='p-2'>
+             <Link to="/listProduits" className="btn btn-danger my-2 mr-2">Annuler <FaBan></FaBan> </Link>
+                </div>
+                
+               </div>
+            
+            </form>
+          </div>
+        </div>
+      </div>
+    );
+  } else {
+    return (
+      <div className="fetching">
+        <FaSpinner className="spinner"></FaSpinner>
+      </div>
+    );
+  }
 }

@@ -1,5 +1,6 @@
 import React, { useContext, useRef } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { FaBan, FaSave } from 'react-icons/fa';
+import { Link, useNavigate } from 'react-router-dom';
 import { fournisseurtCtx } from '../../store/fournisseurContext';
 
 export default function AddFournisseurForm() {
@@ -22,20 +23,32 @@ export default function AddFournisseurForm() {
        navigate('/fournisseurs')
   }
   return (
-    <div>  
-      <h6 className="display-6">Ajouter un fournisseur</h6>
-      <form onSubmit={submitHandler} method="post">
+    <div className="container">
+    <div style={{ display: "flex" }}>
+  <div className="container-fluid">
+<h6 className="display-6 my-4">  Ajouter un fournisseur </h6>            <hr />
+<form onSubmit={submitHandler} method="post"  className="container shadow p-3 bg-light">
         <label htmlFor='nom_commercial' >Nom Commercial</label>
-        <input type="text" name="nom_commercial" ref={refNom}className="form-control"/>
+        <input type="text" name="nom_commercial" ref={refNom}className="form-control" required/>
         <label htmlFor="numero_de_tel">Numéro de téléphone</label>
-        <input type="number" name="numero_de_tel" ref={refTel} className="form-control"/>
+        <input type="number" name="numero_de_tel" ref={refTel} className="form-control" required/>
         <label htmlFor="adresse">Adresse</label>
-      <input type="text" name="adresse" ref={refAdresse} className="form-control"/>
+      <input type="text" name="adresse" ref={refAdresse} className="form-control" required/>
         <label htmlFor="email">Email</label>
-      <input type="email" name="email" ref={refEmail} className="form-control"/>
-      <button type="submit"  className="btn btn-outline-dark rounded-pill my-2 form-control">Ajouter</button>
+      <input type="email" name="email" ref={refEmail} className="form-control" required/>
+      <div className='d-flex flex-row-reverse'>
+                <div className='p-2'>
+             <button className="btn bg-green my-2 " type="submit">Confirmer <FaSave></FaSave></button>    
+                </div>
+                <div className='p-2'>
+             <Link to="/fournisseurs" className="btn btn-danger my-2 mr-2">Annuler <FaBan></FaBan> </Link>
+                </div>
+                
+               </div>
 
       </form>
+    </div>
+    </div>
     </div>
   )
 }

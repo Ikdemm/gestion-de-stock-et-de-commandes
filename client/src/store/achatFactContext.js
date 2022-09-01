@@ -12,14 +12,17 @@ function AddNewAchatFactContextProvider(props) {
 
   const [tabAchatFacts, setTabAchatFacts] = useState([]);
   function addNewAchatFact(newAchatFact) {
+
     fetch("/api/factures/achat", {
       method: "POST",
       body: JSON.stringify(newAchatFact),
-      headers: { "Content-Type": "application/json" },
+      headers: { "Content-Type": "application/json"
+      },
     })
       .then((res) => {
 
         alert("la facture est bien ajoutée");
+        getAllAchatFacts()
         console.log(res);
       })
       .catch((err) => {
@@ -40,17 +43,16 @@ function AddNewAchatFactContextProvider(props) {
   }
   function getAllAchatFacts() {
 
-
-    return  fetch("/api/factures/achat", {
-      method: "GET",
-      headers: { "Content-Type": "application/json" },
-    })
-           .then((res) => {
-
-        return res.json();
-      })
-      .then((data) => setTabAchatFacts(data)); 
-  }
+ fetch("/api/factures/achat", {
+  method: "GET",
+  headers: { "Content-Type": "application/json" },
+})
+  .then((res) =>  res.json())
+  .then((data) => {
+    console.log(data);
+    setTabAchatFacts(data)
+  });
+}
 
   function updateAchatFact(id, updatedC) {
     fetch(`/api/factures/achat/${id}`, {
@@ -59,13 +61,14 @@ function AddNewAchatFactContextProvider(props) {
       headers: { "Content-Type": "application/json" },
     })
       .then((res) => {
+        getAllAchatFacts();
         alert("la facture est modifiée");
       })
       .catch((err) => {
         alert("erreur inconnue");
       });
 
-        getAllAchatFacts()
+     
     }
   const context = {
     tabAchatFacts: tabAchatFacts,

@@ -2,16 +2,14 @@ import Box from "@mui/material/Box";
 import Button from "@mui/material/Button";
 import Modal from "@mui/material/Modal";
 import Typography from "@mui/material/Typography";
+import axios from 'axios';
 import moment from "moment";
 import "moment/locale/fr";
-import React, { useContext, useEffect, useRef,useState } from "react";
-import { achatFactCtx } from "./../../store/achatFactContext";
-import { fournisseurtCtx } from "./../../store/fournisseurContext";
-import { ligneAchatCtx } from "./../../store/ligneAchatContext";
-import { produitCtx } from "./../../store/produitContext";
-import OneLigneFactureAchat from "./OneLigneFactureAchat";
-import { useParams } from 'react-router-dom';
-import axios from 'axios';
+import React, { useContext, useEffect, useRef, useState } from "react";
+import { FaSpinner } from "react-icons/fa";
+import { useNavigate } from "react-router-dom";
+import { ligneAchatCtx } from "../../store/ligneAchatContext";
+import ListeAchats from "./ListeAchats";
 
 const style = {
   position: "absolute",
@@ -25,141 +23,91 @@ const style = {
   p: 4,
 };
 export default function AddToInvoice() {
+  let navigate=useNavigate()
+  let ligneCtx=useContext(ligneAchatCtx)
   const [open, setOpen] = React.useState(false);
   const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
   /*PRODUITS OK*/
+ 
   const [tabProduits, setTabProduits] = useState([]);
-useEffect(()=>
-fetch("/api/produits", {
-  method: "GET",
-  headers: { "Content-Type": "application/json" },
-})
-  .then((res) => {
+  useEffect(() => {
+    axios.get(`/api/produits`).then((response) => {
+      setTabProduits(response.data);
+    });
+  }, []);
 
+    /*FACTURES OK*/
+  const [tabAchatFacts, setTabAchatFacts] = useState([]);
+  useEffect(() => {
+    axios.get(`/api/factures/achat`).then((response) => {
+      setTabAchatFacts(response.data);
+    });
+  }, []);
 
-    return res.json();
-  })
-  .then((data) => setTabProduits(data)),[]
-)
-const [tabFrs, setTabFrs] = useState([]);
+ /*LIGNES OK*/
 
-useEffect(()=>
-fetch("/api/fournisseurs", {
-  method: "GET",
-  headers: { "Content-Type": "application/json" },
-})
-  .then((res) => {
-
-
-    return res.json();
-  })
-  .then((data) => setTabFrs(data)),[]
-)
-useEffect(()=>
-fetch("/api/fournisseurs", {
-  method: "GET",
-  headers: { "Content-Type": "application/json" },
-})
-  .then((res) => {
-
-
-    return res.json();
-  })
-  .then((data) => setTabFrs(data)),[]
-)
-const [tabAchatFacts, setTabAchatFacts] = useState([]);
-
-useEffect(()=>
-
- fetch("/api/factures/achat", {
-  method: "GET",
-  headers: { "Content-Type": "application/json" },
-})
-  .then((res) => {
-
-
-    return res.json();
-  })
-  .then((data) => setTabAchatFacts(data)),[]
-)
-
-
-    //console.log('tabProduits', tabProduits)
-
-/* const pCtx = useContext(produitCtx);
-  var ListeProduits = pCtx.tabProduits;
-  useEffect(()=>{
-    pCtx.getAllProduits()
-  },[]) */
-  //console.log('ListeProduits', ListeProduits)
-
-  /*FOURNISSEURS OK*/
-  /* const ctx = useContext(fournisseurtCtx);
-  const tabF = ctx.tabFournisseurs; */
-  //console.log('tabFournisseurs', tabF)
-  
-
-  /*FACTURES */
-/*   const factCtx = useContext(achatFactCtx);
-useEffect(()=>{
-factCtx.getAllAchatFacts()
-
-},[]
-  ) */
-
-  //var lastF = tabAchatFacts.at(tabAchatFacts.length - 1);
-  //var tabFactures = factCtx.tabAchatFacts;
-  //console.log('tabAchatFacts', tabFactures)
-
+  const [tabLignes, setTabLignes] = useState([]);
+  useEffect(() => {
+    axios.get(`/api/achat/addToInvoice`).then((response) => {
+      setTabLignes(response.data);
+    });
+  }, []);
+  const [tabFrs, setTabFrs] = useState([]);
+  useEffect(() => {
+    axios.get(`/api/fournisseurs`).then((response) => {
+      setTabFrs(response.data);
+    });
+  }, []);
   var lastF = tabAchatFacts.at(tabAchatFacts.length - 1);
   console.log("lastF", lastF);
-  //const fournisseurID = lastF.fournisseur_id;
- // console.log('fournisseurID', fournisseurID)
-  //const fournisseur = tabF.find((f) => f._id == fournisseurID);
-  //console.log('fournisseur', fournisseur)
-  
-
-/* 
-   
-  const lCtx = useContext(ligneAchatCtx);
-  let tabLignes=lCtx.tabLigneAchats;
-  var lignesDeFacture=tabLignes.filter((l)=>l.facture_id==lastF._id)
-  //console.log('lignesDeFacture', lignesDeFacture)
-
- */
-
+  var fournisseur= tabFrs.find((f)=>f._id===lastF.fournisseur_id);
+  console.log('fournisseur', fournisseur)
   const refArticle = useRef("");
   const refQuantite_a = useRef("");
 
   function ajouterLigneAchat(e) {
     e.preventDefault();
-  var c = tabProduits.find((p) => p.title == refArticle.current.value);
+  var c = tabProduits.find((p) => p.title === refArticle.current.value);
     const newLigne = {
       quantite_a: refQuantite_a.current.value,
       facture_id:lastF._id,
       article_id: c._id,
     };
-   // lCtx.addNewLigneAchat(newLigne);
-    e.target.reset();
-    handleClose()
-  } 
+        ligneCtx.addNewLigneAchat(newLigne)
+        e.target.reset();
+        handleClose();
+        window.location.reload()
+      }
  
+  function validationDeCommande(){
+      // eslint-disable-next-line no-restricted-globals
+  var result =  confirm('Etes-vous sûr de bien vouloir valider la commande? Après cette étape, vous ne pouvez changer que les informations générales de la commande!!!');
+
+  if(result){
+navigate('/historique-achat')
+  }}
+  var tabLignesFiltred=tabLignes.filter((l)=>l.facture_id===lastF._id)
+  
+  if(lastF && fournisseur && tabLignesFiltred){
+
   return (
-    <>
+  
+       <>
+    
       <div style={{ display: "flex" }}>
         <div className="container">
           <h6 className="display-6">Poursuivre votre achat</h6>
           <hr />
           <div className="row my-2 container">
-            <div className="d-flex align-items-center">
+            <div className="d-flex align-items-center py-3">
               <div className="col-6">
-                N° de facture:  {/*   {lastF.numFacture} */}    <br />
+                N° de facture:    {lastF.numFacture}    <br />
                 Date facture:
-            {/*     {moment(lastF.dateFacture).locale("fr").format("LL")}   */} 
+               {moment(lastF.dateFacture).locale("fr").format("LL")}   
               </div>
               <div className="col-6 mx-2">
-                Nom du Fournisseur: {/*  {fournisseur.nom_commercial}   */}
+                Nom du Fournisseur:  {fournisseur.nom_commercial}   
               </div>
             </div>
           </div>
@@ -180,7 +128,10 @@ factCtx.getAllAchatFacts()
               </div>
             </div>
           </div>
-          <table className="table table-hover">
+          <div  style={{maxHeight: 240+"px", overflowY:"scroll"}}>
+            
+          
+          <table className="table table-hover mb-5">
             <thead>
               <tr>
                 <th scope="col">Produit</th>
@@ -191,40 +142,49 @@ factCtx.getAllAchatFacts()
                 <th scope="col">Supprimer</th>
               </tr>
             </thead>
-            <tbody>
-         {/*       {
-                   lignesDeFacture && lignesDeFacture.map((l)=>{
+            <tbody >
+          {/*      {
+                   tabLignesFiltred && tabLignesFiltred.map((l)=>{
                         return <OneLigneFactureAchat ligne={l}></OneLigneFactureAchat>
                     })
-                }   
-           */}
+                }   */} 
+           <ListeAchats listeOfAchats={tabLignesFiltred}></ListeAchats>
             </tbody>
           </table>
+          </div>
           <hr />
           <div className="row my-2 container">
             <div className="d-flex align-items-center">
               <div className="col-5"></div>
               <div className="col-6 mx-2">
-                Frais de livraison:{/*  {lastF.frais_de_livraison} */}  dt
+                Frais de livraison:  {lastF.frais_de_livraison}  dt
                 <br></br>
-                <b>Net à payer: {/*  {lastF.net_a_payer} */}  DT</b>
+                  {tabLignesFiltred.length?(
+                    <b className="fs-4">Net à payer:   {lastF.net_a_payer}   DT</b>
+                  ):""
+                  }   
               </div>
             </div>
           </div>
           <div className="row my-2 container">
             <div className="d-flex align-items-center">
-              <div className="col-6">
-                Mode de paiement: {/*  {lastF.mode_de_paiement} */} <br />
+              <div className="col-9">
+                Mode de paiement:  {lastF.mode_de_paiement}  <br />
                 Date d'échéance:
-            {/*    {moment(lastF.dateEcheance)
+              {moment(lastF.dateEcheance)
                   .locale("fr")
-                  .format("LL")}  */}
+                  .format("LL")}  
               </div>
-              <div className="col-6 mx-2"></div>
+              <div className="col-4 mx-2">
+        <button type="" className="col-6 m-5 btn  fs-5 bg-blue"   onClick={validationDeCommande} 
+>Valider la commande</button>
+
+              </div>
             </div>
           </div>
         </div>
       </div>
+
       <Modal
         keepMounted
         open={open}
@@ -236,21 +196,21 @@ factCtx.getAllAchatFacts()
           <Typography id="keep-mounted-modal-title" variant="h6" component="h6">
             Ajouter un article à la facture
           </Typography>
-          <Typography id="keep-mounted-modal-description" sx={{ mt: 2 }}>
+          <div >
             <form onSubmit={ajouterLigneAchat}>
             
-              <label htmlFor="fournisseur_id">Produit</label>
-              <select className="form-control">
+              <label htmlFor="article_id">Produit</label>
+              <select className="form-control"  ref={refArticle}>
                 <option>--veuillez choisir le produit--</option>
                 {tabProduits.map((f) => {
-                  return <option ref={refArticle}>{f.title}</option>;
+                  return <option key={f.title}>{f.title}</option>;
                 })} 
               </select>
 
-              <label htmlFor="article_id">Quantité</label>
+              <label htmlFor="quantite_a">Quantité</label>
               <input
                 type="number"
-                name="article_id"
+                name="quantite_a"
                 ref={refQuantite_a}
                 className="form-control"
               />
@@ -263,9 +223,20 @@ factCtx.getAllAchatFacts()
                 Valider
               </button>
             </form> 
-          </Typography>
+          </div>
         </Box>
       </Modal>
+
     </>
   );
+}
+
+else{
+return (
+  <div className="fetching">      
+  <FaSpinner className="spinner"></FaSpinner>
+        </div>
+)
+}
+
 }

@@ -35,7 +35,7 @@ const handleSubmit = async (event) =>{
       window.alert("Coordonnées invalides")
     }else{
       window.alert("Connexion réussie");
-      navigate('/dashboard')
+      navigate('/welcome-page')
       // Token is generated When we Logged In.
 
     }
@@ -46,7 +46,7 @@ const handleSubmit = async (event) =>{
 }
   return (
     <div style={{marginTop:20+"vh"}}>
-{/*         <h1 className='text-center display-1 bg-dark p-3 fw-bold' style={{color: "#09ff00" }}> Nodes Storages Manager </h1>
+{/*         <h1 className='text-center display-1 bg-dark p-3 fw-bold' style={{color: "#09ff00" }}> Nodes Storage Manager </h1>
  */}    <div className="container shadow my-5">
       <div className="row justify-content-end">
         <div

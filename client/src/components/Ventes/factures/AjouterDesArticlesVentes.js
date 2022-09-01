@@ -2,15 +2,14 @@ import Box from "@mui/material/Box";
 import Button from "@mui/material/Button";
 import Modal from "@mui/material/Modal";
 import Typography from "@mui/material/Typography";
+import axios from 'axios';
 import moment from "moment";
 import "moment/locale/fr";
-import React, { useContext, useRef } from "react";
-import { useParams } from 'react-router-dom';
-import { achatFactCtx } from './../../../store/achatFactContext';
-import { fournisseurtCtx } from './../../../store/fournisseurContext';
-import { ligneAchatCtx } from './../../../store/ligneAchatContext';
-import { produitCtx } from './../../../store/produitContext';
-import OneLigneFactureAchat from './../../Achats/OneLigneFactureAchat';
+import React, { useContext, useEffect, useRef, useState } from "react";
+import { FaSpinner } from "react-icons/fa";
+import { useNavigate } from "react-router-dom";
+import { ligneVenteCtx } from "../../../store/ligneVenteContext";
+import ListeVentes from "./ListeVentes";
 
 const style = {
   position: "absolute",
@@ -23,174 +22,217 @@ const style = {
   boxShadow: 24,
   p: 4,
 };
+
 export default function AjouterDesArticlesVentes() {
-  const [open, setOpen] = React.useState(false);
-  const handleOpen = () => setOpen(true);
-  const handleClose = () => setOpen(false);
-
- // const {_id}=useParams();
- // console.log("_id",_id);
-  const factCtx = useContext(achatFactCtx);
- // const concernedInvoice=factCtx.getAchatFactById(_id);
- // console.log("concernedInvoice", concernedInvoice);
-  const ctx = useContext(fournisseurtCtx);
-  const tabF = ctx.tabFournisseurs;
-  const pCtx = useContext(produitCtx);
-  const ListeProduits = pCtx.tabProduits;
-  //const [invoice, setInvoice]=useState(concernedInvoice);
-  const lCtx = useContext(ligneAchatCtx);
- /*  let tabLignes=lCtx.tabLigneAchats;
-  const tabFactures = factCtx.tabAchatFacts;
+    let navigate=useNavigate()
+    let ligneCtx=useContext(ligneVenteCtx)
+    const [open, setOpen] = React.useState(false);
+    const handleOpen = () => setOpen(true);
+    const handleClose = () => setOpen(false);
+  /*PRODUITS OK*/
  
- */
-  
- // console.log("tabFactures", tabFactures);
-  //const lastF = tabFactures.at(tabFactures.length - 1);
-  //console.log("lastF", lastF);
-  //const concernedInvoice = fCtx.getAchatFactById(lastF._id);
-  //console.log("concernedInvoice", concernedInvoice);
- // const fournisseurID = concernedInvoice.fournisseur_id;
+  const [tabProduits, setTabProduits] = useState([]);
+  useEffect(() => {
+    axios.get(`/api/produits`).then((response) => {
+      setTabProduits(response.data);
+    });
+  }, []);
 
-// const fournisseur = tabF.find((f) => f._id == fournisseurID);
+    /*FACTURES OK*/
+  const [tabVenteFacts, setTabVenteFacts] = useState([]);
+  useEffect(() => {
+    axios.get(`/api/factures/vente`).then((response) => {
+      setTabVenteFacts(response.data);
+    });
+  }, []);
+  const [tabLignes, setTabLignes] = useState([]);
+  useEffect(() => {
+    axios.get(`/api/vente/addToInvoice`).then((response) => {
+      setTabLignes(response.data);
+    });
+  }, []);
+  const [tabClients, setTtabClients] = useState([]);
+  useEffect(() => {
+    axios.get(`/api/clients`).then((response) => {
+        setTtabClients(response.data);
+    });
+  }, []);
 
+  var lastF = tabVenteFacts.at(tabVenteFacts.length - 1);
+  console.log("lastF", lastF);
+  var client= tabClients.find((f)=>f._id===lastF.client_id);
+  console.log('client', client)
   const refArticle = useRef("");
-  const refQuantite_a = useRef("");
-
+  const refQuantite_s = useRef("");
   function ajouterLigneAchat(e) {
     e.preventDefault();
-    const c = ListeProduits.find((p) => p.title == refArticle.current.value);
-
+  var c = tabProduits.find((p) => p.title === refArticle.current.value);
     const newLigne = {
-      quantite_a: refQuantite_a.current.value,
-  //    facture_id:_id,
+        quantite_s: refQuantite_s.current.value,
+      facture_id:lastF._id,
       article_id: c._id,
     };
-    lCtx.addNewLigneAchat(newLigne);
-    e.target.reset();
-    window.location.reload()
-    // navigate("/historique-achat");
-  } 
-  return (
-    <>
-    <div style={{ display: "flex" }}>
-      <div className="container">
-        <h6 className="display-6">Poursuivre votre achat</h6>
-        <hr />
-        <div className="row my-2 container">
-          <div className="d-flex align-items-center">
-            <div className="col-6">
-          {/*     N° de facture:  {concernedInvoice.numFacture}  <br /> */}
-              Date facture:
-           {/*    {moment(concernedInvoice.dateFacture).locale("fr").format("LL")}  */}
-            </div>
-            <div className="col-6 mx-2">
-         {/*      Nom du Fournisseur: {fournisseur.nom_commercial}  */}
-            </div>
-          </div>
-        </div>
-        <hr />
-        <div className="row my-2">
-          <div className="d-flex align-items-center">
-            <div className="col-9">
-              <h5 className="fs-4">Articles commandés</h5>
-            </div>
-            <div className="col-3 mx-2">
-              <Button
-                className="btn rounded-pill text-light"
-                onClick={handleOpen}
-                style={{ backgroundColor: "#F779B0" }}
-              >
-                Ajouter un article
-              </Button>
-            </div>
-          </div>
-        </div>
-        <table className="table table-hover">
-          <thead>
-            <tr>
-              <th scope="col">Produit</th>
-              <th scope="col">Prix Unitaire</th>
-              <th scope="col">Quantité</th>
-              <th scope="col">Total</th>
-              <th scope="col">Modifier</th>
-              <th scope="col">Supprimer</th>
-            </tr>
-          </thead>
-      {/*     <tbody>
-              {
-                  concernedInvoice.articles.map((l)=>{
-                      return <OneLigneFactureAchat ligne={l}></OneLigneFactureAchat>
-                  })
-              }  
-       
-          </tbody> */}
-        </table>
-        <hr />
-        <div className="row my-2 container">
-          <div className="d-flex align-items-center">
-            <div className="col-5"></div>
-            <div className="col-6 mx-2">
-             {/*  Frais de livraison: {concernedInvoice.frais_de_livraison}  */}
-              <br></br>
-           {/*    <b>Net à payer:  {concernedInvoice.net_a_payer}  DT</b> */}
-            </div>
-          </div>
-        </div>
-        <div className="row my-2 container">
-          <div className="d-flex align-items-center">
-            <div className="col-6">
-          {/*     Mode de paiement: {concernedInvoice.mode_de_paiement} <br />
-              Date d'échéance:{" "}
-              {moment(concernedInvoice.dateEcheance)
-                .locale("fr")
-                .format("LL")}  */}
-            </div>
-            <div className="col-6 mx-2"></div>
-          </div>
-        </div>
-      </div>
-    </div>
-    <Modal
-      keepMounted
-      open={open}
-      onClose={handleClose}
-      aria-labelledby="keep-mounted-modal-title"
-      aria-describedby="keep-mounted-modal-description"
-    >
-      <Box sx={style}>
-        <Typography id="keep-mounted-modal-title" variant="h6" component="h6">
-          Ajouter un article à la facture
-        </Typography>
-        <Typography id="keep-mounted-modal-description" sx={{ mt: 2 }}>
-          <form onSubmit={ajouterLigneAchat}>
-          
-            <label htmlFor="fournisseur_id">Produit</label>
-           {/*  <select className="form-control">
-              <option>--veuillez choisir le produit--</option>
-              {ListeProduits.map((f) => {
-                return <option ref={refArticle}>{f.title}</option>;
-              })}
-            </select>
- */}
-            <label htmlFor="article_id">Quantité</label>
-            <input
-              type="number"
-              name="article_id"
-              ref={refQuantite_a}
-              className="form-control"
-            />
+        ligneCtx.addNewLigneVente(newLigne)
+        e.target.reset();
+        handleClose();
+        window.location.reload()
+      }
+      function validationDeCommande(){
+        // eslint-disable-next-line no-restricted-globals
+    var result =  confirm('Etes-vous sûr de bien vouloir valider la commande? Après cette étape, vous ne pouvez changer que les informations générales de la commande!!!');
+  
+    if(result){
+  navigate('/historique-ventes')
+    }}
+    var tabLignesFiltred=tabLignes.filter((l)=>l.facture_id===lastF._id)
 
-            <button
-              type="submit"
-              className="btn text-light form-control my-2"
-              style={{ backgroundColor: "#4125D9" }}
+
+
+
+    if(lastF && client && tabLignesFiltred){
+
+        return (
+        
+             <>
+          
+            <div style={{ display: "flex" }}>
+              <div className="container">
+                <h6 className="display-6">Poursuivre votre vente</h6>
+                <hr />
+                <div className="row my-2 container">
+                  <div className="d-flex align-items-center py-3">
+                    <div className="col-6">
+                      N° de facture:    {lastF.numFacture}    <br />
+                      Date facture:
+                     {moment(lastF.dateFacture).locale("fr").format("LL")}   
+                    </div>
+                    <div className="col-6 mx-2">
+                      Nom du Client:  {client.nomClient}   
+                    </div>
+                  </div>
+                </div>
+                <hr />
+                <div className="row my-2">
+                  <div className="d-flex align-items-center">
+                    <div className="col-9">
+                      <h5 className="fs-4">Articles commandés</h5>
+                    </div>
+                    <div className="col-3 mx-2">
+                      <Button
+                        className="btn rounded-pill text-light"
+                        onClick={handleOpen}
+                        style={{ backgroundColor: "#F779B0" }}
+                      >
+                        Ajouter un article
+                      </Button>
+                    </div>
+                  </div>
+                </div>
+                <div  style={{maxHeight: 240+"px", overflowY:"scroll"}}>
+                  
+                
+                <table className="table table-hover mb-5">
+                  <thead>
+                    <tr>
+                      <th scope="col">Produit</th>
+                      <th scope="col">Prix Unitaire</th>
+                      <th scope="col">Quantité</th>
+                      <th scope="col">Total</th>
+                      <th scope="col">Modifier</th>
+                      <th scope="col">Supprimer</th>
+                    </tr>
+                  </thead>
+                  <tbody >
+          
+                 <ListeVentes listeOfVentes={tabLignesFiltred}></ListeVentes>
+                  </tbody>
+                </table>
+                </div>
+                <hr />
+                <div className="row my-2 container">
+                  <div className="d-flex align-items-center">
+                    <div className="col-5"></div>
+                    <div className="col-6 mx-2">
+                      Frais de livraison:  {lastF.frais_de_livraison}  dt
+                      <br></br>
+                        {tabLignesFiltred.length?(
+                          <b className="fs-4">Net à payer:   {lastF.net_a_payer}   DT</b>
+                        ):""
+                        }   
+                    </div>
+                  </div>
+                </div>
+                <div className="row my-2 container">
+                  <div className="d-flex align-items-center">
+                    <div className="col-9">
+                      Mode de paiement:  {lastF.mode_de_paiement}  <br />
+                      Date d'échéance:
+                    {moment(lastF.dateEcheance)
+                        .locale("fr")
+                        .format("LL")}  
+                    </div>
+                    <div className="col-4 mx-2">
+              <button type="" className="col-6 m-5 btn  fs-5 bg-blue"   onClick={validationDeCommande} 
+      >Valider la commande</button>
+      
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+      
+            <Modal
+              keepMounted
+              open={open}
+              onClose={handleClose}
+              aria-labelledby="keep-mounted-modal-title"
+              aria-describedby="keep-mounted-modal-description"
             >
-              Valider{" "}
-            </button>
-          </form> 
-        </Typography>
-      </Box>
-    </Modal>
-  </>
-  )
-}
+              <Box sx={style}>
+                <Typography id="keep-mounted-modal-title" variant="h6" component="h6">
+                  Ajouter un article à la facture
+                </Typography>
+                <div >
+                  <form onSubmit={ajouterLigneAchat}>
+                  
+                    <label htmlFor="article_id">Produit</label>
+                    <select className="form-control"  ref={refArticle}>
+                      <option>--veuillez choisir le produit--</option>
+                      {tabProduits.map((f) => {
+                        return <option key={f.title}>{f.title}</option>;
+                      })} 
+                    </select>
+      
+                    <label htmlFor="quantite_s">Quantité</label>
+                    <input
+                      type="number"
+                      name="quantite_s"
+                      ref={refQuantite_s}
+                      className="form-control"
+                    />
+      
+                    <button
+                      type="submit"
+                      className="btn text-light form-control my-2"
+                      style={{ backgroundColor: "#4125D9" }}
+                    >
+                      Valider
+                    </button>
+                  </form> 
+                </div>
+              </Box>
+            </Modal>
+      
+          </>
+        );
+      }
+      
+      else{
+      return (
+        <div className="fetching">      
+        <FaSpinner className="spinner"></FaSpinner>
+              </div>
+      )
+      }
+      
+      }

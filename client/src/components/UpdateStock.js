@@ -1,12 +1,15 @@
-import React, { useContext, useState } from 'react'
-import { useNavigate, useParams } from 'react-router-dom'
-import editPhoto from '../assets/images/pen.gif'
+import React, { useContext, useState } from 'react';
+import { FaSpinner } from 'react-icons/fa';
+import { useNavigate, useParams } from 'react-router-dom';
+import editPhoto from '../assets/images/pen.gif';
 import { produitCtx } from './../store/produitContext';
 
 export default function UpdateStock() {
     let {_id}=useParams()
     const pdtCtx= useContext(produitCtx)
+   
   let selectedStock= pdtCtx.getProduitById(_id)
+  console.log('selectedStock', selectedStock)
   const [stock, setStock]=useState(selectedStock)
   function handleInputChange ( event) {
     const { name, value } = event.target
@@ -14,6 +17,9 @@ export default function UpdateStock() {
     setStock({ ...stock, [name]: value })
   }
     let navigate=useNavigate()
+    
+    if(selectedStock){
+   
   return (
     <div  style={{display: "flex"}}>
 
@@ -49,3 +55,12 @@ export default function UpdateStock() {
            </div>
   )
 }
+else{
+  return (
+    <div className="fetching">      
+    <FaSpinner className="spinner"></FaSpinner>
+          </div>
+  )
+  }
+  
+  }

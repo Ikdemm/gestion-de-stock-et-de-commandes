@@ -1,24 +1,56 @@
-import React, { useContext, useEffect } from "react";
-import { fournisseurtCtx } from "../../store/fournisseurContext";
+import axios from "axios";
+import React, { useEffect, useState } from "react";
+import { BiAddToQueue } from "react-icons/bi";
+import { FaSpinner } from "react-icons/fa";
+import { Link } from "react-router-dom";
 import "../Form.module.css";
 import OneFournisseur from "./OneFournisseur";
 
 export default function ListeFournisseur() {
-  let fctx = useContext(fournisseurtCtx);
-  let listeF = fctx.tabFournisseurs;
+  const [tabF, setTabFournisseurs] = useState([]);
 
   useEffect(() => {
-    fctx.getAllFournisseurs();
-  }, []);
+    axios.get(`/api/fournisseurs`).then((response) => {
+      setTabFournisseurs(response.data);
+    });
+  }, []); 
+
+
+if(tabF){
   return (
     <div>
-      <h6 className="display-4">Liste Fournisseurs </h6>
-   
-      <ol className='list-group'>
-        {listeF.map((f) => {
+    <div className="row d-flex">
+      <h6 className="col-md-9 flex-fill display-4">Liste des fournisseurs</h6>
+
+      <div className="col-md-2">
+        <Link to="/addFournisseur" className="btn bg-blue m-4 p-2">
+          Ajouter <BiAddToQueue></BiAddToQueue>
+        </Link>
+      </div>
+    </div>
+    {tabF.length > 0 ? (
+        <div className="card col m-3 px-2">
+        {tabF.map((f) => {
           return <OneFournisseur fournisseur={f} key={f._id}></OneFournisseur>;
         })}
-    </ol>
-    </div>
-  );
+   </div>
+        ) : (
+          <div className="text-center">
+            <img
+              src={require("../../assets/images/nothing.png")}
+              alt="nothing to display"
+            />{" "}
+          </div>
+        )}
+      </div>
+    );
+
+}
+else{
+  return(
+    <div className="fetching">      
+    <FaSpinner className="spinner"></FaSpinner>
+          </div> 
+  )
+}
 }

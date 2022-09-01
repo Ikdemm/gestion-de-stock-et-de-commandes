@@ -34,11 +34,10 @@ function AddNewDirectionContextProvider(props) {
   function removeOneDirection(id) {
     fetch(`/api/directions/${id}`, {
       method: "DELETE",
-      body: JSON.stringify(),
       headers: { "Content-Type": "application/json" },
     })
       .then((res) => {
-        alert("la Direction est bien supprimée");
+        alert("la Direction et tout les employés y inclus sont supprimés avec succès! ");
         console.log(res);
 
 
@@ -80,15 +79,18 @@ function AddNewDirectionContextProvider(props) {
       method: "PUT",
       body: JSON.stringify(updatedC),
       headers: { "Content-Type": "application/json" },
-    })
-      .then((res) => {
-        alert("le Direction est modifié");
+    }).then((res) => {
+        getAllDirections()
+        alert("la Direction est modifiée");
+        console.log('res', res)
+
       })
       .catch((err) => {
         alert("erreur inconnue");
+        console.log('err', err)
+
       });
 
-        getAllDirections()
     }
   const context = {
     tabDirections: tabDirections,

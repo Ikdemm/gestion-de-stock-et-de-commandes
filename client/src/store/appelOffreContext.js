@@ -21,9 +21,14 @@ function AddNewAppelOffreContextProvider(props) {
       .then((res) => {
 
         alert("l'appel d'Offre est bien ajouté");
+        getAllAppelOffres();
+        console.log(res);
+
       })
       .catch((err) => {
-        alert("erreur inconnue");
+        alert("erreur avec addNewAppelOffre");
+        console.log(err);
+
       });
     setTabAppelOffres((prev) => {
       return [...prev, newAppelOffre];

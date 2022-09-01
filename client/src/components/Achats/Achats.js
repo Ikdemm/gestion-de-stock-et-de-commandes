@@ -1,19 +1,32 @@
-import React from "react";
+import axios from "axios";
+import React, { useEffect, useState } from "react";
+import { CgDanger } from "react-icons/cg";
 import {
-  FcCalendar,
-  FcCalculator,
-  FcMultipleSmartphones,
-  FcHighPriority,
-  FcPlus,
-  FcViewDetails,
-  FcSearch
+  FcCalculator, FcHighPriority, FcMoneyTransfer, FcMultipleSmartphones, FcPlus, FcSearch, FcViewDetails
 } from "react-icons/fc";
 import { Link } from "react-router-dom";
-
 export default function Achats() {
+  const [tabProduits, settabProduits] = useState([]);
+
+  useEffect(() => {
+    axios.get(`/api/produits`).then((response) => {
+      settabProduits(response.data);
+    });
+  }, []);
+  var tabAlertes=tabProduits.filter((p)=>p.stock_final>=p.stock_max ||p.stock_final<=p.stock_min )
   return (
     <>
-      <h1 className="display-3">Achats</h1> <hr />
+    <div className="row d-flex">
+      <div className="col-md-8">
+      <h1 className="display-3">Achats</h1>
+              </div>
+              <div className="col-md-4">
+                <Link to="/alertes" className="btn btn-danger mt-4"><CgDanger></CgDanger> Alertes
+              <span className="badge">({tabAlertes.length})</span>
+                </Link>
+                
+              </div>
+    </div>
       <div className="container">
         <div className="row card  my-2 p-4 shadow">
           <div className="d-flex align-items-center">
@@ -67,10 +80,10 @@ export default function Achats() {
           <div className="row card  my-2 p-4 shadow">
             <div className="d-flex align-items-center">
               <div className="col-2">
-                <FcCalendar size={70}></FcCalendar>
+                <FcMoneyTransfer size={70}></FcMoneyTransfer>
               </div>
               <div className="col-7">
-                <h3 className="display-4"> Echéances à venir</h3>
+                <h3 className="display-4"> Suivi de paiement</h3>
               </div>
               <div className="col-3">
               <Link to="/echeances" className="nav-link">

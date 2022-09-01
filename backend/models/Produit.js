@@ -15,6 +15,7 @@ const productSchema = mongoose.Schema({
   },
   price_a: { type: Number, required: true },
   price_v: { type: Number, required: true },
+  image: { type: String, required: false },
 
   stock_initial: { type: Number, required: false, default: 0 },
   quantite_entree: { type: Number, required: false, default: 0 },
@@ -25,6 +26,13 @@ const productSchema = mongoose.Schema({
   } },
   stock_min: { type: Number, required: true, default: 20 },
   stock_max: { type: Number, required: true, default: 100 },
+  etat: { type: String, enum: ["en stock", "en rupture de stock"],
+  default: function(){
+    if(this.stock_final>0){
+      return "en stock"
+    }else
+    return "en rupture de stock"
+  }},
 });
 /* let product_validator=Joi.object({
     title:Joi.string().required(),

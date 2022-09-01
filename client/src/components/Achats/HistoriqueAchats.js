@@ -1,13 +1,18 @@
-import React, { useContext, useEffect } from "react";
-import { achatFactCtx } from './../../store/achatFactContext';
-import OneFactureAchat from "./OneFactureAchat";
+import axios from "axios";
+import React, { useEffect, useState } from "react";
+import { FaSpinner } from "react-icons/fa";
+import AchatList from "./AchatList";
 
 export default function HistoriqueAchats() {
-  let fCtx=useContext(achatFactCtx);
-  let tabFactures=fCtx.tabAchatFacts;
-  useEffect(()=>{
-    fCtx.getAllAchatFacts()
-  },[])
+
+  const [tabAchatFacts, setTabAchatFacts] = useState([]);
+
+  useEffect(() => {
+    axios.get(`/api/factures/achat`).then((response) => {
+      setTabAchatFacts(response.data);
+    });
+  }, []); 
+if(tabAchatFacts){
   return (
     <>
         <h6 className='display-5'>Historique des achats</h6> 
@@ -20,21 +25,17 @@ export default function HistoriqueAchats() {
     <tr>
       <th scope="col">Date</th>
       <th scope="col">N° de Facture</th>
-      <th scope="col">Nom du Fournisseur</th>
       <th scope="col">Total commande</th>
       <th scope="col">Echéance</th>
       <th scope="col">Modifier</th>
-      <th scope="col">Téléchager</th>
+      <th scope="col">Détails</th>
+      <th scope="col">Suivi du paiement</th>
 
     </tr>
   </thead>
   <tbody>
  
-{
-tabFactures.map((f)=>{
-  return <OneFactureAchat facture={f} key={f._id}></OneFactureAchat>
-})
-}
+ <AchatList listOfAchats={tabAchatFacts}></AchatList> 
 
     
   </tbody>
@@ -47,4 +48,12 @@ tabFactures.map((f)=>{
 
     </>
   )
+}
+else{
+  return(
+    <div className="fetching">      
+    <FaSpinner className="spinner"></FaSpinner>
+          </div> 
+  )
+}
 }

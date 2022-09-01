@@ -1,18 +1,21 @@
 import React from 'react'
-import AddFournisseurForm from './AddFournisseurForm';
 import ListeFournisseur from './ListeFournisseur';
 
 export default function HolderFournisseurs() {
   return (
-    <div>
-    <h1 className='display-3'>Fournisseurs</h1><hr/>
-    <div className='row'>
-        <div className='col-5'>
-            <AddFournisseurForm></AddFournisseurForm>
-        </div>
-        <div className='col-7'>
-            <ListeFournisseur></ListeFournisseur>
-        </div>
+    <div className="col">
+    <div className="row p-2">
+      <div className="col-md-12 p-0">
+        <h1 className="display-3">Fournisseurs</h1>
+        <hr />
+      </div>
+    
+      <div className=" card col ml-0 my-3 ">
+      <ListeFournisseur></ListeFournisseur>
+  
+      </div>
     </div>
-</div>  )
+  </div>
+
+)
 }

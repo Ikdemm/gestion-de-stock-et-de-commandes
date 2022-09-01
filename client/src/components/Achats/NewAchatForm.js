@@ -1,17 +1,29 @@
-import React, { useContext, useRef } from "react";
+import axios from "axios";
+import React, { useContext, useEffect, useRef, useState } from "react";
+import { FaSpinner } from "react-icons/fa";
 import { useNavigate } from "react-router-dom";
 import { achatFactCtx } from './../../store/achatFactContext';
-import { fournisseurtCtx } from './../../store/fournisseurContext';
-import { produitCtx } from './../../store/produitContext';
+const _ = require ('lodash')
 
 
 export default function NewAchatForm() {
+  let ctx=useContext(achatFactCtx);
+  const [tabFrs, setTabFrs] = useState([]);
+  useEffect(() => {
+    axios.get(`/api/fournisseurs`).then((response) => {
+      setTabFrs(response.data);
+    });
+  }, []);
 
-  let fCtx=useContext(achatFactCtx);
-  let pCtx=useContext(produitCtx);
-  let FourCtx=useContext(fournisseurtCtx)
-  let tabFOurnisseurs=FourCtx.tabFournisseurs
-  let tabFactures=fCtx.tabAchatFacts
+
+  const [tabAchatFacts, setTabAchatFacts] = useState([]);
+  const tabNotFiltred=_.map(tabAchatFacts,"numFacture")
+
+  useEffect(() => {
+    axios.get(`/api/factures/achat`).then((response) => {
+      setTabAchatFacts(response.data);
+    });
+  }, []);
   let navigate=useNavigate()
 
 
@@ -23,7 +35,7 @@ export default function NewAchatForm() {
   let refmode_de_paiement = useRef("");
   function submitHandler(e) {
     e.preventDefault();
-    const c = tabFOurnisseurs.find((p) => p.nom_commercial == reffournisseur_id.current.value);
+    const c = tabFrs.find((p) => p.nom_commercial === reffournisseur_id.current.value);
     let newInvoice = {
       numFacture: refnumFacture.current.value,
       dateFacture: refdateFacture.current.value,
@@ -33,15 +45,20 @@ export default function NewAchatForm() {
       dateEcheance: refdateEcheance.current.value,
    
     };
-    fCtx.addNewAchatFact(newInvoice);
-    //const lastF = tabFactures.at(tabFactures.length - 1)
-    setTimeout(() => {
-      navigate('/facture-achat/panier')
-
-      console.log('Hello, World!')
-    }, 3000);
+    if(tabNotFiltred.includes(newInvoice.numFacture)){
+      alert("Ce numéro de facture existe déjà, veuillez entrer un numéro différent")
+    }
+    else if(!tabNotFiltred.includes(newInvoice.numFacture)){
+      ctx.addNewAchatFact(newInvoice)
+      setTimeout(() => {
+        alert("Vous allez être diriger dans 3secondes")
+        navigate('/facture-achat/panier')
+        console.log('facture ajoutée!')
+      }, 3000);
+    }
+  
   }
-
+  if (tabFrs) { 
   return (
     <>
     <div style={{display:"flex"}}>
@@ -52,10 +69,10 @@ export default function NewAchatForm() {
         <label htmlFor="numFacture">Numéro de facture</label>
         <input type="text" name="numFacture" ref={refnumFacture} className="form-control" />
         <label htmlFor="fournisseur_id">Fournisseur</label>
-        <select name="select" className="form-control">
+        <select className="form-select" ref={reffournisseur_id}>
           <option>--veuillez choisir le fournisseur--</option>
-          {tabFOurnisseurs.map((f) => {
-            return <option ref={reffournisseur_id} key={f._id}>{f.nom_commercial}</option>;
+          {tabFrs&&tabFrs.map((f) => {
+            return <option  key={f._id}>{f.nom_commercial}</option>;
           })}
         </select>
 
@@ -85,4 +102,12 @@ export default function NewAchatForm() {
 
     </>
   )
+}
+else {
+  return (
+    <div className="fetching">
+      <FaSpinner className="spinner"></FaSpinner>
+    </div>
+  );
+}
 }

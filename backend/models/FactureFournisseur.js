@@ -28,8 +28,16 @@ const factureAchatSchema = new mongoose.Schema({
     enum: ["Comptant", "à crédit", "autres"],
     default: "Comptant",
   },
+  etat:{type: String,enum: ["payee", "non_payee"],
+  default: function(){
+    if(this.mode_de_paiement=="Comptant"){
+      return "payee"
+    }else
+    return "non_payee"
+  }}
 
 });
+
 factureAchatSchema.pre('remove', async function(next){
   const facture= this
   await Ligne.deleteMany({facture_id:facture._id})

@@ -32,14 +32,13 @@ function AddNewProduitContextProvider(props) {
   function removeOneProduit(id) {
     fetch(`/api/produits/${id}`, {
       method: "DELETE",
-      body: JSON.stringify(),
       headers: { "Content-Type": "application/json" },
-    })
-      .then((res) => {
-        alert("le produit est supprimé");
-      })
-      .catch((err) => {
-        alert("erreur inconnue");
+    
+    }).then((res) => {
+        getAllProduits();
+        alert("le produit est supprimé")
+    }).catch((err) => {
+        alert("erreur inconnue!");
       });
  
   

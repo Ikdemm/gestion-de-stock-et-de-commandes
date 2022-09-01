@@ -13,14 +13,9 @@ const employeSchema = mongoose.Schema({
     date_de_naissance:{type:Date, required: true},
     date_de_recrutement:{type:Date, required: true},
     poste :{type:String, required: true},
-    direction:{
-        direction_id:  { type: mongoose.Schema.Types.ObjectId ,ref: 'Direction'}
-      
-    } ,
-    demandes:[
-        { type: mongoose.Schema.Types.ObjectId ,ref: 'DemandeEmploye'}
-    ],
-    user_id:  { type: mongoose.Schema.Types.ObjectId ,ref: 'User'}
+    direction_id:  { type: mongoose.Schema.Types.ObjectId ,ref: 'Direction'},
+
+    user_id:  { type: mongoose.Schema.Types.ObjectId ,ref: 'User', required: false}
 })
 /* let employe_validator=Joi.object({
     nom:Joi.string().min(3).max(20).required(),
