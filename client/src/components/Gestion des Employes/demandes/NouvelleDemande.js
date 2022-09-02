@@ -1,10 +1,8 @@
 import React, { useContext, useRef } from "react";
-import { useNavigate } from "react-router-dom";
 import { demandeCtx } from './../../../store/demandeContext';
 
 export default function NouvelleDemande() {
   let dctx=useContext(demandeCtx)
-  let navigate=useNavigate()
   let refobjet = useRef("");
   let refdetailsDemande = useRef("");
   let refemploye_id = useRef("")

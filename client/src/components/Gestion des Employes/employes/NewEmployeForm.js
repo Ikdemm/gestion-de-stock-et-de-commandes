@@ -1,16 +1,18 @@
-import React, { useContext, useEffect, useState } from 'react';
-import { FaBan, FaSave } from 'react-icons/fa';
+import axios from 'axios';
+import React, { useEffect, useState } from 'react';
+import { FaBan, FaSave, FaSpinner } from 'react-icons/fa';
 import { Link, useNavigate } from 'react-router-dom';
-import { directionCtx } from '../../../store/directionContext';
 
 export default function NewEmployeForm() {
+  const [listeDirections, setTlisteDirections] = useState([]);
 
-  let dctx = useContext(directionCtx);
-  let listeDirections = dctx.tabDirections
-  console.log("listeDirections", listeDirections);
+
   useEffect(() => {
-    dctx.getAllDirections()
-  }, []);
+   axios.get(`/api/directions`).then((response) => {
+    setTlisteDirections(response.data);
+   });
+ }, []); 
+
 let navigate= useNavigate()
  
    const [Employee, setEmployee] = useState({
@@ -60,6 +62,8 @@ let navigate= useNavigate()
     navigate('/employes')
 
 }
+if(listeDirections){
+
   return (
     <div className="container">
     <div style={{ display: "flex" }}>
@@ -144,4 +148,12 @@ let navigate= useNavigate()
     </div>
     </div>
   )
+}else
+{
+  return (
+    <div className="fetching">      
+    <FaSpinner className="spinner"></FaSpinner>
+          </div>
+  )
+}
 }

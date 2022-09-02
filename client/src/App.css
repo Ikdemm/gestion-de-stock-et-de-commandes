@@ -33,7 +33,7 @@ h5{
     to {transform: rotate(360deg);}
   }
 .bg-blue{
-  background-color:  #4125D9;
+  background-color:  rgb(65, 37, 217);
   color: white;
 }
 .bg-green{
