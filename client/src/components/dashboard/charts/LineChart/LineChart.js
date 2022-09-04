@@ -40,12 +40,12 @@ export default function LineChart() {
       },
       title: {
         display: true,
-        text: 'Variation des recettes et des dépenses en 2022',
+        text: 'Evolution des recettes et des dépenses en 2022',
       },
     },
   };
   
-  const labels = ['Septembre', 'Octobre', 'Novembre','Decembre'];
+  const labels = ['Juin','Juillet','Août' ,'Septembre', 'Octobre', 'Novembre','Decembre'];
   
    const data = {
     labels,
@@ -67,6 +67,6 @@ export default function LineChart() {
   };
   
   return (
-    <div> <Line options={options} data={data} className="card " /></div>
+    <div> <Line options={options} data={data} className="card px-3 py-2" /></div>
   )
 }

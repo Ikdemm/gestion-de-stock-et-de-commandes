@@ -3,6 +3,8 @@ const express = require('express');
 const cookieParser = require("cookie-parser");
 const morgan = require('morgan');
 const path = require('path');
+//const passport= require('passport');
+//session = require('express-session')
 require('./db/connect')
 const staffRoutes = require('./routers/employes');
 const directionRoutes = require('./routers/directions');
@@ -22,10 +24,9 @@ const AvoirFactVenteRoutes= require('./routers/AvoirVente');
 const AvoirLigneVenteRoutes= require('./routers/LigneAvoirVente');
 //const cmdFrsRoutes= require('./routers/commandeFournisseurs');
 const userRoutes=require('./routers/users');
-const authenticate= require('./middlewares/is-auth')
+//const authenticate= require('./middlewares/is-auth')
 
 var cors = require('cors');
-
 
 const app = express();
 dotenv.config({ path: "./config.env" });
@@ -38,11 +39,11 @@ app.use(cookieParser());
 app.use(morgan("dev"));
 
 app.use((req, res, next) => {
-    res.setHeader('Access-Control-Allow-Origin', '*');
-    res.setHeader('Access-Control-Allow-Headers', 'Origin, X-Requested-With, Content, Accept, Content-Type, Authorization');
-    res.setHeader('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE, PATCH, OPTIONS');
-    next();
-  });
+  res.setHeader('Access-Control-Allow-Origin', '*');
+  res.setHeader('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE');
+  res.setHeader('Access-Control-Allow-Headers', 'Content-Type, Authorization');
+  next();
+})
 
 
 app.use('/images/', express.static(path.join(__dirname, 'images/')));
@@ -54,7 +55,6 @@ app.use('/api/auth', userRoutes);
 app.use('/api/staff',staffRoutes);
 app.use('/api/demandes',demandesRoutes);
 app.use('/api/directions',directionRoutes);
-
 //gestion des catégories
 app.use('/api/categories',categoriesRoutes);
 //gestion des produits
@@ -77,12 +77,15 @@ app.use('/api/avoirSurachat/addToInvoice',AvoirLigneAchatRoutes);
 //gestion des factures AVOIR sur les ventes
 app.use('/api/avoirs/vente',AvoirFactVenteRoutes);
 app.use('/api/avoirSurvente/addToInvoice',AvoirLigneVenteRoutes);
-app.use('/auth', authenticate, (req,res)=>{
+//app.use('/auth', authenticate, (req,res)=>{
 
-})
-app.get('/logout', (req, res)=>{
-  res.clearCookie("jwt", {path : '/'})
-  res.status(200).send("User Logged Out")
-})
+//}) 
 
+app.use((error, req, res, next) => {
+  console.log("-----", error);
+  const status = error.statusCode || 500;
+  const message = error.message;
+  const data = error.data;
+  res.status(status).json({ message: message, data: data }); //data c'est pour la validation
+});
 app.listen(port, ()=> console.log(`Server is listening on ${port}`));

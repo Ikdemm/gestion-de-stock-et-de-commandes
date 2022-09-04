@@ -5,7 +5,8 @@ import Typography from "@mui/material/Typography";
 import React, { useContext } from "react";
 import { FaCheck, FaRegEye } from "react-icons/fa";
 import { demandeCtx } from './../../../store/demandeContext';
-
+import moment from "moment";
+import "moment/locale/fr";
 import {
   FcCancel
 } from "react-icons/fc";
@@ -91,7 +92,7 @@ return
         <b> Objet: {props.demande.objet}</b> <hr></hr>
         </Typography>
         <Typography id="keep-mounted-modal-description" sx={{ mt: 2 }}>
-        <b> Date Demande:</b> {props.demande.dateDemande}<br/>
+        <b> Date Demande:</b> {moment(props.demande.dateDemande).locale('fr').format('ll')}<br/>
         <b> Details Demande:</b> {props.demande.detailsDemande}<br/>
         <b> Etat:</b> {props.demande.etat}
          

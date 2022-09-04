@@ -19,12 +19,12 @@ let navigate= useNavigate()
     nom: '',
     prenom: '',
     numCIN: '',
+    numTel: '',
     adresse: '',
     date_de_naissance: '',
     date_de_recrutement: '',
     poste: '',
     direction_id: '',
-    user_id: '',
 
     })
     const [imageUrl, setimageUrl] = useState(null)
@@ -47,12 +47,12 @@ let navigate= useNavigate()
     data.append("prenom",Employee.prenom);
     data.append("imageUrl",imageUrl);
     data.append("numCIN",Employee.numCIN);
+    data.append("numTel",Employee.numTel);
     data.append("adresse",Employee.adresse);
     data.append("date_de_naissance",Employee.date_de_naissance);
     data.append("date_de_recrutement",Employee.date_de_recrutement);
     data.append("poste",Employee.poste);
     data.append("direction_id",Employee.direction_id);
-    data.append("user_id",Employee.user_id);
     console.log('data', data)
   await  fetch('/api/staff',{
       method: 'POST',
@@ -74,7 +74,7 @@ if(listeDirections){
     <div className='row mb-2'>
     <div className="col-md-6">
     <label htmlFor="numCIN">N° de CIN</label>
-        <input className='form-control' type="text" name='numCIN' onChange={handleChange}  ></input>
+        <input className='form-control' type="number" name='numCIN' onChange={handleChange}  ></input>
     </div>
     <div className="col-md-6">
     <label htmlFor="imageUrl">Photo</label>
@@ -125,8 +125,8 @@ if(listeDirections){
         <input className='form-control' type="text"  name='poste' onChange={handleChange} ></input>
     </div>
     <div className="col-md-6">
-    <label htmlFor='user_id'>ID d'utilisateur</label>
-        <input className='form-control' type="text"  name='user_id' onChange={handleChange} ></input>
+    <label htmlFor='numTel'>Numéro de téléphone</label>
+        <input className='form-control' type="number"  name='numTel' onChange={handleChange} ></input>
      
     </div>
     </div>

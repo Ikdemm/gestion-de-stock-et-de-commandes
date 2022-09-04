@@ -1,56 +1,128 @@
-const bcrypt = require("bcryptjs");
 const User = require("../models/User");
+const TokenBlack = require("../models/tokenblack");
+const Employe = require("../models/Employe");
+const bcrypt = require("bcryptjs");
+
+const { validationResult } = require("express-validator");
+
 const jwt = require("jsonwebtoken");
-const bcryptjs = require("bcryptjs");
 
-exports.register = async (req, res) => {
-  try {
- 
-    const email = req.body.email;
-    const username = req.body.username;
-    const password = req.body.password;
-    const role = req.body.role;
+exports.register = async (req, res, next) => {
+  const errors = validationResult(req);
 
-    const createUser = new User({
-      email: email,
-      username: username,
-      password: password,
-      role: role,
+  if (!errors.isEmpty()) {
+    const error = new Error("Validation failed");
+    error.statusCode = 422; //L’entité fournie avec la requête est incompréhensible ou incomplète.
+    error.data = errors.array();
+    // console.log("*********");
+    // console.log(error.data);
+    throw error;
+  }
+  const email = req.body.email;
+  const password = req.body.password;
+  const role = req.body.role;
+  let employeId = req.body.employe_id;
+  let employee = await Employe.findById(employeId);
+  if (!employee) return res.status(400).send("Employee Id not Found");
+  console.log(email, password);
+
+  bcrypt
+    .hash(password, 12)
+    .then((hashedPwd) => {
+      const user = new User({
+        email: email,
+        role: role,
+        employe_id: employee._id,
+        password: hashedPwd,
+      });
+      return user.save();
+    })
+    .then((result) => {
+      res.status(201).json({
+        message: "User Created",
+        userId: result["_id"],
+        created: result.createdAt,
+      });
+    })
+    .catch((err) => {
+      if (!err.statusCode) {
+        err.statusCode = 500;
+      }
+      next(err);
     });
-    const created = await createUser.save();
-    console.log(created);
-    res.status(200).send("new user registred successfully");
-  } catch (error) {
-    res.status(400).send(error);
+};
+
+exports.login = (req, res, next) => {
+  const email = req.body.email;
+  const password = req.body.password;
+
+  //console.log(email, password);
+
+  User.findOne({ email: email })
+    .then((u) => {
+      if (!u) {
+        const error = new Error("A user with this mail could not be found");
+        error.statusCode = 401;
+        throw error;
+      }
+      loadedUser = u;
+      return bcrypt.compare(password, loadedUser.password);
+    })
+    .then((isEqual) => {
+      if (!isEqual) {
+        const error = new Error("Wrong Password !!");
+        error.statusCode = 401;
+        throw error;
+      }
+      //res.status(200).json({message : 'User logged !'});
+      const token = jwt.sign(
+        {
+          email: loadedUser.email,
+          userId: loadedUser._id.toString(),
+        },
+        "supersecretcode",
+        { expiresIn: "12h" }
+      );
+
+      res
+        .status(200)
+        .json({
+          message: "User logged !",
+          token: token,
+          userId: loadedUser._id.toString(),
+        });
+    })
+    .catch((err) => {
+      if (!err.statusCode) {
+        err.statusCode = 500;
+      }
+      next(err);
+    });
+};
+
+exports.logout = async (req, res, next) => {
+  const token = req.get("Authorization").split(" ")[1];
+  newToken = new TokenBlack({
+    token: token,
+  });
+  try {
+    result = await newToken.save();
+    res
+      .status(200)
+      .json({ message: "User disconnected", tokenId: result["_id"] });
+  } catch (err) {
+    if (!err.statusCode) {
+      err.statusCode = 500;
+    }
+    next(err);
   }
 };
-exports.login = async (req, res) => { 
-    try {
-    const email = req.body.email;
-    const password = req.body.password;
-  
-    //find user if exists
-    const user = await User.findOne({ email: email });
-    if (user) {
-      //verify password
-      const isMatch = await bcryptjs.compare(password, user.password);
-      if (isMatch) {
-        //generate Token defined in userScema
-        const token = await user.generateToken();
-        res.cookie("jwt", token , {
-          //expires token in 24h
-          expires: new Date(Date.now() + 86400000),
-          httpOnly: true,
-        });
-        res.status(200).send("LoggedIn");
-      } else {
-        res.status(400).send("invalid credentials");
-      }
-    } else {
-      res.status(400).send("your username or password is incorrect");
-    }
-  } catch (error) {
-    console.log(error)
-  } 
-}
-
+exports.getAllUsers=(req, res, next) => {
+    User.find()
+      .then(users => res.status(200).json(users))
+      
+      .catch(err => {
+        console.log(err);
+        next();
+    })
+  };

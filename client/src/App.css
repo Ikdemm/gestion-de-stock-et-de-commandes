@@ -44,3 +44,15 @@ h5{
   background-color: black;
   color:  rgb(9, 255, 0);;
 }
+.avatar {
+  vertical-align: middle;
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+}
+.avatar-profile {
+  vertical-align: middle;
+  width: 300px;
+  height: 300px;
+  border-radius: 50%;
+}

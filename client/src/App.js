@@ -1,3 +1,4 @@
+import { useEffect, useState } from "react";
 import { Route, Routes } from "react-router-dom";
 import "./App.css";
 import Achats from "./components/Achats/Achats";
@@ -33,7 +34,6 @@ import NewEmployeForm from "./components/Gestion des Employes/employes/NewEmploy
 import OneEmploye from "./components/Gestion des Employes/employes/OneEmploye";
 import UpdateEmployee from "./components/Gestion des Employes/employes/UpdateEmployee";
 import Login from "./components/Login";
-import Logout from './components/Logout';
 import AddProductForm from "./components/Produits/AddProductForm";
 import HolderProduct from "./components/Produits/HolderProduct";
 import UpdateProduct from "./components/Produits/UpdateProduct";
@@ -43,148 +43,178 @@ import RegisterForm from "./components/register/RegisterForm";
 import Sidebar from "./components/Sidebar";
 import Stock from "./components/Stock";
 import UpdateStock from "./components/UpdateStock";
+import DetailsAvoirVente from "./components/Ventes/avoirs/DetailsAvoirVente";
 import FormAvoirVentes from "./components/Ventes/avoirs/FormAvoirVentes";
 import HistoriqueAvoirVentes from "./components/Ventes/avoirs/HistoriqueAvoirVentes";
+import PanierAvoirSurVente from "./components/Ventes/avoirs/PanierAvoirSurVente";
 import VenteEcheances from "./components/Ventes/echeances/VenteEcheances";
 import AjouterDesArticlesVentes from "./components/Ventes/factures/AjouterDesArticlesVentes";
+import DetaiVente from "./components/Ventes/factures/DetaisVente";
 import HistoriqueVentes from "./components/Ventes/factures/HistoriqueVentes";
 import NewFormVente from "./components/Ventes/factures/NewFormVente";
 import HolderVentes from "./components/Ventes/HolderVentes";
-import DetaiVente from "./components/Ventes/factures/DetaisVente";
-import WelcomePage from "./components/WelcomePage";
-import DetailsAvoirVente from "./components/Ventes/avoirs/DetailsAvoirVente";
-import PanierAvoirSurVente from "./components/Ventes/avoirs/PanierAvoirSurVente";
+import WelcomePage from "./components/Home/WelcomePage";
 
 function App() {
-
-  return (
-    <div className="App">
-      
- 
-
-     <div className="sticky-top" >
-    <Sidebar   ></Sidebar>
-  </div>   
-
-     
+  const [isLogged, setIsLogged] = useState(false);
+  function verifyConnecte() {
+    let token = localStorage.getItem('token');
+    if (token)
+        setIsLogged(true);
+    else
+        setIsLogged(false);
+}
+useEffect(()=>{
+  verifyConnecte()
+},[])
+ /*  const LogCtx = useContext(LoginContext);
+  LogCtx.verifierConnecte(); */
+  //if (!LogCtx.estConnecte) {
+  if (!isLogged) {
+    return (
+      <Routes>
+        <Route path="/login" element={<Login />} />
+      </Routes>
+    );
+  } else
+    return (
+      <>
+        <div className="sticky-top">
+          <Sidebar></Sidebar>
+        </div>
         <Routes>
-          <Route path="/welcome-page" element= {<WelcomePage/>}  />
+
+          <Route path="/welcome-page" element={<WelcomePage />} />
           <Route path="/dashboard" element={<DashbordHolder />} />
-         
-          <Route path="/fournisseurs"  element={<HolderFournisseurs />} />
-          <Route path="/addFournisseur"  element={<AddFournisseurForm />} />
-         
-          <Route path="/fournisseurs/:_id/edit" element={<UpdateFournisseur />} />
-        
+
+          <Route path="/fournisseurs" element={<HolderFournisseurs />} />
+          <Route path="/addFournisseur" element={<AddFournisseurForm />} />
+
+          <Route
+            path="/fournisseurs/:_id/edit"
+            element={<UpdateFournisseur />}
+          />
+
           <Route path="/clients" element={<HolderCustomers />} />
-          <Route path="/addClient" element={< AddClientForm/>} />
-         
+          <Route path="/addClient" element={<AddClientForm />} />
+
           <Route path="/clients/:_id/edit" element={<UpdateCustomer />} />
-          
+
           <Route path="/stock/:_id/edit" element={<UpdateStock />} />
-         
+
           <Route path="/addProduit" element={<AddProductForm />} />
-       
+
           <Route path="/listProduits" element={<HolderProduct />} />
-         
+
           <Route path="/directions" element={<HolderDirection />} />
-          
+
           <Route path="/listCategories" element={<CategoryHolder />} />
-        
-          
-          <Route path="/produits/:_id/edit"element={<UpdateProduct />} />
-          
-          <Route path="/directions/:_id/edit"element={<UpdateDirection />} />
-        
+
+          <Route path="/produits/:_id/edit" element={<UpdateProduct />} />
+
+          <Route path="/directions/:_id/edit" element={<UpdateDirection />} />
+
           <Route path="/addCategory" element={<Category />} />
-    
+
           {/************************ GESTION DES EMPLOYES *************************/}
           <Route path="/employes" element={<HolderEmployees />} />
-      
+
           <Route path="/employes/:_id/edit" element={<UpdateEmployee />} />
-     
-          <Route path="/employes/:_id/details"  element={<OneEmploye />} />
-         
+
+          <Route path="/employes/:_id/details" element={<OneEmploye />} />
+
           <Route path="/nouveau-employe" element={<NewEmployeForm />} />
-      
+
           <Route path="/stock" element={<Stock />} />
-        
-        
+
           <Route path="/echeances" element={<HolderEcheances />} />
-        
+
           {/************************ GESTION DES FACTURES ACHAT *************************/}
           <Route path="/achat" element={<Achats />} />
           <Route path="/alertes" element={<AlertesSurAchat />} />
-          
-          {/* //*Ordinaires**/ }
+
+          {/* //*Ordinaires**/}
           <Route path="/historique-achat" element={<HistoriqueAchats />} />
-       
+
           <Route path="/ajout-facture-achat" element={<NewAchatForm />} />
-       
+
           <Route path="/facture-achat/panier" element={<AddToInvoice />} />
-          <Route path="/facture-achat/:_id/details" element={<DetailsAchat />} />
-          {/*  <Route path="/facture-achat/:_id/panier" element={<AddToInvoice/>}/>  */}
-         {/*  //*Avoir**/ }
           <Route
-            path="/historique-avoir-achat" element={<HistoriqueAvoirSurAchat />} />
-          <Route path="/avoir-achat/:_id/details" element={<DetailsAvoirAchat />} />
-           
+            path="/facture-achat/:_id/details"
+            element={<DetailsAchat />}
+          />
+          {/*  <Route path="/facture-achat/:_id/panier" element={<AddToInvoice/>}/>  */}
+          {/*  //*Avoir**/}
+          <Route
+            path="/historique-avoir-achat"
+            element={<HistoriqueAvoirSurAchat />}
+          />
+          <Route
+            path="/avoir-achat/:_id/details"
+            element={<DetailsAvoirAchat />}
+          />
+
           <Route path="/ajout-avoir-achat" element={<NewAchatAvoirForm />} />
           <Route path="/avoir-achat/panier" element={<PanierAvoirAchat />} />
-            
-          {/* //*Appel d'offre**/ }
+
+          {/* //*Appel d'offre**/}
           <Route
-            path="/historique-appel-doffre"  element={<HistoriqueAppelsOffres />} />
-           
-          <Route path="/ajout-appel-doffre"  element={<NewAppelOffreForm />} />
-             
-       
+            path="/historique-appel-doffre"
+            element={<HistoriqueAppelsOffres />}
+          />
+
+          <Route path="/ajout-appel-doffre" element={<NewAppelOffreForm />} />
+
           {/*   <Route path="/appel-doffre/:_id/details" element={<NewAppelOffreForm/>}/> */}
           {/************************ GESTION DES FACTURES VENTE *************************/}
           <Route path="/ventes" element={<HolderVentes />} />
-         
-         {/*  //*Ordinaires**/ }
-          <Route path="/historique-ventes" element={<HistoriqueVentes />} />
-           
-          <Route path="/ajout-facture-vente" element={<NewFormVente />} />
-           
-          <Route path="/facture-vente/panier"  element={<AjouterDesArticlesVentes />} />
-          <Route path="/facture-vente/:_id/details" element={<DetaiVente />} />
-           
-          {/* //*Avoir**/}
-          <Route  path="/historique-avoir-vente"  element={<HistoriqueAvoirVentes />} />
-          <Route path="/avoir-vente/:_id/details" element={<DetailsAvoirVente />} />
-          <Route path="/avoir-vente/panier"  element={<PanierAvoirSurVente />} />
-           
-          <Route path="/ajout-avoir-vente"  element={<FormAvoirVentes />} />
-         
-          {/* //*échéance**/ }
-          <Route path="/echeances-vente"  element={<VenteEcheances />} />
-           
-          {/************************ GESTION DES DEMANDES *************************/}
-          <Route path="/demandes"  element={<HolderDemande />} />
-          
-          <Route path="/gestion-demandes"  element={<HolderGestionDemandes />} />
-         
-          <Route path="/non-traitees"  element={<NonTraitees />} />
-         
-          <Route path="/traitees" element={<Traitees />} />
-           
-          {/************************ GESTION DES PROFILES *************************/}
-          <Route path="/register"   element={<HolderProfiles />} />
-          
-          <Route path="/register-form"  element={<RegisterForm />} />
-          
-          <Route path="/all-users"  element={<AllUsers />} />
-         
-          <Route path="/logout"  element={<Logout />} />
-          
-          <Route path="/login" element={<Login />}     />
-        </Routes>
-     
 
-      </div>
-  );
+          {/*  //*Ordinaires**/}
+          <Route path="/historique-ventes" element={<HistoriqueVentes />} />
+
+          <Route path="/ajout-facture-vente" element={<NewFormVente />} />
+
+          <Route
+            path="/facture-vente/panier"
+            element={<AjouterDesArticlesVentes />}
+          />
+          <Route path="/facture-vente/:_id/details" element={<DetaiVente />} />
+
+          {/* //*Avoir**/}
+          <Route
+            path="/historique-avoir-vente"
+            element={<HistoriqueAvoirVentes />}
+          />
+          <Route
+            path="/avoir-vente/:_id/details"
+            element={<DetailsAvoirVente />}
+          />
+          <Route path="/avoir-vente/panier" element={<PanierAvoirSurVente />} />
+
+          <Route path="/ajout-avoir-vente" element={<FormAvoirVentes />} />
+
+          {/* //*échéance**/}
+          <Route path="/echeances-vente" element={<VenteEcheances />} />
+
+          {/************************ GESTION DES DEMANDES *************************/}
+          <Route path="/demandes" element={<HolderDemande />} />
+
+          <Route path="/gestion-demandes" element={<HolderGestionDemandes />} />
+
+          <Route path="/non-traitees" element={<NonTraitees />} />
+
+          <Route path="/traitees" element={<Traitees />} />
+
+          {/************************ GESTION DES PROFILES *************************/}
+          <Route path="/profiles" element={<HolderProfiles />} />
+
+          <Route path="/register-form" element={<RegisterForm />} />
+
+          <Route path="/all-users" element={<AllUsers />} />
+
+        </Routes>
+      </>
+    );
 }
 
 export default App;

@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react';
+import { FaSpinner } from 'react-icons/fa';
 import UsersList from './UsersList';
 
 export default function AllUsers() {
@@ -22,16 +23,20 @@ const [tabUsers, setListeUsers] = useState([]);
 
  
     
-
+if(tabUsers){
   return (
     <div>    
          
-
-    <h6 className='display-6'>Liste des utilisateurs</h6>  
-
 <UsersList listOfUsers={tabUsers}></UsersList>
-   
-   
-   
-    </div>  )
+       
+    </div>  
+    )
+
+}else{
+  return (
+    <div className="fetching">
+      <FaSpinner className="spinner"></FaSpinner>
+    </div>
+  );
+}
 }

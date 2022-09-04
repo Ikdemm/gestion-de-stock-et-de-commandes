@@ -6,7 +6,7 @@ import moment from "moment";
 import "moment/locale/fr";
 import { default as React, useContext, useEffect, useState } from "react";
 import { FaIdCard, FaRegEye, FaTrash } from "react-icons/fa";
-import { FcBriefcase, FcDepartment, FcHome, FcInfo, FcOvertime} from "react-icons/fc";
+import { FcBriefcase, FcDepartment, FcHome, FcInfo, FcOvertime, FcCellPhone} from "react-icons/fc";
 import { Link } from "react-router-dom";
 import { employeeCtx } from "../../../store/employeeContext";
 const style = {
@@ -95,13 +95,14 @@ export default function ListeEmployes() {
                   <div className="col-11">{item.poste}</div>
           </div>
           <div className="row">
+                  <div className="col-md-1"> <FcCellPhone></FcCellPhone></div>
+                  <div className="col-11"> {item.numTel}  </div>
+          </div>
+          <div className="row">
                   <div className="col-md-1">  <FcHome></FcHome></div>
                   <div className="col-11">{item.adresse} </div>
           </div>
-          <div className="row">
-                  <div className="col-md-1"> <FcOvertime></FcOvertime></div>
-                  <div className="col-11">Ancienneté: {moment(item.date_de_recrutement).locale('fr').calendar()} </div>
-          </div>
+      
           </div>
           </div>
           <div className="col-md-3 my-1 custom-border-right">
@@ -166,6 +167,10 @@ export default function ListeEmployes() {
                   <div className="col-md-1"> <FcOvertime></FcOvertime></div>
                   <div className="col-11">Date de naissance: {moment(item.date_de_naissance).locale('fr').format('ll')} </div>
           </div>
+          <div className="row">
+                  <div className="col-md-1"> <FcOvertime></FcOvertime></div>
+                  <div className="col-11">Date de recrutement: {moment(item.date_de_recrutement).locale('fr').calendar()} </div>
+          </div>
           </div>
         </Box>
       </Modal>
@@ -219,12 +224,12 @@ export default function ListeEmployes() {
                   <div className="col-11">{item.poste}</div>
           </div>
           <div className="row">
-                  <div className="col-md-1">  <FcHome></FcHome></div>
-                  <div className="col-11">{item.adresse} </div>
+                  <div className="col-md-1"> <FcCellPhone></FcCellPhone></div>
+                  <div className="col-11">{item.numTel}  </div>
           </div>
           <div className="row">
-                  <div className="col-md-1"> <FcOvertime></FcOvertime></div>
-                  <div className="col-11">Ancienneté: {moment(item.date_de_recrutement).locale('fr').calendar()} </div>
+                  <div className="col-md-1">  <FcHome></FcHome></div>
+                  <div className="col-11">{item.adresse} </div>
           </div>
           </div>
           </div>
@@ -289,6 +294,10 @@ export default function ListeEmployes() {
           <div className="row">
                   <div className="col-md-1"> <FcOvertime></FcOvertime></div>
                   <div className="col-11">Date de naissance: {moment(item.date_de_naissance).locale('fr').format('ll')} </div>
+          </div>
+          <div className="row">
+                  <div className="col-md-1"> <FcOvertime></FcOvertime></div>
+                  <div className="col-11">Date de recrutement: {moment(item.date_de_recrutement).locale('fr').calendar()} </div>
           </div>
           </div>
         </Box>

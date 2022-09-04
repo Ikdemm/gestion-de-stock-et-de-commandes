@@ -1,26 +1,44 @@
-const Users = require ('../models/User');
-const jwt = require ('jsonwebtoken')
+const jwt = require("jsonwebtoken");
+const TokenBlack = require('../models/tokenblack');
 
 
-const authenticate= async(req,res, next)=>{
-    try{
-        //get the cookies
-        const token= req.cookies.jwt
-        if(!token){
-            res.status(401).send('no token')
-        }else{
-            const verifyToken= jwt.verify(token, process.env.SECRET_KEY)
-            const rootUser= await Users.findOne({_id:verifyToken._id, "tokens.token": token})
-            if(!rootUser){
-                res.status(401).send('user not found')
-            }else{
-                res.status(200).send('Authorized user')
-            }
-        }
-        next()
-    }catch(error){
-        res.status(401).send('Error')
-        console.log(error)
+module.exports = async (req, res, next) => {
+    const authHeader = req.get('Authorization');
+    if (!authHeader) {
+        const error = new Error('Not authenticated !');
+        error.statusCode = 401;
+        throw error;
+    }
+    const token = req.get('Authorization').split(' ')[1];
+
+    /* Blacklist */
+    result = await TokenBlack.findOne({ token: token });
+
+    if (result) {
+        const error = new Error('Token Blacklisted !');
+        error.statusCode = 401;
+        next(error);
+    }
+    /***********/
+
+    let decodedToken;
+    try {
+        decodedToken = jwt.verify(token, 'supersecretcode'); //Decode AND verify token
+    }
+    catch (err) {
+        err.statusCode = 500;
+        throw err;
+    }
+
+
+    if (!decodedToken) {
+        const error = new Error('Not authenticated !');
+        error.statusCode = 401;
+        throw error;
+    }
+
+    req.userId = decodedToken.userId;
+    console.log('req.userId', req.userId);
+    console.log('decodedToken.userId',decodedToken.userId);
+    next();
 }
-}
-module.exports=authenticate

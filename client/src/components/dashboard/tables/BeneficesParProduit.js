@@ -10,25 +10,49 @@ export default function BeneficesParProduit() {
       setTtabProduits(response.data);
      });
    }, []); 
+  const [tabLignes, setTabLignes] = useState([]);
+   useEffect(() => {
+     axios.get(`/api/vente/addToInvoice`).then((response) => {
+       setTabLignes(response.data);
+     });
+   }, []); 
+   const [tabVenteFacts, settabVenteFacts] = useState([]);
+
+  useEffect(() => {
+    axios.get(`/api/factures/vente`).then((response) => {
+      settabVenteFacts(response.data);
+    });
+  }, []); 
+  var  totalVentes =0 ;
+  for(let i=0; i<tabVenteFacts.length; i++){
+      totalVentes+=tabVenteFacts[i].net_a_payer
+       
+  } 
   return (
-    <div className='card'>
-        <table className="table">
+    <div className=' ml-2'>
+      <div className=' card p-2'>
+        
+        <table className="table ">
   <thead>
     <tr>
       <th scope="col">Produit</th>
-      <th className='text-center' scope="col">Prix d'achat</th>
-      <th className='text-center' scope="col">Prix de vente</th>
       <th className='text-center' scope="col">Marge bénéficiaire</th>
+      <th className='text-center' scope="col">% CA</th>
     </tr>
   </thead>
   <tbody>
     {tabProduits.map((p)=>{
+  var tabDesVentesParProduit =  tabLignes.filter((pdt)=>pdt.article.article_id===p._id)
+  var CA=0;
+for(let i=0; i<tabDesVentesParProduit.length; i++){
+  CA+=tabDesVentesParProduit[i].total
+ 
+}
         return(
             <tr key={p._id}>
         <td>{p.title}</td>
-      <td className='text-center'>{p.price_a} DT</td>
-      <td className='text-center'>{p.price_v} DT</td>
-      <td className='text-center'>{((p.price_v-p.price_a)/p.price_a *100 )} %</td>
+      <td className='text-center'>{((p.price_v-p.price_a)/p.price_v *100 ).toFixed(2) } %</td>
+      <td className='text-center'>{ (CA /totalVentes *100).toFixed(2)} % </td>
       </tr>
         )
     })
@@ -40,6 +64,7 @@ export default function BeneficesParProduit() {
 
   </tbody>
 </table>
+    </div>
     </div>
   )
 }

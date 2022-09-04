@@ -30,6 +30,7 @@ exports.createEmploye = async (req, res) => {
     date_de_naissance:req.body.date_de_naissance,
     date_de_recrutement:req.body.date_de_recrutement,
     numCIN:req.body.numCIN,
+    numTel:req.body.numTel,
     poste :req.body.poste,
     direction_id:direction._id,
   }) 
@@ -58,7 +59,7 @@ exports.getOneEmploye = (req, res, next) => {
         next();
     })
 };
-/* //modifier un employé
+ //modifier un employé
 exports.updateImage=(req,res) => {
   const eId=req.params['id'];
 
@@ -84,8 +85,30 @@ exports.updateImage=(req,res) => {
       .catch(err => {
           console.log(err);
       })
-}; */
+}; 
 exports.updateOneEmploye=(req,res,next) => {
+  const cId= req.params['id'];
+  Employe.findById(cId)
+  .then(employe => {
+    if (!employe) {
+        const error = new Error('Could not find this employe');
+        error.statusCode = 404;
+        throw error;
+    }
+    employe = _.merge(employe, req.body)
+    return employe.save();
+}) 
+.then(result => {
+  res.status(200).json({
+      message: 'Direction updated successfully',
+      result: result
+  });
+})
+.catch(err => {
+  console.log(err);
+})
+  };
+/* exports.updateOneEmploye=(req,res,next) => {
     const thingObject = req.file ?
     {
       ...JSON.parse(req.body),
@@ -96,7 +119,7 @@ exports.updateOneEmploye=(req,res,next) => {
     .then(() => res.status(200).json({ message: 'Employé modifié !'}))
     .catch(error => res.status(400).json({ error }));
   };
-
+ */
 //supprimer un employé
 exports.deleteOneEmploye= async (req, res)  => {
 
