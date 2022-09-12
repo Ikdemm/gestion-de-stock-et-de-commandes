@@ -116,7 +116,7 @@ function App() {
   function PrivateOutlet() {
     //check if user logged in
     const auth = isLoggedIn();
-    return isLoggedIn() ? <Outlet /> : <Navigate to="/login" />;
+    return isLoggedIn() ? <Outlet /> : <Navigate to="/" />;
   }
 
   const DefaultContainer = () => {
@@ -320,7 +320,7 @@ function App() {
   const LoginContainer = () => (
     <div className="container">
    
-      <Route path="/login" element={<Login></Login> } />
+      <Route path="/" element={<Login></Login> } />
     </div>
   );
 
@@ -328,7 +328,7 @@ function App() {
     <BrowserRouter>
         <div className="App">
       <Routes>
-          <Route exact path="/login" component={LoginContainer} />
+          <Route exact path="/" component={LoginContainer} />
           <Route component={DefaultContainer} />
       </Routes>
         </div>

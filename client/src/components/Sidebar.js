@@ -1,4 +1,3 @@
-import axios from "axios";
 import { useContext, useEffect, useState } from "react";
 import { AiOutlineHome } from "react-icons/ai";
 import {
@@ -14,7 +13,7 @@ import {
   BsList,
   BsPeople,
   BsShop,
-  BsSpeedometer2,
+  BsSpeedometer2
 } from "react-icons/bs";
 import { FaRegBuilding } from "react-icons/fa";
 import { Link, useNavigate } from "react-router-dom";
@@ -39,14 +38,24 @@ function Sidebar() {
       )
    
   },[])
-  const [tabStaff, setTabStaff] = useState([]);
-  useEffect(() => {
-    axios.get(`/api/staff`).then((response) => {
-      setTabStaff(response.data);
-    });
-  }, []);
+
   let emailUser = localStorage.getItem("email");
   var connectedUser = tabUsers.find((u) => u.email === emailUser);
+  const [isLogged, setIsLogged] = useState(false);
+  function verifyConnecte() {
+    let token = localStorage.getItem('token');
+    if (token)
+        setIsLogged(true);
+    else
+        setIsLogged(false);
+}
+useEffect(()=>{
+  verifyConnecte()
+},[])
+ 
+  if (!isLogged) {
+return<div></div>
+  }else
 if(connectedUser?.role==="admin")
  { return (
     <>
@@ -191,7 +200,7 @@ if(connectedUser?.role==="admin")
               <button
                 onClick={() => {
                   LogCtx.seDeconnecter();
-                  navigate("/login");
+                  navigate("/");
                   window.location.reload();
                 }}
                 className="nav-link text-white"
@@ -271,7 +280,7 @@ if(connectedUser?.role==="admin")
               <button
                 onClick={() => {
                   LogCtx.seDeconnecter();
-                  navigate("/login");
+                  navigate("/");
                   window.location.reload();
                 }}
                 className="nav-link text-white"
@@ -332,7 +341,7 @@ if(connectedUser?.role==="admin")
               <button
                 onClick={() => {
                   LogCtx.seDeconnecter();
-                  navigate("/login");
+                  navigate("/");
                   window.location.reload();
                 }}
                 className="nav-link text-white"
@@ -379,14 +388,32 @@ if(connectedUser?.role==="admin")
                 <span className="ms-1"> Page d'accueil</span>
               </Link>
             </li>
+            <li className="nav-item">
+              <Link to="/fournisseurs" className="nav-link text-white">
+                <span className={styles.icon}>
+                  {" "}
+                  <BsFillPersonBadgeFill />
+                </span>
+                <span className="ms-1">Fournisseurs</span>
+              </Link>
+            </li>
+  <li className="nav-item">
+              <Link to="/achat" className="nav-link text-white">
+                <span className={styles.icon}>
+                  {" "}
+                  <BsCart4 />
+                </span>
 
+                <span className="ms-1"> Achats </span>
+              </Link>
+            </li>
 
     
             <li className="nav-item">
               <button
                 onClick={() => {
                   LogCtx.seDeconnecter();
-                  navigate("/login");
+                  navigate("/");
                   window.location.reload();
                 }}
                 className="nav-link text-white"
@@ -456,7 +483,7 @@ if(connectedUser?.role==="admin")
               <button
                 onClick={() => {
                   LogCtx.seDeconnecter();
-                  navigate("/login");
+                  navigate("/");
                   window.location.reload();
                 }}
                 className="nav-link text-white"
@@ -527,7 +554,7 @@ if(connectedUser?.role==="admin")
               <button
                 onClick={() => {
                   LogCtx.seDeconnecter();
-                  navigate("/login");
+                  navigate("/");
                   window.location.reload();
                 }}
                 className="nav-link text-white"
@@ -588,7 +615,7 @@ if(connectedUser?.role==="admin")
               <button
                 onClick={() => {
                   LogCtx.seDeconnecter();
-                  navigate("/login");
+                  navigate("/");
                   window.location.reload();
                 }}
                 className="nav-link text-white"

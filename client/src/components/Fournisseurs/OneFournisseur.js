@@ -8,8 +8,11 @@ import { fournisseurtCtx } from "./../../store/fournisseurContext";
 export default function OneFournisseur(props) {
   let ctx = useContext(fournisseurtCtx);
   function removeC() {
+    if (window.confirm('Etes-vous sur de bien vouloir supprimer ce fournisseur ? ')) {
+  
     ctx.removeOneFournisseur(props.fournisseur._id);
     window.location.reload();
+  }
   }
   return (
     <>

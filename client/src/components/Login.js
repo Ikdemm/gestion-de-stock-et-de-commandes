@@ -21,6 +21,7 @@ export default function Login() {
   // Handle Login
   const handleSubmit =  (event) => {
     event.preventDefault();
+    // eslint-disable-next-line no-unused-vars
     const { email, password } = user;
     LogCtx.seConnecter(user)
     .then(res => {

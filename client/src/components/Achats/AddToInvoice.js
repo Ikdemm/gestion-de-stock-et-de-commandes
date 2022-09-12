@@ -82,7 +82,7 @@ export default function AddToInvoice() {
  
   function validationDeCommande(){
       // eslint-disable-next-line no-restricted-globals
-  var result =  confirm('Etes-vous sûr de bien vouloir valider la commande? Après cette étape, vous ne pouvez changer que les informations générales de la commande!!!');
+  var result =  confirm('Etes-vous sûr de bien vouloir valider la commande? Après cette étape, vous ne pouvez changer rien changer dans cette commande, en cas d erreur vous pouvez générer une facture d avoir!!!');
 
   if(result){
 navigate('/historique-achat')
@@ -200,7 +200,7 @@ navigate('/historique-achat')
             <form onSubmit={ajouterLigneAchat}>
             
               <label htmlFor="article_id">Produit</label>
-              <select className="form-control"  ref={refArticle}>
+              <select className="form-select"  ref={refArticle}>
                 <option>--veuillez choisir le produit--</option>
                 {tabProduits.map((f) => {
                   return <option key={f.title}>{f.title}</option>;

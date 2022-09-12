@@ -28,9 +28,12 @@ export default function OneDirection(props) {
     const tabNotFiltred=_.map(ctx.tabDirections,"name")
 
     function removeC() {
+      if (window.confirm('Etes-vous sur de bien vouloir supprimer cette direction ? Sachant que tous les employés y inclus seront supprimés ainsi')) {
+ 
         ctx.removeOneDirection(props.direction._id);
     
         window.location.reload();
+      }
       }
     const refName=useRef('')
 

@@ -82,8 +82,8 @@ export default function DetaisVente() {
                       return (  <tr>
     
                       <td>{a.title}</td>
-                      <td>{a.price_a}</td>
-                      <td>{l.quantite_a} </td>
+                      <td>{a.price_v}</td>
+                      <td>{l.quantite_s} </td>
                       <td >{l.total}</td>
                       </tr>
               )

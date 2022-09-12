@@ -1,9 +1,7 @@
 const Employe = require ("../models/Employe");
 const Direction = require("../models/Direction");
 const Joi = require('joi');
-//Joi.objectId = require('joi-objectid')(Joi);
-//const employe_validator = require("../models/Employe");
-//const id_not_valid_fun = require("../models/Employe");
+
 const fs = require('fs');
 const _ = require('lodash');
 var ObjectId = require('mongoose').Types.ObjectId
@@ -11,9 +9,7 @@ var ObjectId = require('mongoose').Types.ObjectId
 //creer un nouveau employé
 exports.createEmploye = async (req, res) => {
   
-/*   let res_validation= employe_validator.validate(req.body);
-  if(res_validation.error)
-  return res.status(400).send(res_validation.error.details[0].message)  */
+
   let directionId= req.body.direction_id;
   ObjectId.isValid(directionId);
   console.log("directionId",directionId)
@@ -45,7 +41,7 @@ exports.createEmploye = async (req, res) => {
    
 }catch(err){
   console.log("employee not submitted",err)
-  //res.status(400).send(`Error : ${err.message}`);
+
 }
 } 
  
@@ -100,7 +96,7 @@ exports.updateOneEmploye=(req,res,next) => {
 }) 
 .then(result => {
   res.status(200).json({
-      message: 'Direction updated successfully',
+      message: 'Employee updated successfully',
       result: result
   });
 })
@@ -132,7 +128,6 @@ exports.deleteOneEmploye= async (req, res)  => {
       direction.employes.splice(index)
       await direction.save();
       res.send(employee) 
-
  
 };
 

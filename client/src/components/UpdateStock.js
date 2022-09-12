@@ -1,57 +1,76 @@
-import React, { useContext, useState } from 'react';
-import { FaSpinner } from 'react-icons/fa';
-import { useNavigate, useParams } from 'react-router-dom';
-import editPhoto from '../assets/images/pen.gif';
+import axios from 'axios';
+import React, { useContext, useEffect, useRef, useState } from 'react';
+import { FaBan, FaSave, FaSpinner } from 'react-icons/fa';
+import { Link, useNavigate, useParams } from 'react-router-dom';
 import { produitCtx } from './../store/produitContext';
 
 export default function UpdateStock() {
     let {_id}=useParams()
+    const [tabProduits, setTaProduits] = useState([]);
+  useEffect(() => {
+    axios.get(`/api/produits`).then((response) => {
+      setTaProduits(response.data);
+    });
+  }, []); 
+let selectedStock= tabProduits.find((p)=>p._id===_id)  
+console.log('selectedStock', selectedStock)  
     const pdtCtx= useContext(produitCtx)
-   
-  let selectedStock= pdtCtx.getProduitById(_id)
-  console.log('selectedStock', selectedStock)
-  const [stock, setStock]=useState(selectedStock)
-  function handleInputChange ( event) {
-    const { name, value } = event.target
-  
-    setStock({ ...stock, [name]: value })
-  }
+    let reSI = useRef("");
+    let refE = useRef("");
+    let refS = useRef("");
+    let refSF = useRef("");
+
     let navigate=useNavigate()
+    function submitHandler(e) {
+      e.preventDefault();
+      let uProduct = {
+  
+        stock_initial: reSI.current.value,
+        quantite_entree: refE.current.value,
+        quantite_sortie: refS.current.value,
+        stock_final: refSF.current.value,
+      };
+   
+      pdtCtx.updateProduit(_id,uProduct);
+        e.target.reset();
+        navigate("/stock");
+        window.location.reload();
+ 
+    }
     
     if(selectedStock){
    
   return (
-    <div  style={{display: "flex"}}>
-
-    <div className="container" style={{ padding: 50 + "px" }}>
-           <div className="row d-flex justify-content-center">   
-               <div className="col-md-6">
-               <img src={editPhoto} alt="editPhoto"  style={{height: 80+"vh"}}/> 
-               </div> 
-               <div className="col-md-6" style={{marginTop: 30+"vh"}}>
-        <h6 className='display-6'  style={{color:"#4125D9"}}>Corriger le stock</h6>  
-           <form onSubmit={event => {
-               event.preventDefault()
-               pdtCtx.updateProduit(_id,stock);
-              navigate('/stock') }
-             }>
+    
+    <div className="container">
+      <div  style={{display: "flex"}}>
+        
+               <div className="container-fluid">
+        <h6 className='display-6 mb-4'>Corriger le stock</h6>   <hr />
+           <form onSubmit={submitHandler} className="card px-5 py-3">
           
                  <label htmlFor="stock_initial">Stock initial</label>
-                 <input className="form-control" type="number" name="stock_initial" value={stock.stock_initial} onChange={handleInputChange} ></input>
+                 <input className="form-control" type="number" name="stock_initial" defaultValue={selectedStock.stock_initial} ref={reSI} ></input>
                  <label htmlFor="quantite_entree">Quantité entrée</label>
-                 <input className="form-control" type="number" name="quantite_entree" value={stock.quantite_entree} onChange={handleInputChange} ></input>
+                 <input className="form-control" type="number" name="quantite_entree" defaultValue={selectedStock.quantite_entree} ref={refE} ></input>
                  <label htmlFor="quantite_sortie">Quantité sortie</label>
-                 <input className="form-control" type="number" name="quantite_sortie" value={stock.quantite_sortie} onChange={handleInputChange} ></input>
+                 <input className="form-control" type="number" name="quantite_sortie" defaultValue={selectedStock.quantite_sortie} ref={refS} ></input>
    
                  <label htmlFor="stock_final">Stock Existant</label>
-                 <input className="form-control" type="number" name="stock_final" value={stock.stock_final} onChange={handleInputChange} ></input>
+                 <input className="form-control" type="number" name="stock_final" defaultValue={selectedStock.stock_final} ref={refSF} ></input>
    
-               
-             <button className="btn btn-success my-2" type="submit">Corriger le stock</button>
+                 <div className='d-flex flex-row-reverse'>
+                <div className='p-2'>
+             <button className="btn bg-green my-2 " type="submit">Confirmer <FaSave></FaSave></button>    
+                </div>
+                <div className='p-2'>
+             <Link to="/stock" className="btn btn-danger my-2 mr-2">Annuler <FaBan></FaBan> </Link>
+                </div>
+                
+               </div>         
              </form>
                </div>
                </div>
-           </div>
            </div>
   )
 }

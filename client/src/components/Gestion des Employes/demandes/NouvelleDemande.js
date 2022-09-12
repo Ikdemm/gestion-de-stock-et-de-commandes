@@ -1,32 +1,13 @@
-import axios from "axios";
-import React, { useContext, useEffect, useRef, useState } from "react";
+import React, { useContext, useRef } from "react";
+import { FaSpinner } from "react-icons/fa";
 import { demandeCtx } from './../../../store/demandeContext';
 
-export default function NouvelleDemande() {
-  const [tabUsers, setListeUsers] = useState([]);
-  useEffect(()=>{
-    fetch('/api/auth/all-users')
-    .then(res => {return res.json()})
-    .then(data => {
-              
-      for (const key in data) {
-          data[key]._id = key;
-          setListeUsers((prev)=>{
-              return [...prev, data[key]]
-          })
-
-      }}
-      )
-   
-  },[])
-  const [tabStaff, setTabStaff] = useState([]);
-  useEffect(() => {
-    axios.get(`/api/staff`).then((response) => {
-      setTabStaff(response.data);
-    });
-  }, []);
+export default function NouvelleDemande(props) {
+  var listeUsers=props.tabUsers;
+  var tabStaff=props.tabStaff;
   let emailUser = localStorage.getItem("email");
-  var connectedUser = tabUsers.find((u) => u.email === emailUser);
+  var connectedUser = listeUsers.find((u) => u.email === emailUser);
+  console.log('connectedUser', connectedUser)
   var employee = tabStaff.find((o) => o._id === connectedUser.employe_id);
   
   let dctx=useContext(demandeCtx)
@@ -43,15 +24,16 @@ export default function NouvelleDemande() {
        };
     dctx.addNewDemande(newDemande);
     console.log('newDemande', newDemande)
-  e.target.reset()
-
+   e.target.reset()
    window.location.reload()
  
   }
+  if (tabStaff.length>0 && listeUsers.length>0 && connectedUser && employee) {
+
   return (
     <>
     <div style={{display:"flex"}}>
-    <div className="container card p-3" >
+    <div className="container  p-3" >
     <h6 className="display-6">Nouvelle demande</h6>
     <form onSubmit={submitHandler}  method="post">
         <label htmlFor="objet">Objet</label>
@@ -66,10 +48,16 @@ export default function NouvelleDemande() {
       </form>
 
 
-    
-
       </div>
       </div>
 
     </>  )
+}else
+{
+  return (
+    <div className="fetching">      
+    <FaSpinner className="spinner"></FaSpinner>
+          </div>
+  )
+}
 }

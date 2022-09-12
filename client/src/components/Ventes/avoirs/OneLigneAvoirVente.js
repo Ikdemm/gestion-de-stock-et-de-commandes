@@ -29,6 +29,7 @@ export default function OneLigneAvoirVente(props) {
         setTabProduits(response.data);
       });
     }, []);
+    // eslint-disable-next-line no-unused-vars
     const [tabLignes, setTabLignes] = useState([]);
     useEffect(() => {
       axios.get(`/api/avoirSurvente/addToInvoice`).then((response) => {

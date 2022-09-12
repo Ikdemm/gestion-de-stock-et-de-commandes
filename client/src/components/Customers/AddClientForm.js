@@ -2,11 +2,14 @@ import React, { useContext, useRef } from 'react';
 import { FaBan, FaSave } from 'react-icons/fa';
 import { Link, useNavigate } from 'react-router-dom';
 import { clientCtx } from './../../store/clientContext';
+const _ = require ('lodash')
 
 export default function AddClientForm() {
 
   let navigate= useNavigate()
   const cctx=useContext(clientCtx)
+  const tabNotFiltred=_.map(cctx.tabClients,"numero_de_tel")
+
   const refNom=useRef('')
   const refTel=useRef('')
   const refAdresse=useRef('')
@@ -19,10 +22,14 @@ export default function AddClientForm() {
       adresse: refAdresse.current.value,
       email: refEmail.current.value,
           }
+          if(!tabNotFiltred.includes(newClient.numero_de_tel)){
+        
           cctx.addNewClient(newClient)
           e.target.reset()
        navigate('/clients')
-  }
+      }else
+      alert('ce numéro de téléphone existe déjà, veuillez entrer un numéro différent')
+    }
   return (
     <div className="container">
           <div style={{ display: "flex" }}>

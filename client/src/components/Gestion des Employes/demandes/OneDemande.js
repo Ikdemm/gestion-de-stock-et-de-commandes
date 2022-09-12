@@ -2,14 +2,15 @@ import Box from "@mui/material/Box";
 import Button from "@mui/material/Button";
 import Modal from "@mui/material/Modal";
 import Typography from "@mui/material/Typography";
-import React, { useContext } from "react";
-import { FaCheck, FaRegEye } from "react-icons/fa";
+import React, { useContext, useEffect, useState } from "react";
+import { FaCheck, FaRegEye, FaSpinner } from "react-icons/fa";
 import { demandeCtx } from './../../../store/demandeContext';
 import moment from "moment";
 import "moment/locale/fr";
 import {
   FcCancel
 } from "react-icons/fc";
+import axios from "axios";
 const style = {
     position: "absolute",
     top: "50%",
@@ -32,6 +33,14 @@ export default function OneDemande(props) {
     
         window.location.reload();
       } */
+      const [APIData, setAPIData] = useState([]);
+
+      useEffect(() => {
+         axios.get(`/api/staff`).then((response) => {
+           setAPIData(response.data);
+         });
+       }, []);
+       var employee= APIData.find((e)=>e._id===props.demande.employe_id)
    function UpdateDemande() {
 
       if(props.demande.etat==="non_traitee")
@@ -45,11 +54,12 @@ ctx.updateDemande(props.demande._id, props.demande)
 window.location.reload()
 return
       } 
+ if (APIData && employee) {
+
   return (
     <div>
     <li
       className="list-group-item my-1 shadow p-3"
-      style={{ backgroundColor: "#F5FAFF" }}
     >
       <div className="row">
         <div className="col-6">{props.demande.objet}</div>
@@ -89,7 +99,9 @@ return
     >
       <Box sx={style}>
         <Typography id="keep-mounted-modal-title" variant="h6" component="h2">
-        <b> Objet: {props.demande.objet}</b> <hr></hr>
+        <b> Objet: {props.demande.objet}</b> <br></br>
+        
+        <b> Envoyé par: {employee.prenom}  {employee.nom}</b> <hr></hr>
         </Typography>
         <Typography id="keep-mounted-modal-description" sx={{ mt: 2 }}>
         <b> Date Demande:</b> {moment(props.demande.dateDemande).locale('fr').format('ll')}<br/>
@@ -101,4 +113,11 @@ return
     </Modal> 
   </div>
   )
+} else {
+  return (
+    <div className="fetching">
+      <FaSpinner className="spinner"></FaSpinner>
+    </div>
+  );
+}
 }

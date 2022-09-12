@@ -9,8 +9,11 @@ export default function OneCustomer(props) {
 
   let ctx=useContext(clientCtx)
   function removeC(){
+    if (window.confirm('Etes-vous sur de bien vouloir supprimer ce client ? ')) {
+
     ctx.removeOneClient(props.client._id)
      window.location.reload()
+  }
   }
   
   return (

@@ -155,15 +155,18 @@ let navigate=useNavigate()
                     </div>
                   </div>
                 </div>
-                <div className="row my-2 container">
-                  <div className="d-flex align-items-center">
+         
               
-                    <div className="col-4 mx-2">
-              <button type="" className="col-6 m-5 btn  fs-5 bg-blue"   onClick={validationDeCommande} 
+                <div className="row my-2 container">
+                <div className="d-flex align-items-center">
+                  <div className="col-10"></div>
+              <div className="col-2">
+              <button type="" className=" btn  fs-5 bg-blue"   onClick={validationDeCommande} 
       >Valider l'avoir</button>
       
-                    </div>
-                  </div>
+              
+                </div>
+                </div>
                 </div>
               </div>
             </div>
@@ -183,7 +186,7 @@ let navigate=useNavigate()
                   <form onSubmit={ajouterLigneVente}>
                   
                     <label htmlFor="article_id">Produit</label>
-                    <select className="form-control"  ref={refArticle}>
+                    <select className="form-select"  ref={refArticle}>
                       <option>--veuillez choisir le produit--</option>
                       {tabProduits.map((f) => {
                         return <option key={f.title}>{f.title}</option>;
@@ -200,8 +203,8 @@ let navigate=useNavigate()
       
                     <button
                       type="submit"
-                      className="btn text-light form-control my-2"
-                      style={{ backgroundColor: "#4125D9" }}
+                      className="btn bg-blue form-control my-2"
+                  
                     >
                       Valider
                     </button>

@@ -27,7 +27,6 @@ if(tabAchatFacts){
       <th scope="col">N° de Facture</th>
       <th scope="col">Total commande</th>
       <th scope="col">Echéance</th>
-      <th scope="col">Modifier</th>
       <th scope="col">Détails</th>
       <th scope="col">Suivi du paiement</th>
 

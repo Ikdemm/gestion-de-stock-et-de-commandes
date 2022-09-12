@@ -118,7 +118,7 @@ function App() {
   function PrivateOutlet() {
     //check if user logged in
     let auth= isLoggedIn()
-    return auth ? <Outlet /> : <Navigate to="/login" />;
+    return auth ? <Outlet /> : <Navigate to="/" />;
   }
   
 
@@ -302,7 +302,7 @@ function App() {
           <Route path="/logout" auth={auth1} element={<PrivateOutlet />}>
             <Route  path="" element={<Logout />} />
           </Route>
-          <Route path="/login" element={<Login />}  auth={auth}   />
+          <Route path="/" element={<Login />}  auth={auth}   />
         </Routes>
       </div>
     </div>

@@ -19,7 +19,7 @@ export default function WelcomePage() {
    
   },[])
 
-  if (tabUsers) {
+  if (tabUsers.length>0) {
     return (
       <div>
         <DetailsUser listOfUsers={tabUsers}></DetailsUser>

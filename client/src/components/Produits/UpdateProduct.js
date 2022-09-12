@@ -8,10 +8,10 @@ const _ = require("lodash");
 export default function UpdateProduct() {
   let {_id}=useParams()
   const pctx= useContext(produitCtx)
-  const [tabProduits, setTabClients] = useState([]);
+  const [tabProduits, setTaProduits] = useState([]);
   useEffect(() => {
     axios.get(`/api/produits`).then((response) => {
-      setTabClients(response.data);
+      setTaProduits(response.data);
     });
   }, []); 
 let selectedProduit= tabProduits.find((p)=>p._id===_id)  

@@ -196,7 +196,7 @@ export default function AjouterDesArticlesVentes() {
                   <form onSubmit={ajouterLigneAchat}>
                   
                     <label htmlFor="article_id">Produit</label>
-                    <select className="form-control"  ref={refArticle}>
+                    <select className="form-select"  ref={refArticle}>
                       <option>--veuillez choisir le produit--</option>
                       {tabProduits.map((f) => {
                         return <option key={f.title}>{f.title}</option>;
@@ -213,8 +213,8 @@ export default function AjouterDesArticlesVentes() {
       
                     <button
                       type="submit"
-                      className="btn text-light form-control my-2"
-                      style={{ backgroundColor: "#4125D9" }}
+                      className="btn blue form-control my-2"
+                  
                     >
                       Valider
                     </button>

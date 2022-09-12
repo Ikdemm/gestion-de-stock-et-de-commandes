@@ -34,9 +34,12 @@ export default function OneProduct(props) {
   console.log('category', category)
   let ctx = useContext(produitCtx);
   function removeC() {
+    if (window.confirm('Etes-vous sur de bien vouloir supprimer ce produit ? ')) {
+
     ctx.removeOneProduit(props.produit._id);
 
     window.location.reload();
+  }
   }
   if(category){
     return (

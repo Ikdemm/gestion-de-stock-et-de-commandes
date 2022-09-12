@@ -3,7 +3,7 @@ import axios from "axios";
 import React, { useContext, useEffect, useRef, useState } from "react";
 import { BiMailSend } from 'react-icons/bi';
 import { FaBan, FaSave } from 'react-icons/fa';
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { appelOffreCtx } from './../../../store/appelOffreContext';
 const _ = require ('lodash');
 
@@ -33,7 +33,7 @@ export default function NewAppelOffreForm() {
 
     emailjs.sendForm('service_4d727vz', 'template_buichrq', e.target, 'MLOcpsLxRpw0wWQtg')
       .then((result) => {
-        alert("Votre appel d'offre a été envoyé par email au destinataire, vous pouvre le renvoyer vers un atre destinataire ou l'enregistrer dans la BD")
+        alert("Votre appel d'offre a été envoyé par email au destinataire, vous pouvez le renvoyer vers un autre destinataire ou l'enregistrer dans la BD")
           console.log("send email",result.text);
       }, (error) => {
           console.log("send email ERROR",error.text);
@@ -80,6 +80,7 @@ export default function NewAppelOffreForm() {
           name="ref"
           ref={refRef}
           className="form-control"
+          required
         />
         <label htmlFor="dateAPO">Date</label>
         <input
@@ -87,6 +88,7 @@ export default function NewAppelOffreForm() {
           name="dateAPO"
           ref={refdateAPO}
           className="form-control"
+          required
         />
         <label htmlFor="objet">Objet</label>
         <input
@@ -94,6 +96,7 @@ export default function NewAppelOffreForm() {
           name="objet"
           ref={refObjet}
           className="form-control"
+          required
           />
   
         <label htmlFor="objet">Destinataire(s) [Entrez les e-mails (séparés par des virgules)] </label>
@@ -107,10 +110,10 @@ export default function NewAppelOffreForm() {
           />
   
         <label htmlFor="produit_id">Produit</label>
-        <select name="produit_id" className="form-select" >
+        <select name="produit_id" className="form-select"ref={refproduit_id} >
           <option>--veuillez choisir le produit--</option>
           {tabProduits.map((f) => {
-            return <option  key={f._id}ref={refproduit_id}>{f.title}</option>;
+            return <option  key={f._id}>{f.title}</option>;
           })}
         </select>
         <label htmlFor="quantite">Quantite</label>
@@ -119,6 +122,7 @@ export default function NewAppelOffreForm() {
           name="quantite"
           ref={refquantite}
           className="form-control"
+          required
           />
         <label htmlFor="commentaire">Commentaire</label>
         <input
@@ -133,6 +137,7 @@ export default function NewAppelOffreForm() {
           name="dateLimiteDeReponse"
           ref={refdateLimiteDeReponse}
           className="form-control"
+          required
           />
         <label htmlFor="dateDeCommandePlanifiee">Date De Commande Planifiée</label>
         <input
@@ -156,12 +161,11 @@ export default function NewAppelOffreForm() {
           >
           Enregitrer L'appel d'offre <FaSave></FaSave>
         </button>
-<button
-          type="submit"
+<Link to="/achat"
           className="btn btn-danger  m-2 "
           >
           Annuler <FaBan></FaBan>
-        </button>
+        </Link>
                </div>
 
       </form>

@@ -1,7 +1,7 @@
 import axios from "axios";
 import React, { useContext, useEffect, useRef, useState } from "react";
-import { FaSpinner } from "react-icons/fa";
-import { useNavigate } from "react-router-dom";
+import { FaBan, FaSave, FaSpinner } from "react-icons/fa";
+import { Link, useNavigate } from "react-router-dom";
 import { venteFactCtx } from './../../../store/venteFactContext';
 const _ = require ('lodash')
 
@@ -63,7 +63,7 @@ export default function NewFormVente() {
     <div className="container" >
     <h6 className="display-6">Nouvelle facture de vente</h6><hr/>
     <h5 className="fs-4">Informations générales</h5>
-    <form onSubmit={submitHandler}  method="post">
+    <form onSubmit={submitHandler}  method="post"className="container shadow p-3 bg-light">
         <label htmlFor="numFacture">Numéro de facture</label>
         <input type="text" name="numFacture" ref={refnumFacture} className="form-control" />
         <label htmlFor="client_id">Client</label>
@@ -80,7 +80,7 @@ export default function NewFormVente() {
         <label htmlFor="frais_de_livraison">Frais de livraison</label>
         <input  type="number"  name="frais_de_livraison"  ref={reffrais_de_livraison}  className="form-control"   />
         <label htmlFor="mode_de_paiement">Mode de paiement</label>
-        <select name="mode_de_paiement" className="form-control" ref={refmode_de_paiement}>
+        <select name="mode_de_paiement" className="form-select" ref={refmode_de_paiement}>
           <option>--veuillez choisir le mode de paiement--</option>
            <option>Comptant</option>
            <option >à crédit</option>
@@ -88,8 +88,15 @@ export default function NewFormVente() {
         </select>
         <label htmlFor="dateEcheance">Date d'échéance</label>
         <input type="date"name="dateEcheance"ref={refdateEcheance} className="form-control" />
-
-        <button type="submit"className='btn text-light form-control my-2'style={{backgroundColor:"#4125D9"}}>Confirmer les informations générales </button>
+        <div className='d-flex flex-row-reverse'>
+                <div className='p-2'>
+             <button className="btn bg-green my-2 " type="submit">Confirmer les informations générales <FaSave></FaSave></button>    
+                </div>
+                <div className='p-2'>
+             <Link to="/ventes" className="btn btn-danger my-2 mr-2">Annuler <FaBan></FaBan> </Link>
+                </div>
+                
+               </div>
       </form>
 
 

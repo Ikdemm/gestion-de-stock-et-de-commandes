@@ -3,7 +3,6 @@ import 'moment/locale/fr';
 import React, { useContext, useEffect, useRef, useState } from 'react';
 import { FaBan, FaSave, FaSpinner } from 'react-icons/fa';
 import { Link, useNavigate, useParams } from 'react-router-dom';
-import { directionCtx } from '../../../store/directionContext';
 import { employeeCtx } from '../../../store/employeeContext';
 export default function UpdateEmployee() {
   let {_id}=useParams()
@@ -17,13 +16,15 @@ export default function UpdateEmployee() {
   }, []);
   let empctx = useContext(employeeCtx);
   let selectedEmployee=tabEmployes.find((e)=>e._id===_id)
-
-  let dctx = useContext(directionCtx);
-  let listeDirections = dctx.tabDirections
-  console.log("listeDirections", listeDirections);
+  const [listeDirections, setTabDirections] = useState([]);
   useEffect(() => {
-    dctx.getAllDirections()
+    axios.get(`/api/directions`).then((response) => {
+      setTabDirections(response.data);
+    });
   }, []);
+
+  console.log("listeDirections", listeDirections);
+
   let refCIN = useRef("");
   let refN = useRef("");
   let refPR = useRef("");

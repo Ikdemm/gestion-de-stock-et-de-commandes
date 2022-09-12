@@ -1,6 +1,7 @@
 import axios from 'axios';
 import React, { useContext, useEffect, useRef, useState } from 'react'
-import { useNavigate } from 'react-router-dom';
+import { FaBan, FaSave, FaSpinner } from 'react-icons/fa';
+import { Link, useNavigate } from 'react-router-dom';
 import { achatAvoirCtx } from '../../../store/achatAVOIRContext';
 const _ = require ('lodash')
 
@@ -51,19 +52,21 @@ export default function NewAchatAvoirForm() {
     }
   
   }
+  if (tabAchatFacts) { 
+ 
   return (
     <>
         <div style={{display:"flex"}}>
     <div className="container" >
     <h6 className="display-6">Nouvelle facture d'avoir sur achat</h6><hr/>
     <h5 className="fs-4">Informations générales</h5>
-    <form onSubmit={submitHandler}  method="post">
+    <form onSubmit={submitHandler}  method="post"className="container shadow p-3 bg-light">
         <label htmlFor="numAvoir">Numéro de l'avoir</label>
-        <input type="text" name="numAvoir" ref={refnumAvoir} className="form-control" />
+        <input type="text" name="numAvoir" ref={refnumAvoir} className="form-control" required/>
   
 
         <label htmlFor="dateAvoir">Date Avoir</label>
-        <input type="date"   name="dateAvoir"ref={refdateAvoir}  className="form-control"/>
+        <input type="date"   name="dateAvoir"ref={refdateAvoir}  className="form-control" required/>
 
         <label htmlFor="facture_id">Facture concernée</label>
         <select className="form-select" ref={reffacture_id}>
@@ -73,8 +76,15 @@ export default function NewAchatAvoirForm() {
           })}
         </select>
       
-
-        <button type="submit"className='btn text-light form-control my-2'style={{backgroundColor:"#4125D9"}}>Confirmer les informations générales </button>
+        <div className='d-flex flex-row-reverse'>
+                <div className='p-2'>
+             <button className="btn bg-green my-2 " type="submit">Confirmer les informations générales <FaSave></FaSave></button>    
+                </div>
+                <div className='p-2'>
+             <Link to="/achat" className="btn btn-danger my-2 mr-2">Annuler <FaBan></FaBan> </Link>
+                </div>
+                
+               </div>
       </form>
 
 
@@ -84,4 +94,12 @@ export default function NewAchatAvoirForm() {
       </div>
     </>
   )
+}
+else {
+  return (
+    <div className="fetching">
+      <FaSpinner className="spinner"></FaSpinner>
+    </div>
+  );
+}
 }

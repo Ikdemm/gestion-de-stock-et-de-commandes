@@ -116,12 +116,12 @@ function App() {
       isLoggedIn();
     }, []); 
     const auth = isLoggedIn();
-    return auth ? <Outlet /> : <Navigate to="/login" />;
+    return auth ? <Outlet /> : <Navigate to="/" />;
   }
   const LoginContainer = () => (
    <Routes>
     
-    <Route path="/login" element={<Login></Login> } />
+    <Route path="/" element={<Login></Login> } />
    </Routes>
 
 );
@@ -333,7 +333,7 @@ function App() {
     <BrowserRouter>
         <div className="App">
       <Routes>
-          <Route  path="/login" element={<LoginContainer></LoginContainer>} />
+          <Route  path="/" element={<LoginContainer></LoginContainer>} />
           <Route element={<DefaultContainer></DefaultContainer>} />
       </Routes>
         </div>

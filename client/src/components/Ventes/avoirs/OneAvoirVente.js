@@ -2,7 +2,6 @@ import axios from "axios";
 import moment from "moment";
 import "moment/locale/fr";
 import React, { useEffect, useState } from "react";
-import { AiTwotoneEdit } from "react-icons/ai";
 import { BsCardHeading } from "react-icons/bs";
 import { FaSpinner } from "react-icons/fa";
 import { Link } from "react-router-dom";
@@ -24,13 +23,8 @@ export default function OneAvoirVente(props) {
             <td>{moment(date).locale("fr").format("L")}</td>
             <td  >{props.facture.numAvoir}</td>
             
-            <td  >{props.facture.somme_a_recevoir} dt</td>
-            <td  >
-           
-              <button className="btn btn-light">
-                <AiTwotoneEdit></AiTwotoneEdit>
-              </button>
-            </td>
+            <td  >{props.facture.somme_a_rembourser} dt</td>
+      
             <td  >
             <Link to={"/avoir-vente/"+props.facture._id+"/details"} className=' btn btn-outline-dark mx-1'> <BsCardHeading /></Link> 
       

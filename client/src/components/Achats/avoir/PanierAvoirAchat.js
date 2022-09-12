@@ -79,10 +79,10 @@ export default function PanierAvoirAchat() {
       }
       function validationDeCommande(){
         // eslint-disable-next-line no-restricted-globals
-    var result =  confirm('Etes-vous sûr de bien vouloir valider l avoir? Après cette étape, vous ne pouvez changer que les informations générales de la commande!!!');
+    var result =  confirm('Etes-vous sûr de bien vouloir valider l avoir? Après cette étape, vous ne pouvez rien changer !!!');
   
     if(result){
-  navigate('/historique-avoir')
+  navigate('/historique-avoir-achat')
     }}
     var tabLignesFiltred=tabLignes.filter((l)=>l.avoir_id===lastF._id)
 if(lastF && facture && tabLignesFiltred){    
@@ -155,15 +155,17 @@ if(lastF && facture && tabLignesFiltred){
               </div>
             </div>
           </div>
-          <div className="row my-2 container">
-            <div className="d-flex align-items-center">
-        
-              <div className="col-4 mx-2">
-        <button type="" className="col-6 m-5 btn  fs-5 bg-blue"   onClick={validationDeCommande} 
+          <div className="row">
+         <div className="col-md-9">
+          
+         </div>
+
+         <div className="col-md-3">
+        <button type="" className="p-3 btn  fs-5 bg-blue"   onClick={validationDeCommande} 
 >Valider l'avoir</button>
 
-              </div>
-            </div>
+           
+          </div>
           </div>
         </div>
       </div>
@@ -183,7 +185,7 @@ if(lastF && facture && tabLignesFiltred){
             <form onSubmit={ajouterLigneAchat}>
             
               <label htmlFor="article_id">Produit</label>
-              <select className="form-control"  ref={refArticle}>
+              <select className="form-select"  ref={refArticle}>
                 <option>--veuillez choisir le produit--</option>
                 {tabProduits.map((f) => {
                   return <option key={f.title}>{f.title}</option>;
@@ -200,8 +202,8 @@ if(lastF && facture && tabLignesFiltred){
 
               <button
                 type="submit"
-                className="btn text-light form-control my-2"
-                style={{ backgroundColor: "#4125D9" }}
+                className="btn bg-blue form-control my-2"
+             
               >
                 Valider
               </button>

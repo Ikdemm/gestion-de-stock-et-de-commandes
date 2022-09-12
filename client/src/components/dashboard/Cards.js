@@ -35,7 +35,7 @@ export default function Cards() {
   }, []); 
   return (
     <div className='row'>
-        <div className='row mt-5'>
+        <div className='row mt-3'>
             
 <div className='col-md-3 '>
     <div className='p-3 card'>

@@ -101,8 +101,8 @@ export default function DetailsAvoirAchat() {
               <hr />
               <div className="row my-2 container">
                 <div className="d-flex align-items-center">
-                  <div className="col-5"></div>
-                  <div className="col-6 mx-2">
+                  <div className="col-7"></div>
+                  <div className="col-5 mx-2">
               
                       
                         <b className="fs-4">Somme à recevoir:   {selectedFacture.somme_a_recevoir}   DT</b>
@@ -113,9 +113,10 @@ export default function DetailsAvoirAchat() {
               </div>
               <div className="row my-2 container">
                 <div className="d-flex align-items-center">
-             
-                  <div className="col-4 mx-2">
-            <Link to="/historique-avoir-achat" className="col-6 m-5 btn  fs-5 bg-blue">Retour</Link>
+                <div className="col-9"></div>
+
+                  <div className="col-3">
+            <Link to="/historique-avoir-achat" className="col-6 my-5 btn  fs-5 bg-blue">Retour</Link>
         
                   </div>
                 </div>

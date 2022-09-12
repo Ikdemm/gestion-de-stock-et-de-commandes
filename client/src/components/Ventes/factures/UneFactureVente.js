@@ -2,7 +2,6 @@ import axios from "axios";
 import moment from "moment";
 import "moment/locale/fr";
 import React, { useContext, useEffect, useState } from "react";
-import { AiTwotoneEdit } from "react-icons/ai";
 import { BsCardHeading } from "react-icons/bs";
 import { FaCheck, FaSpinner } from "react-icons/fa";
 import { FcCancel } from "react-icons/fc";
@@ -40,12 +39,7 @@ window.location.reload()
           
           <td  >{props.facture.net_a_payer} dt</td>
           <td  >{moment(props.facture.dateEcheance).locale("fr").format("L")}</td>
-          <td  >
-         
-            <button className="btn btn-light">
-              <AiTwotoneEdit></AiTwotoneEdit>
-            </button>
-          </td>
+     
           <td  >
           <Link to={"/facture-vente/"+props.facture._id+"/details"} className=' btn btn-outline-dark mx-1'> <BsCardHeading /></Link> 
     

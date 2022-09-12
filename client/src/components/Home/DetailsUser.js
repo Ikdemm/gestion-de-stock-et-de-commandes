@@ -125,27 +125,27 @@ const [selectedImage, setSelectedImage] = useState(null);
               <div className="row mb-3">
                 <div className="col-md-6">
                     
-                  <label for="prenom">Prénom</label>
+                  <label htmlFor="prenom">Prénom</label>
                   <input type="text" name="prenom" defaultValue={ employee.prenom}  className="form-control"/>
                   </div>
                 <div className="col-md-6">
-                  <label for="nom">Nom</label>
+                  <label htmlFor="nom">Nom</label>
                   <input type="text" name="nom" defaultValue={ employee.nom}  className="form-control"/>
                   </div>
               </div>
               <div className="row mb-3">
                 <div className="col-md-6">
-                  <label for="numTel"> N° de téléphone</label>
+                  <label htmlFor="numTel"> N° de téléphone</label>
                   <input type="number" name="numTel" defaultValue={ employee.numTel}  className="form-control"/>
                  </div>
                 <div className="col-md-6">
-                  <label for="numCIN"> N° de CIN</label>
+                  <label htmlFor="numCIN"> N° de CIN</label>
                   <input type="number" name="numCIN" defaultValue={ employee.numCIN}  className="form-control"/>
                  </div>
               </div>
               <div className="row mb-3">
                 <div className="col">
-                  <label for="adresse"> Adresse</label>
+                  <label htmlFor="adresse"> Adresse</label>
                   <input type="text" name="adresse" defaultValue={ employee.adresse}  className="form-control"/>
                  </div>
          

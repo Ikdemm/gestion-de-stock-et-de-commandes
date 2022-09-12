@@ -2,7 +2,7 @@ import moment from 'moment';
 import 'moment/locale/fr';
 import React, { useContext } from 'react';
 import { FaEdit, FaTrash } from 'react-icons/fa';
-import { Link, useNavigate, useParams } from 'react-router-dom';
+import { Link, useParams } from 'react-router-dom';
 import { employeeCtx } from '../../../store/employeeContext';
 import { directionCtx } from './../../../store/directionContext';
 export default function OneEmploye() {
@@ -21,11 +21,13 @@ var selectedEmployee=empCtx.getEmployeeById(_id)
 console.log("selectedEmployee",selectedEmployee);
 var dir=tabDirections.find((d)=>d._id===selectedEmployee.direction.direction_id)
 console.log("dir",dir);
-let navigate=useNavigate()
 function removeC(){
+  if (window.confirm('Etes-vous sur de bien vouloir supprimer cet employé ? ')) {
+
   empCtx.removeOneEmployee(selectedEmployee._id)
 
-navigate('/employes')
+  window.location.reload()
+}
 }
   return (
   <>

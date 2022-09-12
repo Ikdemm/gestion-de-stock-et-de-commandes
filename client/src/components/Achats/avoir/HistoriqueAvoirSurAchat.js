@@ -25,7 +25,6 @@ export default function HistoriqueAvoirSurAchat() {
         <th scope="col">Date</th>
         <th scope="col">N° de l'avoir</th>
         <th scope="col">Total</th>
-        <th scope="col">Modifier</th>
         <th scope="col">Détails</th>
   
       </tr>

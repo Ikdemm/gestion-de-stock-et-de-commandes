@@ -1,6 +1,7 @@
 import axios from 'axios';
 import React, { useContext, useEffect, useRef, useState } from 'react'
-import { useNavigate } from 'react-router-dom';
+import { FaBan, FaSave } from 'react-icons/fa';
+import { Link, useNavigate } from 'react-router-dom';
 import { venteAvoirCtx } from '../../../store/venteAvoirContext';
 const _ = require ('lodash');
 
@@ -53,7 +54,7 @@ export default function FormAvoirVentes() {
     <div className="container" >
     <h6 className="display-6">Nouvelle facture d'avoir sur vente</h6><hr/>
     <h5 className="fs-4">Informations générales</h5>
-    <form onSubmit={submitHandler}  method="post">
+    <form onSubmit={submitHandler}  method="post"className="container shadow p-3 bg-light">
         <label htmlFor="numAvoir">Numéro de l'avoir</label>
         <input type="text" name="numAvoir" ref={refnumAvoir} className="form-control" />
   
@@ -69,8 +70,15 @@ export default function FormAvoirVentes() {
           })}
         </select>
       
-
-        <button type="submit"className='btn text-light form-control my-2'style={{backgroundColor:"#4125D9"}}>Confirmer les informations générales </button>
+        <div className='d-flex flex-row-reverse'>
+                <div className='p-2'>
+             <button className="btn bg-green my-2 " type="submit">Confirmer les informations générales <FaSave></FaSave></button>    
+                </div>
+                <div className='p-2'>
+             <Link to="/ventes" className="btn btn-danger my-2 mr-2">Annuler <FaBan></FaBan> </Link>
+                </div>
+                
+               </div>
       </form>
 
 

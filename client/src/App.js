@@ -54,36 +54,51 @@ import HistoriqueVentes from "./components/Ventes/factures/HistoriqueVentes";
 import NewFormVente from "./components/Ventes/factures/NewFormVente";
 import HolderVentes from "./components/Ventes/HolderVentes";
 import WelcomePage from "./components/Home/WelcomePage";
+import NotFoundPage from "./components/NotFoundPage";
 
 function App() {
   const [isLogged, setIsLogged] = useState(false);
   function verifyConnecte() {
-    let token = localStorage.getItem('token');
-    if (token)
-        setIsLogged(true);
-    else
-        setIsLogged(false);
-}
-useEffect(()=>{
-  verifyConnecte()
-},[])
- /*  const LogCtx = useContext(LoginContext);
-  LogCtx.verifierConnecte(); */
-  //if (!LogCtx.estConnecte) {
+    let token = localStorage.getItem("token");
+    if (token) setIsLogged(true);
+    else setIsLogged(false);
+  }
+  useEffect(() => {
+    verifyConnecte();
+  }, []);
+  const [tabUsers, setListeUsers] = useState([]);
+  useEffect(() => {
+    fetch("/api/auth/all-users")
+      .then((res) => {
+        return res.json();
+      })
+      .then((data) => {
+        for (const key in data) {
+          data[key]._id = key;
+          setListeUsers((prev) => {
+            return [...prev, data[key]];
+          });
+        }
+      });
+  }, []);
+
+  let emailUser = localStorage.getItem("email");
+  var connectedUser = tabUsers.find((u) => u.email === emailUser);
   if (!isLogged) {
     return (
       <Routes>
-        <Route path="/login" element={<Login />} />
+        <Route path="/" element={<Login />} />
+        <Route path="*" element={<Login />} />
+
       </Routes>
     );
-  } else
+  } else if (isLogged && connectedUser?.role === "admin") {
     return (
       <>
         <div className="sticky-top">
           <Sidebar></Sidebar>
         </div>
         <Routes>
-
           <Route path="/welcome-page" element={<WelcomePage />} />
           <Route path="/dashboard" element={<DashbordHolder />} />
 
@@ -211,10 +226,181 @@ useEffect(()=>{
           <Route path="/register-form" element={<RegisterForm />} />
 
           <Route path="/all-users" element={<AllUsers />} />
-
+          <Route path="*" element={<NotFoundPage />} />
         </Routes>
       </>
     );
+  } else if (isLogged && connectedUser?.role === "magasinier_appro") {
+    return (
+      <>
+        <div className="sticky-top">
+          <Sidebar></Sidebar>
+        </div>
+        <Routes>
+          <Route path="/welcome-page" element={<WelcomePage />} />
+
+          <Route path="/stock/:_id/edit" element={<UpdateStock />} />
+          <Route path="/addProduit" element={<AddProductForm />} />
+          <Route path="/listProduits" element={<HolderProduct />} />
+          <Route path="/listCategories" element={<CategoryHolder />} />
+          <Route path="/produits/:_id/edit" element={<UpdateProduct />} />
+          <Route path="/addCategory" element={<Category />} />
+          <Route path="/stock" element={<Stock />} />
+          <Route path="*" element={<NotFoundPage />} />
+        </Routes>
+      </>
+    );
+  } else if (isLogged && connectedUser?.role === "magasinier_bati") {
+    return (
+      <>
+        <div className="sticky-top">
+          <Sidebar></Sidebar>
+        </div>
+        <Routes>
+          <Route path="/welcome-page" element={<WelcomePage />} />
+          <Route path="/gestion-demandes" element={<HolderGestionDemandes />} />
+          <Route path="/non-traitees" element={<NonTraitees />} />
+          <Route path="/traitees" element={<Traitees />} />
+          <Route path="*" element={<NotFoundPage />} />
+        </Routes>
+      </>
+    );
+   
+} else if (isLogged && connectedUser?.role === "chef_serv_achat") {
+    return (
+      <>
+        <div className="sticky-top">
+          <Sidebar></Sidebar>
+        </div>
+        <Routes>
+          <Route path="/welcome-page" element={<WelcomePage />} />
+          <Route path="/fournisseurs" element={<HolderFournisseurs />} />
+          <Route path="/addFournisseur" element={<AddFournisseurForm />} />
+
+          <Route
+            path="/fournisseurs/:_id/edit"
+            element={<UpdateFournisseur />}
+          />
+                    {/************************ GESTION DES FACTURES ACHAT *************************/}
+                    <Route path="/achat" element={<Achats />} />
+          <Route path="/alertes" element={<AlertesSurAchat />} />
+
+          {/* //*Ordinaires**/}
+          <Route path="/historique-achat" element={<HistoriqueAchats />} />
+
+          <Route path="/ajout-facture-achat" element={<NewAchatForm />} />
+
+          <Route path="/facture-achat/panier" element={<AddToInvoice />} />
+          <Route
+            path="/facture-achat/:_id/details"
+            element={<DetailsAchat />}
+          />
+          {/*  <Route path="/facture-achat/:_id/panier" element={<AddToInvoice/>}/>  */}
+          {/*  //*Avoir**/}
+          <Route
+            path="/historique-avoir-achat"
+            element={<HistoriqueAvoirSurAchat />}
+          />
+          <Route
+            path="/avoir-achat/:_id/details"
+            element={<DetailsAvoirAchat />}
+          />
+
+          <Route path="/ajout-avoir-achat" element={<NewAchatAvoirForm />} />
+          <Route path="/avoir-achat/panier" element={<PanierAvoirAchat />} />
+
+          {/* //*Appel d'offre**/}
+          <Route
+            path="/historique-appel-doffre"
+            element={<HistoriqueAppelsOffres />}
+          />
+
+          <Route path="/ajout-appel-doffre" element={<NewAppelOffreForm />} />
+          <Route path="*" element={<NotFoundPage />} />
+        </Routes>
+      </>
+    );
+  
+} else if (isLogged && connectedUser?.role === "chef_serv_vente") {
+    return (
+      <>
+        <div className="sticky-top">
+          <Sidebar></Sidebar>
+        </div>
+        <Routes>
+          <Route path="/welcome-page" element={<WelcomePage />} />
+          <Route path="/clients" element={<HolderCustomers />} />
+          <Route path="/addClient" element={<AddClientForm />} />
+
+          <Route path="/clients/:_id/edit" element={<UpdateCustomer />} />
+   {/************************ GESTION DES FACTURES VENTE *************************/}
+          <Route path="/ventes" element={<HolderVentes />} />
+
+          {/*  //*Ordinaires**/}
+          <Route path="/historique-ventes" element={<HistoriqueVentes />} />
+
+          <Route path="/ajout-facture-vente" element={<NewFormVente />} />
+
+          <Route
+            path="/facture-vente/panier"
+            element={<AjouterDesArticlesVentes />}
+          />
+          <Route path="/facture-vente/:_id/details" element={<DetaiVente />} />
+
+          {/* //*Avoir**/}
+          <Route
+            path="/historique-avoir-vente"
+            element={<HistoriqueAvoirVentes />}
+          />
+          <Route
+            path="/avoir-vente/:_id/details"
+            element={<DetailsAvoirVente />}
+          />
+          <Route path="/avoir-vente/panier" element={<PanierAvoirSurVente />} />
+
+          <Route path="/ajout-avoir-vente" element={<FormAvoirVentes />} />
+
+          {/* //*échéance**/}
+          <Route path="/echeances-vente" element={<VenteEcheances />} />
+          <Route path="*" element={<NotFoundPage />} />
+        </Routes>
+      </>
+    );
+  }
+ else if (isLogged && connectedUser?.role === "directeur_direction") {
+    return (
+      <>
+        <div className="sticky-top">
+          <Sidebar></Sidebar>
+        </div>
+        <Routes>
+          <Route path="/welcome-page" element={<WelcomePage />} />
+          <Route path="/dashboard" element={<DashbordHolder />} />
+
+      <Route path="/profiles" element={<HolderProfiles />} />
+
+      <Route path="/register-form" element={<RegisterForm />} />
+
+      <Route path="/all-users" element={<AllUsers />} />
+      <Route path="*" element={<NotFoundPage />} />
+        </Routes>
+      </>
+    );
+  }
+ else if (isLogged && connectedUser?.role === "employe") {
+    return (
+      <>
+        <div className="sticky-top">
+          <Sidebar></Sidebar>
+        </div>
+        <Routes>
+          <Route path="/welcome-page" element={<WelcomePage />} />
+          <Route path="/demandes" element={<HolderDemande />} />
+          <Route path="*" element={<NotFoundPage />} />
+        </Routes>
+      </>
+    );
+  }
 }
 
 export default App;

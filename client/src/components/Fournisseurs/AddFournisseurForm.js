@@ -2,10 +2,13 @@ import React, { useContext, useRef } from 'react';
 import { FaBan, FaSave } from 'react-icons/fa';
 import { Link, useNavigate } from 'react-router-dom';
 import { fournisseurtCtx } from '../../store/fournisseurContext';
+const _ = require ('lodash')
 
 export default function AddFournisseurForm() {
   let navigate= useNavigate()
   const fctx=useContext(fournisseurtCtx)
+  const tabNotFiltred=_.map(fctx.tabFournisseurs,"email")
+
   const refNom=useRef('')
   const refTel=useRef('')
   const refAdresse=useRef('')
@@ -18,10 +21,14 @@ export default function AddFournisseurForm() {
       adresse: refAdresse.current.value,
       email:refEmail.current.value
           }
-          
+    if(!tabNotFiltred.includes(newFournisseur.email)){
+       
        fctx.addNewFournisseur(newFournisseur)
+       e.target.reset()
        navigate('/fournisseurs')
-  }
+      }else
+      alert('cet email de fournisseur existe déjà, veuillez entrer un email différent')
+    }
   return (
     <div className="container">
     <div style={{ display: "flex" }}>

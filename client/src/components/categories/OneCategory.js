@@ -25,9 +25,12 @@ export default function OneCategory(props) {
   const handleClose = () => setOpen(false);
   let ctx = useContext(categorieCtx);
   function removeC() {
+    if (window.confirm('Etes-vous sur de bien vouloir supprimer cette catégorie ? Sachant que tous les produits y inclus seront supprimés ainsi')) {
+
     ctx.removeOneCategorie(props.categorie._id);
 
     window.location.reload();
+  }
   }
  
   const tabNotFiltred=_.map(ctx.tabCategories,"name")
