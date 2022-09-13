@@ -3,6 +3,8 @@ import React, { useContext, useEffect, useRef, useState } from 'react'
 import { FaBan, FaSave, FaSpinner } from 'react-icons/fa';
 import { Link, useNavigate, useParams } from 'react-router-dom';
 import { produitCtx } from '../../store/produitContext';
+import swal from 'sweetalert';
+
 const _ = require("lodash");
 
 export default function UpdateProduct() {
@@ -47,13 +49,31 @@ function submitHandler(e) {
     stock_max: refSMax.current.value,
     image: refImage.current.value,
   };
-  if (!tabNotFiltred.includes(uProduct.title)) {
-    pctx.updateProduit(_id,uProduct);
-    e.target.reset();
-    navigate("/listProduits");
-    window.location.reload();
+  if (tabNotFiltred.includes(uProduct.title)) {
+    swal({
+      title: "Echec",
+      text: "ce nom de produit existe déjà, veuillez entrer un nom différent!",
+      icon: "error",
+    });
+
+
+
   } else
-    alert("ce nom de produit existe déjà, veuillez entrer un nom différent");
+ {
+  pctx.updateProduit(_id,uProduct);
+  swal({
+    title: "Opération réussie!",
+    text: "Le produit a été bien mis à jour!",
+    icon: "success",
+  });
+  setTimeout(()=>{
+
+  e.target.reset();
+  navigate("/listProduits");
+  window.location.reload();
+}, 1500)
+
+ }
 }
 if(selectedProduit){
 
@@ -100,7 +120,7 @@ if(selectedProduit){
                 <div className="col-md-6">
 
               <label htmlFor="categorie_id">Catégorie</label>
-              <select name="categorie_id" className="form-control" ref={refC}>
+              <select name="categorie_id" className="form-control" ref={refC} >
                 <option>--Veuillez choisir la catégorie--</option>
                 {tabCat.map((f) => {
                   return <option key={f._id}  

@@ -137,11 +137,13 @@ exports.updateOneLine= async (req, res)=>{
             old_article.quantite_entree-=ecart
             old_article.stock_final=old_article.calculStockFinal();
             line.total+=(old_article.price_a*ecart)
+            line.total=line.calculTotal()
             console.log('line.total1',line.total)            
         }else if(ecart<0){
             old_article.quantite_entree-=ecart
             old_article.stock_final=old_article.calculStockFinal();
             line.total+=(old_article.price_a*ecart)
+            line.total=line.calculTotal()
             console.log('line.total2',line.total)            
         } 
         console.log('ecart2',ecart)            

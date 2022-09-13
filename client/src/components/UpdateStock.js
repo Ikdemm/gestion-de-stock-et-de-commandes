@@ -3,6 +3,7 @@ import React, { useContext, useEffect, useRef, useState } from 'react';
 import { FaBan, FaSave, FaSpinner } from 'react-icons/fa';
 import { Link, useNavigate, useParams } from 'react-router-dom';
 import { produitCtx } from './../store/produitContext';
+import swal from 'sweetalert';
 
 export default function UpdateStock() {
     let {_id}=useParams()
@@ -32,10 +33,18 @@ console.log('selectedStock', selectedStock)
       };
    
       pdtCtx.updateProduit(_id,uProduct);
+      swal({
+        title: "Opération réussie!",
+        text: "Le stock a été bien mis à jour!",
+        icon: "success",
+      });
+      setTimeout(()=>{
+
         e.target.reset();
         navigate("/stock");
         window.location.reload();
- 
+      }, 1500)
+
     }
     
     if(selectedStock){

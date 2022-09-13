@@ -19,11 +19,11 @@ function AddNewCategorieContextProvider(props) {
       headers: { "Content-Type": "application/json" },
     }).then((res) => {
         getAllCategories();
-        alert("la nouvelle categorie est bien ajoutée");
-        console.log(res);
+        //console.log("la nouvelle categorie est bien ajoutée");
+        console.log("la nouvelle categorie est bien ajoutée",res);
       }).catch((err) => {
-        alert("erreur avec addNewCategorie");
-        console.log(err);
+        //console.log("erreur avec addNewCategorie");
+        console.log("erreur avec addNewCategorie",err);
       });
     setTabCategories((prev) => {
       return [...prev, newCategorie];
@@ -35,12 +35,12 @@ function AddNewCategorieContextProvider(props) {
       headers: { "Content-Type": "application/json" },
     }).then((res) => {
         getAllCategories()
-        alert("la Categorie est bien supprimée");
+        console.log("la Categorie est bien supprimée");
         console.log(res);
 
 
       }).catch((err) => {
-        alert("erreur removeOneCategorie");
+        console.log("erreur removeOneCategorie");
         console.log(err);
       });
  
@@ -72,11 +72,11 @@ function AddNewCategorieContextProvider(props) {
       headers: { "Content-Type": "application/json" },
     }).then((res) => {
         getAllCategories()
-        alert("la Categorie est modifiée");
+        console.log("la Categorie est modifiée");
         console.log('res', res)
       })
       .catch((err) => {
-        alert("erreur inconnue");
+        console.log("erreur inconnue");
         console.log('err', err)
       });
 

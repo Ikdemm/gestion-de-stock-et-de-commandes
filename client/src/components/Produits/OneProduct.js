@@ -8,6 +8,7 @@ import Modal from "@mui/material/Modal";
 import Typography from "@mui/material/Typography";
 import { FcInfo , FcMoneyTransfer, FcPackage, FcRating, FcSalesPerformance} from "react-icons/fc";
 import axios from "axios";
+import swal from 'sweetalert';
 
 const style = {
   position: "absolute",
@@ -34,12 +35,30 @@ export default function OneProduct(props) {
   console.log('category', category)
   let ctx = useContext(produitCtx);
   function removeC() {
-    if (window.confirm('Etes-vous sur de bien vouloir supprimer ce produit ? ')) {
+    swal({
+      title: "Suppression",
+      text: "Etes-vous sur de bien vouloir supprimer ce produit?",
+      icon: "warning",
+      buttons: ["Annuler", "Supprimer"],
+      dangerMode: true,
+    })
+    .then((willDelete) => {
+      if (willDelete) {
+        ctx.removeOneProduit(props.produit._id);
+        swal("Produit supprimé avec succès", {
+          icon: "success",
+        });
+        setTimeout(()=>{
 
-    ctx.removeOneProduit(props.produit._id);
+          window.location.reload();
+        }, 1500)
+      } else {
+        swal("Produit selectionné non supprimé");
+      }
+    });
 
-    window.location.reload();
-  }
+
+  
   }
   if(category){
     return (

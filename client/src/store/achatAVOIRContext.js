@@ -21,12 +21,12 @@ function AchatAvoirContextProvider(props) {
     })
       .then((res) => {
 
-        alert("la facture est bien ajoutée");
+        console.log("la facture est bien ajoutée");
         getAllAchatAvoirs()
         console.log(res);
       })
       .catch((err) => {
-        alert("erreur avec addNewAchatAvoir");
+        console.log("erreur avec addNewAchatAvoir");
         console.log(err);
       });
     setTabAchatAvoirs((prev) => {
@@ -62,10 +62,10 @@ function AchatAvoirContextProvider(props) {
     })
       .then((res) => {
         getAllAchatAvoirs();
-        alert("la facture est modifiée");
+        console.log("la facture est modifiée");
       })
       .catch((err) => {
-        alert("erreur inconnue");
+        console.log("erreur inconnue");
       });
 
      

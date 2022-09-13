@@ -2,6 +2,8 @@ import React, { useContext, useRef } from 'react';
 import { FaBan, FaSave } from 'react-icons/fa';
 import { Link, useNavigate } from 'react-router-dom';
 import { clientCtx } from './../../store/clientContext';
+import swal from 'sweetalert';
+
 const _ = require ('lodash')
 
 export default function AddClientForm() {
@@ -25,10 +27,22 @@ export default function AddClientForm() {
           if(!tabNotFiltred.includes(newClient.numero_de_tel)){
         
           cctx.addNewClient(newClient)
+         // swal("le client est bien ajouté", "success");
+          swal({
+            title: "Ajout Client!",
+            text: "Le client est bien ajouté!",
+            icon: "success",
+          });
           e.target.reset()
        navigate('/clients')
-      }else
-      alert('ce numéro de téléphone existe déjà, veuillez entrer un numéro différent')
+      }else{
+      swal({
+        title: "Echec",
+        text: "Ce numéro de téléphone existe déjà, veuillez entrer un numéro différent!",
+        icon: "error",
+      });
+    }
+     // alert('ce numéro de téléphone existe déjà, veuillez entrer un numéro différent')
     }
   return (
     <div className="container">

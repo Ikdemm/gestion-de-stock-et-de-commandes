@@ -19,11 +19,11 @@ function VenteAvoirContextProvider(props) {
     })
       .then((res) => {
 
-        alert("la facture est bien ajoutée");
+        console.log("la facture est bien ajoutée");
         console.log(res);
       })
       .catch((err) => {
-        alert("erreur avec addNewVenteAvoir");
+        console.log("erreur avec addNewVenteAvoir");
         console.log(err);
       });
     setTabVenteAvoirs((prev) => {
@@ -61,10 +61,10 @@ function VenteAvoirContextProvider(props) {
       headers: { "Content-Type": "application/json" },
     })
       .then((res) => {
-        alert("la facture est modifiée");
+        console.log("la facture est modifiée");
       })
       .catch((err) => {
-        alert("erreur inconnue");
+        console.log("erreur inconnue");
       });
 
         getAllVenteAvoirs()

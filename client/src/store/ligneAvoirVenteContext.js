@@ -20,11 +20,11 @@ function LigneAvoirSurVenteContextProvider(props) {
     })
       .then((res) => {
 
-        alert("la LigneAvoirSurVente est bien ajoutée");
+        console.log("la LigneAvoirSurVente est bien ajoutée");
         console.log(res);
       })
       .catch((err) => {
-        alert("erreur avec addNewLigneAvoirSurVente");
+        console.log("erreur avec addNewLigneAvoirSurVente");
         console.log(err);
       });
     setTabLigneAvoirSurVentes((prev) => {
@@ -38,13 +38,13 @@ function LigneAvoirSurVenteContextProvider(props) {
       headers: { "Content-Type": "application/json" },
     })
       .then((res) => {
-        alert("la LigneAvoirSurVente est bien supprimée");
+        console.log("la LigneAvoirSurVente est bien supprimée");
         console.log(res);
 
 
       })
       .catch((err) => {
-        alert("erreur removeOneLigneAvoirSurVente");
+        console.log("erreur removeOneLigneAvoirSurVente");
         console.log(err);
       });
  
@@ -82,10 +82,10 @@ function LigneAvoirSurVenteContextProvider(props) {
       headers: { "Content-Type": "application/json" },
     })
       .then((res) => {
-        alert("le LigneAvoirSurVente est modifié");
+        console.log("le LigneAvoirSurVente est modifié");
       })
       .catch((err) => {
-        alert("erreur inconnue");
+        console.log("erreur inconnue");
       });
 
         getAllLigneAvoirSurVentes()

@@ -1,5 +1,5 @@
 const mongoose = require('mongoose');
-const Produit = require('../models/Produit');
+//const Produit = require('../models/Produit');
 const {ObjectId} = mongoose.Schema;
 
 const categorieSchema= new mongoose.Schema({
@@ -10,9 +10,9 @@ const categorieSchema= new mongoose.Schema({
     ]
     
 })
-categorieSchema.pre('remove', async function(next){
+/* categorieSchema.pre('remove', async function(next){
    const categorie= this
    await Produit.deleteMany({categorie_id:categorie._id})
    next()
-})
+}) */
 module.exports=mongoose.model('Categorie',categorieSchema )

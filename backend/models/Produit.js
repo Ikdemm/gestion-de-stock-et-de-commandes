@@ -2,6 +2,7 @@ const mongoose = require("mongoose");
 const Joi = require("joi");
 Joi.objectId = require("joi-objectid")(Joi);
 const {ObjectId} = mongoose.Schema;
+const uniqueValidator=require('mongoose-unique-validator');
 
 const productSchema = mongoose.Schema({
   title: { type: String, required: true, unique: true },
@@ -57,6 +58,6 @@ productSchema.methods.calculStockFinal = function () {
   console.log("SF", SF);
   return SF;
 };
-
+productSchema.plugin(uniqueValidator);
 module.exports = mongoose.model("Produit", productSchema);
 //module.exports.product_validator= product_validator;

@@ -20,10 +20,13 @@ function AddNewProduitContextProvider(props) {
     })
       .then((res) => {
 
-        alert("le produit est bien ajouté");
+        //console.log("le produit est bien ajouté");
+        console.log('le produit est bien ajouté', res)
       })
       .catch((err) => {
-        alert("erreur inconnue");
+        //console.log("erreur inconnue");
+        console.log('erreur inconnue', err)
+
       });
     setTabProduits((prev) => {
       return [...prev, newProduit];
@@ -36,9 +39,9 @@ function AddNewProduitContextProvider(props) {
     
     }).then((res) => {
         getAllProduits();
-        alert("le produit est supprimé")
+        console.log("le produit est supprimé")
     }).catch((err) => {
-        alert("erreur inconnue!");
+        console.log("erreur inconnue!");
       });
  
   
@@ -74,10 +77,10 @@ function AddNewProduitContextProvider(props) {
       headers: { "Content-Type": "application/json" },
     })
       .then((res) => {
-        alert("le produit est modifié");
+        console.log("le produit est modifié");
       })
       .catch((err) => {
-        alert("erreur inconnue");
+        console.log("erreur inconnue");
       });
 
     }

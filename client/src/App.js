@@ -212,7 +212,7 @@ function App() {
           <Route path="/echeances-vente" element={<VenteEcheances />} />
 
           {/************************ GESTION DES DEMANDES *************************/}
-          <Route path="/demandes" element={<HolderDemande />} />
+     {/*      <Route path="/demandes" element={<HolderDemande />} /> */}
 
           <Route path="/gestion-demandes" element={<HolderGestionDemandes />} />
 
@@ -308,6 +308,7 @@ function App() {
 
           <Route path="/ajout-avoir-achat" element={<NewAchatAvoirForm />} />
           <Route path="/avoir-achat/panier" element={<PanierAvoirAchat />} />
+          <Route path="/echeances" element={<HolderEcheances />} />
 
           {/* //*Appel d'offre**/}
           <Route

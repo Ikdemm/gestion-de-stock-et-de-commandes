@@ -20,11 +20,11 @@ function AddNewDirectionContextProvider(props) {
     })
       .then((res) => {
 
-        alert("la Direction est bien ajoutée");
+        console.log("la Direction est bien ajoutée");
         console.log(res);
       })
       .catch((err) => {
-        alert("erreur avec addNewDirection");
+        console.log("erreur avec addNewDirection");
         console.log(err);
       });
     setTabDirections((prev) => {
@@ -37,13 +37,13 @@ function AddNewDirectionContextProvider(props) {
       headers: { "Content-Type": "application/json" },
     })
       .then((res) => {
-        alert("la Direction et tout les employés y inclus sont supprimés avec succès! ");
+        console.log("la Direction et tout les employés y inclus sont supprimés avec succès! ");
         console.log(res);
 
 
       })
       .catch((err) => {
-        alert("erreur removeOneDirection");
+        console.log("erreur removeOneDirection");
         console.log(err);
       });
  
@@ -81,12 +81,12 @@ function AddNewDirectionContextProvider(props) {
       headers: { "Content-Type": "application/json" },
     }).then((res) => {
         getAllDirections()
-        alert("la Direction est modifiée");
+        console.log("la Direction est modifiée");
         console.log('res', res)
 
       })
       .catch((err) => {
-        alert("erreur inconnue");
+        console.log("erreur inconnue");
         console.log('err', err)
 
       });

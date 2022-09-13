@@ -33,6 +33,7 @@ function LoginContextProvider(props) {
 
     function seDeconnecter() {
         localStorage.removeItem('token');
+        localStorage.removeItem('email');
         setIsLogged(false)
     }
 

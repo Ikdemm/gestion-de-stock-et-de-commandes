@@ -5,9 +5,9 @@ exports.createFournisseur= async (req, res) =>{
     let fournisseur = new Fournisseur(req.body)
     try{
         fournisseur= await fournisseur.save()
-        res.send(fournisseur)
+        res.status(201).json({ message: 'Le fournisseur est bien ajouté à la BD !'})
     }catch(error){
-        res.sendStatus(405).send(error.message)
+        res.status(400).send(`Error : ${error.message}`);
     }
 } 
 exports.getAllFournisseurs = async (req, res) => {

@@ -1,9 +1,11 @@
-import React, { useContext, useState } from "react";
+import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { LoginContext } from "../store/LoginContext";
+//import { LoginContext } from "../store/LoginContext";
+import swal from 'sweetalert';
+
 export default function Login() {
   let navigate = useNavigate();
-  const LogCtx = useContext(LoginContext);
+ // const LogCtx = useContext(LoginContext);
 
   const [user, setUser] = useState({
     email: "",
@@ -19,7 +21,7 @@ export default function Login() {
   };
 
   // Handle Login
-  const handleSubmit =  (event) => {
+/*   const handleSubmit =  (event) => {
     event.preventDefault();
     // eslint-disable-next-line no-unused-vars
     const { email, password } = user;
@@ -38,7 +40,45 @@ export default function Login() {
       
     })
 
-  };
+  }; */
+  const handleSubmit = async (event) =>{
+    event.preventDefault();
+    const {email, password} = user;
+    try {
+      const res = await fetch('/api/auth/login', {
+        method : "POST",
+        headers : {
+          "Content-Type" : "application/json"
+        },
+        body : JSON.stringify({  email, password})
+      });
+
+      if(res.status === 401 || !res){
+        swal({
+          title: "Connexion échouée",
+          text: "Identifiants invalides!",
+          icon: "error",
+        })
+        //window.alert("Identifiants invalides")
+      }else{
+        swal({
+          title: "Connexion réussie!",
+          text: "Vous êtes bien connecté(e)!",
+          icon: "success",
+        });
+        //window.alert("Connexion réussie");
+        localStorage.setItem('token', res['token']);
+        localStorage.setItem('email', email);
+        navigate('/welcome-page');
+        window.location.reload();
+        // Token is generated When we Logged In.
+  
+      }
+
+    } catch (error) {
+      console.log(error);
+    }
+  }
   return (
     <div style={{ marginTop: 20 + "vh" }}>
       {/*         <h1 className='text-center display-1 bg-dark p-3 fw-bold' style={{color: "#09ff00" }}> Nodes Storage Manager </h1>

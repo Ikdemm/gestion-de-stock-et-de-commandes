@@ -20,10 +20,12 @@ function AddNewClientContextProvider(props) {
     })
       .then((res) => {
 
-        alert("le client est bien ajouté");
+        //console.log("le client est bien ajouté");
+        console.log("le client est bien ajouté",res);
       })
       .catch((err) => {
-        alert("erreur inconnue");
+        //console.log("erreur inconnue");
+        console.log("erreur inconnue",err);
       });
     setTabClients((prev) => {
       return [...prev, newClient];
@@ -36,10 +38,10 @@ function AddNewClientContextProvider(props) {
       headers: { "Content-Type": "application/json" },
     })
       .then((res) => {
-        alert("le client est supprimé");
+        console.log("le client est supprimé");
       })
       .catch((err) => {
-        alert("erreur inconnue");
+        console.log("erreur inconnue");
       });
  
         getAllClients()
@@ -76,10 +78,10 @@ function AddNewClientContextProvider(props) {
       headers: { "Content-Type": "application/json" },
     })
       .then((res) => {
-        alert("le client est modifié");
+        console.log("le client est modifié");
       })
       .catch((err) => {
-        alert("erreur inconnue");
+        console.log("erreur inconnue");
       });
 
         getAllClients()

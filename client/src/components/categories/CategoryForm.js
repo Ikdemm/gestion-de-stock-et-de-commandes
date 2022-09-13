@@ -1,5 +1,6 @@
 import React, { useContext, useRef } from "react";
 import { categorieCtx } from "../../store/categoryContext";
+import swal from 'sweetalert';
 const _ = require("lodash");
 
 export default function CategoryForm() {
@@ -13,14 +14,28 @@ export default function CategoryForm() {
     let NewCategory = {
       name: refName.current.value,
     };
-    if (!tabNotFiltred.includes(NewCategory.name)) {
+    if (tabNotFiltred.includes(NewCategory.name)) {
+      swal({
+        title: "Echec",
+        text: "ce nom de catégorie existe déjà, veuillez entrer un nom différent",
+        icon: "error",
+      })
+   
+    } else
+     {
       catCtx.addNewCategorie(NewCategory);
+      swal({
+        title: "Opération réussie!",
+        text: "La catégorie est bien ajoutée!",
+        icon: "success",
+      });
+      setTimeout(()=>{
+
       e.target.reset();
       window.location.reload();
-    } else
-      alert(
-        "ce nom de catégorie existe déjà, veuillez entrer un nom différent"
-      );
+    }, 1500)
+
+     }
   }
   return (
     <div>

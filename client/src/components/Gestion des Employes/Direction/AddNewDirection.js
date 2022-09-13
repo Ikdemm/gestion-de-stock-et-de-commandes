@@ -1,5 +1,6 @@
 import React, { useContext, useRef } from "react";
 import { directionCtx } from "../../../store/directionContext";
+import swal from 'sweetalert';
 const _ = require("lodash");
 
 export default function AddNewDirection() {
@@ -14,14 +15,31 @@ export default function AddNewDirection() {
       name: refName.current.value,
     };
 
-    if (!tabNotFiltred.includes(newD.name)) {
+    if (tabNotFiltred.includes(newD.name)) {
+
+      swal({
+        title: "Echec",
+        text: "ce nom de direction existe déjà, veuillez entrer un nom différent",
+        icon: "error",
+      })
+
+  
+    } else{
+
       dCtx.addNewDirection(newD);
+      swal({
+        title: "Opération réussie!",
+        text: "La direction est bien ajoutée!",
+        icon: "success",
+      });
+      setTimeout(()=>{
+
       e.target.reset();
       window.location.reload();
-    } else
-      alert(
-        "ce nom de direction existe déjà, veuillez entrer un nom différent"
-      );
+    }, 1500)
+
+    }
+    
   }
   return (
     <div>

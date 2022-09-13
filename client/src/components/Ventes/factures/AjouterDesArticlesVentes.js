@@ -79,7 +79,7 @@ export default function AjouterDesArticlesVentes() {
       }
       function validationDeCommande(){
         // eslint-disable-next-line no-restricted-globals
-    var result =  confirm('Etes-vous sûr de bien vouloir valider la commande? Après cette étape, vous ne pouvez changer que les informations générales de la commande!!!');
+        var result =  confirm('Etes-vous sûr de bien vouloir valider la commande? Après cette étape, vous ne pouvez changer rien changer dans cette commande, en cas d erreur vous pouvez générer une facture d avoir!!!');
   
     if(result){
   navigate('/historique-ventes')
@@ -213,7 +213,7 @@ export default function AjouterDesArticlesVentes() {
       
                     <button
                       type="submit"
-                      className="btn blue form-control my-2"
+                      className="btn blue form-control bg-blue my-2"
                   
                     >
                       Valider

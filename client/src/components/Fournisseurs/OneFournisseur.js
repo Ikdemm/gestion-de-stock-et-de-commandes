@@ -18,12 +18,20 @@ export default function OneFournisseur(props) {
     <>
       <div className="row mb-1 mr-0 custom-border ">
         <div className="col-md-2 custom-border-right p-1 text-center">
-          <img
-            src={require("../../assets/images/company.jpg")}
-            alt="company static"
-            width="100px"
-            height="100px"
-          />
+        {
+   props.fournisseur.logo?
+     <img src={props.fournisseur.logo} alt="logo from DB" width="100px" height="100px" />
+     
+    :
+      
+    <img
+    src={require("../../assets/images/company.jpg")}
+    alt="company static"
+    width="100px"
+    height="100px"
+  />   }
+
+       
         </div>
         <div className="col-md-7 custom-border-right">
           <div className="col my-1">

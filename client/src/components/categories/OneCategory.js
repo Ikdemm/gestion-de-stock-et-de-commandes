@@ -5,6 +5,7 @@ import React, { useContext, useRef } from "react";
 import { AiFillDropboxCircle } from "react-icons/ai";
 import { FaEdit, FaInfoCircle, FaTrash } from "react-icons/fa";
 import { categorieCtx } from "../../store/categoryContext";
+import swal from 'sweetalert';
 
 const _ = require ('lodash')
 
@@ -25,13 +26,33 @@ export default function OneCategory(props) {
   const handleClose = () => setOpen(false);
   let ctx = useContext(categorieCtx);
   function removeC() {
-    if (window.confirm('Etes-vous sur de bien vouloir supprimer cette catégorie ? Sachant que tous les produits y inclus seront supprimés ainsi')) {
+    swal({
+      title: "Suppression",
+      text: "Etes-vous sur de bien vouloir supprimer cette catégorie?",
+      icon: "warning",
+      buttons: ["Annuler", "Supprimer"],
+      dangerMode: true,
+    })
+    .then((willDelete) => {
+      if (willDelete) {
+        ctx.removeOneCategorie(props.categorie._id);
+        swal("Catégorie supprimée avec succès", {
+          icon: "success",
+        });
+        setTimeout(()=>{
 
-    ctx.removeOneCategorie(props.categorie._id);
+          window.location.reload();
+        }, 1500)
+      } else {
+        swal("Catégorie selectionnée non supprimée");
+      }
+    });
 
-    window.location.reload();
+
+   // if (window.confirm('Etes-vous sur de bien vouloir supprimer cette catégorie ? Sachant que tous les produits y inclus seront supprimés ainsi'))
+    
   }
-  }
+  
  
   const tabNotFiltred=_.map(ctx.tabCategories,"name")
   console.log(tabNotFiltred);
@@ -42,13 +63,25 @@ export default function OneCategory(props) {
     let uCategory={
       name: refName.current.value,
     }  
-    if(!tabNotFiltred.includes(uCategory.name)){
+    if(tabNotFiltred.includes(uCategory.name)){
+      swal({
+        title: "Echec",
+        text: "ce nom de catégorie existe déjà, veuillez entrer un nom différent!",
+        icon: "error",
+      });
 
-      ctx.updateCategorie(props.categorie._id,uCategory);
-      e.target.reset()
+    }else{
+  ctx.updateCategorie(props.categorie._id,uCategory);
+  swal({
+    title: "Opération réussie!",
+    text: "La catégorie a été bien mise à jour!",
+    icon: "success",
+  });
+  e.target.reset()
 window.location.reload()
-}else
-    alert('ce nom de catégorie existe déjà, veuillez entrer un nom différent')
+
+ 
+}
   }
   //if (tabCommandes){
   return (

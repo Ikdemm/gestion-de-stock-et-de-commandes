@@ -20,11 +20,11 @@ function AddNewLigneAchatContextProvider(props) {
     })
       .then((res) => {
 
-        alert("la LigneAchat est bien ajoutée");
+        console.log("la LigneAchat est bien ajoutée");
         console.log(res);
       })
       .catch((err) => {
-        alert("erreur avec addNewLigneAchat");
+        console.log("erreur avec addNewLigneAchat");
         console.log(err);
       });
     setTabLigneAchats((prev) => {
@@ -38,13 +38,13 @@ function AddNewLigneAchatContextProvider(props) {
       headers: { "Content-Type": "application/json" },
     })
       .then((res) => {
-        alert("la LigneAchat est bien supprimée");
+        console.log("la LigneAchat est bien supprimée");
         console.log(res);
 
 
       })
       .catch((err) => {
-        alert("erreur removeOneLigneAchat");
+        console.log("erreur removeOneLigneAchat");
         console.log(err);
       });
  
@@ -82,10 +82,10 @@ function AddNewLigneAchatContextProvider(props) {
       headers: { "Content-Type": "application/json" },
     })
       .then((res) => {
-        alert("le LigneAchat est modifié");
+        console.log("le LigneAchat est modifié");
       })
       .catch((err) => {
-        alert("erreur inconnue");
+        console.log("erreur inconnue");
       });
 
         getAllLigneAchats()

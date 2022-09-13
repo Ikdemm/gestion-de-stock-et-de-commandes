@@ -20,13 +20,13 @@ function AddNewAppelOffreContextProvider(props) {
     })
       .then((res) => {
 
-        alert("l'appel d'Offre est bien ajouté");
+        console.log("l'appel d'Offre est bien ajouté");
         getAllAppelOffres();
         console.log(res);
 
       })
       .catch((err) => {
-        alert("erreur avec addNewAppelOffre");
+        console.log("erreur avec addNewAppelOffre");
         console.log(err);
 
       });
@@ -41,10 +41,10 @@ function AddNewAppelOffreContextProvider(props) {
       headers: { "Content-Type": "application/json" },
     })
       .then((res) => {
-        alert("l'appel d'Offre est supprimé");
+        console.log("l'appel d'Offre est supprimé");
       })
       .catch((err) => {
-        alert("erreur inconnue");
+        console.log("erreur inconnue");
       });
  
         getAllAppelOffres()
@@ -81,10 +81,10 @@ function AddNewAppelOffreContextProvider(props) {
       headers: { "Content-Type": "application/json" },
     })
       .then((res) => {
-        alert("l'appel d'Offre est modifié");
+        console.log("l'appel d'Offre est modifié");
       })
       .catch((err) => {
-        alert("erreur inconnue");
+        console.log("erreur inconnue");
       });
 
         getAllAppelOffres()

@@ -23,9 +23,9 @@ function UserContextProvider(props) {
                 }
             }).then(res => {
                 getAllUsers();
-                alert("Utilisateur Ajouté")
+                console.log("Utilisateur Ajouté")
             }).catch((err) => {
-                alert("Erreur inconnue !")
+                console.log("Erreur inconnue !")
             })
 setTabUsers((prev) => {
     return [...prev, user];

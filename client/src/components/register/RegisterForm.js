@@ -3,6 +3,8 @@ import React, { useContext, useEffect, useRef, useState } from "react";
 import { FaBan, FaSave, FaSpinner } from "react-icons/fa";
 import { Link, useNavigate } from "react-router-dom";
 import { UserContext } from "../../store/userContext";
+import swal from 'sweetalert';
+
 const _ = require("lodash");
 
 export default function RegisterForm() {
@@ -32,14 +34,27 @@ export default function RegisterForm() {
       employe_id: c._id
 
     };
-    if (!tabNotFiltred.includes(newUser.email)) {
+    if (tabNotFiltred.includes(newUser.email)) {
+      swal({
+        title: "Echec",
+        text: "cet email d'utilisateur existe déjà, veuillez entrer un email différent!",
+        icon: "error",
+      })   
    
+    } 
+    else{
     ctx.addUser(newUser)
-    e.target.reset();
-    navigate("/profiles");
-    window.location.reload()
-  } else
-  alert("cet email existe déjà, veuillez entrer un email différent");
+    swal({
+      title: "Opération réussie!",
+      text: "L'utilisateur est bien ajouté!",
+      icon: "success",
+    }); 
+    setTimeout(()=>{
+      e.target.reset();
+      navigate("/profiles");
+      window.location.reload()
+    }, 2000)
+  }
 }
 
   if (tabStaff ) {

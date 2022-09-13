@@ -22,11 +22,11 @@ function AddNewDemandeContextProvider(props) {
     })
       .then((res) => {
 
-        alert("la Demande est bien ajoutée");
+        console.log("la Demande est bien ajoutée");
         console.log(res);
       })
       .catch((err) => {
-        alert("erreur avec addNewDemande");
+        console.log("erreur avec addNewDemande");
         console.log(err);
       });
     setTabDemandes((prev) => {
@@ -40,13 +40,13 @@ function AddNewDemandeContextProvider(props) {
       headers: { "Content-Type": "application/json" },
     })
       .then((res) => {
-        alert("la Demande est bien supprimée");
+        console.log("la Demande est bien supprimée");
         console.log(res);
 
 
       })
       .catch((err) => {
-        alert("erreur removeOneDemande");
+        console.log("erreur removeOneDemande");
         console.log(err);
       });
  
@@ -112,10 +112,10 @@ function AddNewDemandeContextProvider(props) {
       headers: { "Content-Type": "application/json" },
     })
       .then((res) => {
-        alert("la Demande est modifiée");
+        console.log("la Demande est modifiée");
       })
       .catch((err) => {
-        alert("erreur inconnue");
+        console.log("erreur inconnue");
       });
 
         getAllDemandes()

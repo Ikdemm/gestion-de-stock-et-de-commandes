@@ -7,6 +7,8 @@ import { FaCheck, FaSpinner } from "react-icons/fa";
 import { FcCancel } from "react-icons/fc";
 import { Link } from "react-router-dom";
 import { venteFactCtx } from "../../../store/venteFactContext";
+import swal from 'sweetalert';
+
 export default function UneFactureVente(props) {
   let ctx=useContext(venteFactCtx)
   let date = props.facture.dateFacture;
@@ -26,8 +28,16 @@ export default function UneFactureVente(props) {
       props.facture.etat="non_payee"
    
     }
-ctx.updateVenteFact(props.facture._id, props.facture)
-window.location.reload()
+ctx.updateVenteFact(props.facture._id, props.facture);
+swal({
+  title: "Opération réussie!",
+  text: "Etat de paiement de la facture a été bien mis à jour!",
+  icon: "success",
+});
+setTimeout(()=>{
+  window.location.reload()
+
+}, 2000)
 
     } 
     if(tabLignesFiltred){

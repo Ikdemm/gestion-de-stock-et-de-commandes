@@ -1,6 +1,7 @@
 import React, { useContext, useRef } from "react";
 import { FaSpinner } from "react-icons/fa";
 import { demandeCtx } from './../../../store/demandeContext';
+import swal from 'sweetalert';
 
 export default function NouvelleDemande(props) {
   var listeUsers=props.tabUsers;
@@ -23,9 +24,18 @@ export default function NouvelleDemande(props) {
       employe_id: employee._id
        };
     dctx.addNewDemande(newDemande);
+    swal({
+      title: "Opération réussie!",
+      text: "Votre demande a été bien enregistrée!",
+      icon: "success",
+    }); 
     console.log('newDemande', newDemande)
-   e.target.reset()
-   window.location.reload()
+    setTimeout(()=>{
+      e.target.reset()
+      window.location.reload()
+    
+    }, 2000)
+       
  
   }
   if (tabStaff.length>0 && listeUsers.length>0 && connectedUser && employee) {

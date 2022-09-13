@@ -7,6 +7,8 @@ import { FaCheck, FaRegEye, FaSpinner } from "react-icons/fa";
 import { demandeCtx } from './../../../store/demandeContext';
 import moment from "moment";
 import "moment/locale/fr";
+import swal from 'sweetalert';
+
 import {
   FcCancel
 } from "react-icons/fc";
@@ -51,8 +53,16 @@ export default function OneDemande(props) {
      
       }
 ctx.updateDemande(props.demande._id, props.demande)
-window.location.reload()
-return
+swal({
+  title: "Opération réussie!",
+  text: "Etat de traitement de la demande a été bien mis à jour!",
+  icon: "success",
+});
+
+setTimeout(()=>{
+  window.location.reload()
+
+}, 2000)
       } 
  if (APIData && employee) {
 

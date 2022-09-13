@@ -20,10 +20,10 @@ function AddNewFournisseurContextProvider(props) {
     })
       .then((res) => {
 
-        alert("le fournisseur est bien ajouté");
+        console.log("le fournisseur est bien ajouté", res);
       })
       .catch((err) => {
-        alert("erreur inconnue");
+        console.log("erreur inconnue",err);
       });
       setTabFrs((prev) => {
       return [...prev, newFournisseur];
@@ -36,10 +36,10 @@ function AddNewFournisseurContextProvider(props) {
       headers: { "Content-Type": "application/json" },
     })
       .then((res) => {
-        alert("le fournisseur est supprimé");
+        console.log("le fournisseur est supprimé");
       })
       .catch((err) => {
-        alert("erreur inconnue");
+        console.log("erreur inconnue");
       });
  
         getAllFournisseurs()
@@ -76,10 +76,10 @@ function AddNewFournisseurContextProvider(props) {
       headers: { "Content-Type": "application/json" },
     })
       .then((res) => {
-        alert("le fournisseur est modifié");
+        console.log("le fournisseur est modifié");
       })
       .catch((err) => {
-        alert("erreur inconnue");
+        console.log("erreur inconnue");
       });
 
         getAllFournisseurs()

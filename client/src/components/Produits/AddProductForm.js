@@ -3,6 +3,7 @@ import React, { useContext, useEffect, useRef, useState } from "react";
 import { FaBan, FaSave, FaSpinner } from "react-icons/fa";
 import { Link, useNavigate } from "react-router-dom";
 import { produitCtx } from "../../store/produitContext";
+import swal from 'sweetalert';
 const _ = require("lodash");
 
 export default function AddProductForm() {
@@ -44,13 +45,27 @@ export default function AddProductForm() {
       quantite_sortie: refQS.current.value,
       image: refImage.current.value,
     };
-    if (!tabNotFiltred.includes(newProduct.title)) {
+    if (tabNotFiltred.includes(newProduct.title)) {
+      swal({
+        title: "Echec",
+        text: "ce nom de produit existe déjà, veuillez entrer un nom différent!",
+        icon: "error",
+      });
+    } else{
       pctx.addNewProduit(newProduct);
+      swal({
+        title: "Opération réussie!",
+        text: "Le produit est bien ajouté!",
+        icon: "success",
+      });
+      setTimeout(()=>{
+
       e.target.reset();
       navigate("/listProduits");
       window.location.reload();
-    } else
-      alert("ce nom de produit existe déjà, veuillez entrer un nom différent");
+    }, 1500)
+
+    }
   }
 
   if (tabCat) {

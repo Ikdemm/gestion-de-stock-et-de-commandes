@@ -2,6 +2,7 @@ import React, { useContext, useRef } from 'react';
 import { FaBan, FaSave } from 'react-icons/fa';
 import { Link, useNavigate } from 'react-router-dom';
 import { fournisseurtCtx } from '../../store/fournisseurContext';
+import swal from 'sweetalert';
 const _ = require ('lodash')
 
 export default function AddFournisseurForm() {
@@ -13,21 +14,37 @@ export default function AddFournisseurForm() {
   const refTel=useRef('')
   const refAdresse=useRef('')
   const refEmail=useRef('')
+  const refLogo=useRef('')
   function submitHandler(e){
     e.preventDefault()
     let newFournisseur={
       nom_commercial: refNom.current.value,
       numero_de_tel: refTel.current.value,
       adresse: refAdresse.current.value,
-      email:refEmail.current.value
+      email:refEmail.current.value,
+      logo:refLogo.current.value,
           }
-    if(!tabNotFiltred.includes(newFournisseur.email)){
-       
-       fctx.addNewFournisseur(newFournisseur)
-       e.target.reset()
-       navigate('/fournisseurs')
-      }else
-      alert('cet email de fournisseur existe déjà, veuillez entrer un email différent')
+    if(tabNotFiltred.includes(newFournisseur.email)){
+      swal({
+        title: "Echec",
+        text: "cet email de fournisseur existe déjà, veuillez entrer un email différent!",
+        icon: "error",
+      })
+      }else{
+     
+        fctx.addNewFournisseur(newFournisseur)
+        swal({
+         title: "Opération réussie!",
+         text: "Le fournisseur est bien ajouté!",
+         icon: "success",
+       });
+        e.target.reset()
+        navigate('/fournisseurs')
+      }
+
+        //alert('cet email de fournisseur existe déjà, veuillez entrer un email différent')
+      
+
     }
   return (
     <div className="container">
@@ -43,6 +60,8 @@ export default function AddFournisseurForm() {
       <input type="text" name="adresse" ref={refAdresse} className="form-control" required/>
         <label htmlFor="email">Email</label>
       <input type="email" name="email" ref={refEmail} className="form-control" required/>
+        <label htmlFor="email">Logo</label>
+      <input type="url" name="logo" ref={refLogo} className="form-control" placeholder='entrer un lien Url'/>
       <div className='d-flex flex-row-reverse'>
                 <div className='p-2'>
              <button className="btn bg-green my-2 " type="submit">Confirmer <FaSave></FaSave></button>    

@@ -22,12 +22,12 @@ function AddNewEmployeeContextProvider(props) {
       })
         .then((res) => {
           
-          alert("l'employé est bien ajouté");
+          console.log("l'employé est bien ajouté");
           console.log(res);
         })
         .catch((err) => {
           
-          alert("erreur inconnue");
+          console.log("erreur inconnue");
           console.log(err);
 
         });
@@ -42,13 +42,13 @@ function AddNewEmployeeContextProvider(props) {
       headers: { "Content-Type": "multipart/form-data" },
     })
       .then((res) => {
-        alert("l'employé est bien supprimé");
+        console.log("l'employé est bien supprimé");
         console.log(res);
 
 
       })
       .catch((err) => {
-        alert("erreur removeOneEmployee");
+        console.log("erreur removeOneEmployee");
         console.log(err);
       });
  
@@ -86,10 +86,10 @@ function AddNewEmployeeContextProvider(props) {
    /*    headers: {  "Content-Type": "multipart/form-data" }, */
     })
       .then((res) => {
-        alert("l'employé est modifié");
+        console.log("l'employé est modifié");
       })
       .catch((err) => {
-        alert("erreur inconnue");
+        console.log("erreur inconnue");
       });
 
         getAllEmployees()
@@ -101,10 +101,10 @@ function AddNewEmployeeContextProvider(props) {
    /*    headers: {  "Content-Type": "multipart/form-data" }, */
     })
       .then((res) => {
-        alert("l'employé est modifié");
+        console.log("l'employé est modifié");
       })
       .catch((err) => {
-        alert("erreur inconnue");
+        console.log("erreur inconnue");
       });
 
         getAllEmployees()

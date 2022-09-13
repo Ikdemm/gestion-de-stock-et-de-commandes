@@ -3,6 +3,8 @@ import React, { useContext, useEffect, useRef, useState } from 'react';
 import { FaSpinner } from 'react-icons/fa';
 import { Link, useNavigate, useParams } from 'react-router-dom';
 import { clientCtx } from './../../store/clientContext';
+import swal from 'sweetalert';
+
 export default function UpdateCustomer() {
     let {_id}=useParams()
     const catdCtx= useContext(clientCtx)
@@ -28,6 +30,11 @@ let selectedClient= tabClients.find((c)=>c._id===_id)
       email: emailValue.current.value,
     }
     catdCtx.updateClient(_id,uCand);
+    swal({
+      title: "Opération réussie!",
+      text: "Le client a été bien mis à jour!",
+      icon: "success",
+    });
     navigate('/clients');
 }  
     if(selectedClient){ 
