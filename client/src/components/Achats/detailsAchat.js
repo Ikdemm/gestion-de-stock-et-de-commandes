@@ -3,7 +3,9 @@ import moment from "moment";
 import "moment/locale/fr";
 import React, { useEffect, useState } from 'react';
 import { FaSpinner } from 'react-icons/fa';
-import { Link, useParams } from 'react-router-dom';
+import { useParams } from 'react-router-dom';
+//import { Link, useParams } from 'react-router-dom';
+import DownloadPage from '../DownloadPage';
 export default function DetailsAchat() {
 
   var {_id}=useParams()
@@ -42,8 +44,9 @@ if(selectedFacture && fournisseur &&tabLignesFiltred && tabProduits){
 
 
   return (
-    <div style={{ display: "flex" }}>
-    <div className="container" id="here">
+    <>
+    <div style={{ display: "flex" }}  id="here">
+    <div className="container">
     
       <div className="row my-2 container">
         <div className="d-flex align-items-center py-3">
@@ -125,14 +128,24 @@ if(selectedFacture && fournisseur &&tabLignesFiltred && tabProduits){
               .format("LL")}  
           </div>
           <div className="col-4 mx-2">
-    <Link to="/historique-achat" className="col-6 m-5 btn  fs-5 bg-blue">Retour</Link>
-
+   {/*  <Link to="/historique-achat" className="col-6 m-5 btn  fs-5 bg-blue">Retour</Link>
+ */}
           </div>
         </div>
       </div>
     </div>
   </div>
-  )
+<div className='row'>
+  <div className="col-8">
+    
+  </div>
+  <div className="col-4">
+    
+    <DownloadPage rootElementId={"here"} dowloadFileName={`Facture-Achat-N°${selectedFacture.numFacture}`}></DownloadPage>
+  </div>
+</div>
+ </>
+    )
 }
 else{
   return (

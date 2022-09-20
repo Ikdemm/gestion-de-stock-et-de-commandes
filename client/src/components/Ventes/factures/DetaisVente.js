@@ -3,7 +3,8 @@ import moment from "moment";
 import "moment/locale/fr";
 import React, { useEffect, useState } from 'react';
 import { FaSpinner } from 'react-icons/fa';
-import { Link, useParams } from 'react-router-dom';
+import { useParams } from 'react-router-dom';
+import DownloadPage from '../../DownloadPage';
 export default function DetaisVente() {
   var {_id}=useParams()
   const [tabFact, setTtabFact] = useState([]);
@@ -37,6 +38,7 @@ export default function DetaisVente() {
     if(selectedFacture && client &&tabLignesFiltred && tabProduits){
     
       return (
+        <>
         <div style={{ display: "flex" }}>
         <div className="container" id="here">
         
@@ -119,14 +121,26 @@ export default function DetaisVente() {
                   .locale("fr")
                   .format("LL")}  
               </div>
-              <div className="col-4 mx-2">
+     {/*          <div className="col-4 mx-2">
         <Link to="/historique-ventes" className="col-6 m-5 btn  fs-5 bg-blue">Retour</Link>
     
-              </div>
+              </div> */}
             </div>
           </div>
         </div>
       </div>
+      <div className="row">
+          <div className="col-8">
+    
+    </div>
+
+                  <div className="col-4">
+      
+             <DownloadPage rootElementId={"here"} dowloadFileName={`Facture-Vente-N°${selectedFacture.numFacture}`}></DownloadPage>
+
+                  </div>
+              </div>    
+      </>
       )
     }
     else{
