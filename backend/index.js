@@ -6,6 +6,7 @@ const path = require('path');
 //const passport= require('passport');
 //session = require('express-session')
 require('./db/connect')
+require('dotenv').config()
 const staffRoutes = require('./routers/employes');
 const directionRoutes = require('./routers/directions');
 const demandesRoutes = require('./routers/demandes');

@@ -40,7 +40,25 @@ export default function UsersList(props) {
               return (
                 <tr key={u._id}>
                   <td>
-                  <img src={`http://localhost:4000/getfile/${employee.imageUrl}`} alt="avatar"  className="avatar" />
+                  {
+                        employee.imageUrl.url?
+                        <img
+                        src={employee.imageUrl.url}
+                        alt="employee avatar from cloud"
+                        className="avatar"
+
+                      />
+    
+                                            : 
+
+                        <img
+                        src={`http://localhost:4000/getfile/${employee.imageUrl}`}
+                        alt="employee avatar from server"
+                        className="avatar"
+
+                      /> 
+                    
+              }        
                   {employee.prenom} {employee.nom}
                   </td>
                   <td className="py-2">{u.email} </td>
