@@ -92,12 +92,25 @@ export default function ListeEmployes() {
                     key={item._id}
                   >
                     <div className="col-md-2 custom-border-right p-1 text-center">
-                      <img
-                        src={`http://localhost:4000/getfile/${item.imageUrl}`}
-                        alt="article static"
+                    {
+                        item.imageUrl.url?
+                        <img
+                        src={item.imageUrl.url}
+                        alt="employee avatar from cloud"
                         width="100px"
                         height="100px"
                       />
+    
+                                            : 
+
+                        <img
+                        src={`http://localhost:4000/getfile/${item.imageUrl}`}
+                        alt="employee avatar from server"
+                        width="100px"
+                        height="100px"
+                      /> 
+                    
+                      }
                     </div>
                     <div className="col-md-4 custom-border-right my-1">
                       <div className="col">
@@ -235,12 +248,25 @@ export default function ListeEmployes() {
                     key={item._id}
                   >
                     <div className="col-md-2 custom-border-right p-1 text-center">
-                      <img
-                        src={`http://localhost:4000/getfile/${item.imageUrl}`}
-                        alt="article static"
+                    {
+                        item.imageUrl.url?
+                        <img
+                        src={item.imageUrl.url}
+                        alt="employee avatar from cloud"
                         width="100px"
                         height="100px"
                       />
+    
+                                            : 
+
+                        <img
+                        src={`http://localhost:4000/getfile/${item.imageUrl}`}
+                        alt="employee avatar from server"
+                        width="100px"
+                        height="100px"
+                      /> 
+                    
+                      }
                     </div>
                     <div className="col-md-4 custom-border-right my-1">
                       <div className="col">

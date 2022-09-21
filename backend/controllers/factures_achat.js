@@ -1,6 +1,7 @@
 const Facture = require("../models/FactureFournisseur");
 const _ = require("lodash");
-exports.createInvoice = async (req, res) => {
+
+exports.createInvoice = async (req, res, next) => {
   let newFacture = new Facture(req.body);
   try {
     newFacture = await newFacture.save();

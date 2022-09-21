@@ -67,11 +67,26 @@ const [selectedImage, setSelectedImage] = useState(null);
         <div className="row mt-4">
           <div className="col-md-4 card">
             <div className="text-center">
-              <img
-                src={`http://localhost:4000/getfile/${employee.imageUrl}`}
-                alt="avatar"
-                className="avatar-profile mt-3"
-              />
+            {
+                        employee.imageUrl.url?
+                        <img
+                        src={employee.imageUrl.url}
+                        alt="employee avatar from cloud"
+                        className="avatar-profile mt-3"
+
+                      />
+    
+                                            : 
+
+                        <img
+                        src={`http://localhost:4000/getfile/${employee.imageUrl}`}
+                        alt="employee avatar from server"
+                        className="avatar-profile mt-3"
+
+                      /> 
+                    
+              }
+         
               <h3 className="card-title mt-3">
                 {" "}
                 {employee.prenom} {employee.nom}
