@@ -4,7 +4,7 @@ import "moment/locale/fr";
 import React, { useEffect, useState } from 'react';
 import { FaSpinner } from 'react-icons/fa';
 import { useParams } from 'react-router-dom';
-import DownloadPage from '../../DownloadPage';
+import DownloadPageAsPdf from '../../DownloadPageAsPdf';
 export default function DetaisVente() {
   var {_id}=useParams()
   const [tabFact, setTtabFact] = useState([]);
@@ -136,7 +136,7 @@ export default function DetaisVente() {
 
                   <div className="col-4">
       
-             <DownloadPage rootElementId={"here"} dowloadFileName={`Facture-Vente-N°${selectedFacture.numFacture}`}></DownloadPage>
+             <DownloadPageAsPdf rootElementId={"here"} dowloadFileName={`Facture-Vente-N°${selectedFacture.numFacture}`}></DownloadPageAsPdf>
 
                   </div>
               </div>    

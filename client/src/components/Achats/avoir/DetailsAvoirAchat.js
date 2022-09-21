@@ -4,7 +4,7 @@ import "moment/locale/fr";
 import React, { useEffect, useState } from 'react';
 import { FaSpinner } from 'react-icons/fa';
 import { useParams } from 'react-router-dom';
-import DownloadPage from '../../DownloadPage';
+import DownloadPageAsPdf from '../../DownloadPageAsPdf';
 
 export default function DetailsAvoirAchat() {
     var {_id}=useParams()
@@ -124,7 +124,7 @@ export default function DetailsAvoirAchat() {
                   <div className="col-4">
        {/*      <Link to="/historique-avoir-achat" className="col-6 my-5 btn  fs-5 bg-blue">Retour</Link>
          */}
-             <DownloadPage rootElementId={"here"} dowloadFileName={`Avoir-Achat-N°${selectedFacture.numAvoir}`}></DownloadPage>
+             <DownloadPageAsPdf rootElementId={"here"} dowloadFileName={`Avoir-Achat-N°${selectedFacture.numAvoir}`}></DownloadPageAsPdf>
 
                   </div>
               </div>

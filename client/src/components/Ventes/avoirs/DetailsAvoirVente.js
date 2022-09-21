@@ -4,7 +4,7 @@ import "moment/locale/fr";
 import React, { useEffect, useState } from 'react';
 import { FaSpinner } from 'react-icons/fa';
 import { useParams } from 'react-router-dom';
-import DownloadPage from '../../DownloadPage';
+import DownloadPageAsPdf from '../../DownloadPageAsPdf';
 export default function DetailsAvoirVente() {
     var {_id}=useParams()
     const [tabAvoirs, setTtabAvoirs] = useState([]);
@@ -117,9 +117,6 @@ export default function DetailsAvoirVente() {
                   <div className="col-9"></div>
               <div className="col-3">
              
-       {/*      <Link to="/historique-avoir-vente" className="col-6 m-5 btn  fs-5 bg-blue">
-              Retour</Link>
-         */}
            
               </div>
               </div>
@@ -133,7 +130,7 @@ export default function DetailsAvoirVente() {
 
                   <div className="col-4">
       
-             <DownloadPage rootElementId={"here"} dowloadFileName={`Avoir-Vente-N°${selectedFacture.numAvoir}`}></DownloadPage>
+             <DownloadPageAsPdf rootElementId={"here"} dowloadFileName={`Avoir-Vente-N°${selectedFacture.numAvoir}`}></DownloadPageAsPdf>
 
                   </div>
               </div>       

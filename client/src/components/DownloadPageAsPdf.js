@@ -3,7 +3,8 @@ import { VscFilePdf } from "react-icons/vsc";
 import html2canvas from "html2canvas";
 import { jsPDF } from "jspdf";
 
-export default function DownloadPage({ rootElementId, dowloadFileName }) {
+export default function DownloadPageAsPdf({ rootElementId, dowloadFileName }) {
+  //download page as pdf function
   function downloadFileDocument() {
     const source = document.getElementById(rootElementId);
     html2canvas(source).then((canvas) => {
@@ -15,26 +16,6 @@ export default function DownloadPage({ rootElementId, dowloadFileName }) {
       pdf.save(`${dowloadFileName}`);
     });
   }
-  /*  function downloadFileDocument() {
-    //const doc =   new jsPDF('l', 'pt', "letter");
-    const doc =  new jsPDF({
-        orientation: "l",
-        unit: "px",
-       // format: [2480 , 3508 ]
-        format: "a4"
-      });
-
-    doc.html(document.getElementById(rootElementId), {
-      callback: function (pdf) {
-    var pageCount = doc.internal.getNumberOfPages();
-    for (let i =1 ; i < pageCount; i++){
-
-        pdf.deletePage(pageCount); 
-    }
-        pdf.save(`${dowloadFileName}`);
-      },
-    });
-  }  */
 
   return (
     <>
