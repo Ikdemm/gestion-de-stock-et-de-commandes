@@ -22,7 +22,17 @@ export default function RegisterForm() {
 
   let ctx=useContext(UserContext)
   const tabNotFiltred = _.map(ctx.listeUsers, "email");
-
+  function verifyEmail(email) {
+    var regex = new RegExp('^[a-zA-Z0-9._:$!%-]+@[a-zA-Z0-9.-]+.[a-zA-Z]$');
+    var is_email = regex.test(email);
+    if (is_email) {
+      //alert("ok");
+      return true;
+    } else {
+      //alert("not ok");
+      return false;
+    }
+  }
   function submitHandler(e) {
     e.preventDefault();
     const c = tabStaff.find((p) => p._id === refemploye.current.value);
@@ -34,6 +44,17 @@ export default function RegisterForm() {
       employe_id: c._id
 
     };
+        //verification de l'adresse email
+    //Guard clause
+    if (!verifyEmail(refemail.current.value)) {
+      swal({
+        title: "Echec",
+        text: "Mauvais format de l'adresse email !",
+        icon: "error",
+      });
+      return;
+    } else {
+    }  
     if (tabNotFiltred.includes(newUser.email)) {
       swal({
         title: "Echec",

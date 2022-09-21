@@ -15,6 +15,29 @@ export default function AddClientForm() {
   const refTel = useRef("");
   const refAdresse = useRef("");
   const refEmail = useRef("");
+
+  function verifyPhoneNumber(nb) {
+    var regex = new RegExp("^([234579]{1})([0-9]{7})$");
+    var is_phone = regex.test(nb);
+    if (is_phone) {
+      //alert("ok");
+      return true;
+    } else {
+      //alert("not ok");
+      return false;
+    }
+  }
+  function verifyEmail(email) {
+    var regex = new RegExp('^[a-zA-Z0-9._:$!%-]+@[a-zA-Z0-9.-]+.[a-zA-Z]$');
+    var is_email = regex.test(email);
+    if (is_email) {
+      //alert("ok");
+      return true;
+    } else {
+      //alert("not ok");
+      return false;
+    }
+  }
   function submitHandler(e) {
     e.preventDefault();
     let newClient = {
@@ -23,6 +46,28 @@ export default function AddClientForm() {
       adresse: refAdresse.current.value,
       email: refEmail.current.value,
     };
+    //verification du numero de tel
+    //Guard clause
+    if (!verifyPhoneNumber(refTel.current.value)) {
+      swal({
+        title: "Echec",
+        text: "Mauvais format de numéro de téléphone!",
+        icon: "error",
+      });
+      return;
+    } else {
+    }
+    //verification de l'adresse email
+    //Guard clause
+    if (!verifyEmail(refEmail.current.value)) {
+      swal({
+        title: "Echec",
+        text: "Mauvais format de l'adresse email !",
+        icon: "error",
+      });
+      return;
+    } else {
+    }
     if (!tabNotFiltred.includes(newClient.numero_de_tel)) {
       cctx.addNewClient(newClient);
       swal({
@@ -32,6 +77,8 @@ export default function AddClientForm() {
       });
       e.target.reset();
       navigate("/clients");
+      window.location.reload()
+
     } else {
       swal({
         title: "Echec",
@@ -66,7 +113,7 @@ export default function AddClientForm() {
               className="form-control"
               required
             />
-            <label htmlFor="adresse">Adresse de livraiosn</label>
+            <label htmlFor="adresse">Adresse de livraison</label>
             <input
               type="text"
               name="adresse"

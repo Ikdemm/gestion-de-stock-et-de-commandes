@@ -9,7 +9,28 @@ export default function AddFournisseurForm() {
   let navigate= useNavigate()
   const fctx=useContext(fournisseurtCtx)
   const tabNotFiltred=_.map(fctx.tabFournisseurs,"email")
-
+  function verifyPhoneNumber(nb) {
+    var regex = new RegExp("^([234579]{1})([0-9]{7})$");
+    var is_phone = regex.test(nb);
+    if (is_phone) {
+      //alert("ok");
+      return true;
+    } else {
+      //alert("not ok");
+      return false;
+    }
+  }
+  function verifyEmail(email) {
+    var regex = new RegExp('^[a-zA-Z0-9._:$!%-]+@[a-zA-Z0-9.-]+.[a-zA-Z]$');
+    var is_email = regex.test(email);
+    if (is_email) {
+      //alert("ok");
+      return true;
+    } else {
+      //alert("not ok");
+      return false;
+    }
+  }
   const refNom=useRef('')
   const refTel=useRef('')
   const refAdresse=useRef('')
@@ -24,6 +45,28 @@ export default function AddFournisseurForm() {
       email:refEmail.current.value,
       logo:refLogo.current.value,
           }
+     //verification du numero de tel
+    //Guard clause
+    if (!verifyPhoneNumber(refTel.current.value)) {
+      swal({
+        title: "Echec",
+        text: "Mauvais format de numéro de téléphone!",
+        icon: "error",
+      });
+      return;
+    } else {
+    }
+    //verification de l'adresse email
+    //Guard clause
+    if (!verifyEmail(refEmail.current.value)) {
+      swal({
+        title: "Echec",
+        text: "Mauvais format de l'adresse email !",
+        icon: "error",
+      });
+      return;
+    } else {
+    }      
     if(tabNotFiltred.includes(newFournisseur.email)){
       swal({
         title: "Echec",
@@ -40,6 +83,7 @@ export default function AddFournisseurForm() {
        });
         e.target.reset()
         navigate('/fournisseurs')
+        window.location.reload()
       }
 
         //alert('cet email de fournisseur existe déjà, veuillez entrer un email différent')
