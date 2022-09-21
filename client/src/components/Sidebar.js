@@ -10,6 +10,7 @@ import {
   BsFillGearFill,
   BsFillPeopleFill,
   BsFillPersonBadgeFill,
+  BsGlobe,
   BsList,
   BsPeople,
   BsShop,
@@ -18,6 +19,8 @@ import {
 import { FaRegBuilding } from "react-icons/fa";
 import { Link, useNavigate } from "react-router-dom";
 import { LoginContext } from "../store/LoginContext";
+import { useTranslation } from 'react-i18next'
+
 import styles from "./Sidebar.module.css";
 function Sidebar() {
   const LogCtx = useContext(LoginContext);
@@ -52,7 +55,11 @@ function Sidebar() {
 useEffect(()=>{
   verifyConnecte()
 },[])
- 
+const {t, i18n} = useTranslation()
+
+const onChangeLang = (e)=>{
+  i18n.changeLanguage(e.target.value)
+}
   if (!isLogged) {
 return<div></div>
   }else
@@ -196,6 +203,23 @@ if(connectedUser?.role==="admin")
                 </span>
               </Link>
             </li>
+            <div className="nav-item">
+              <div className="d-flex">
+                
+            <span className={styles.icon} style={{marginLeft: 15+"px"}}>
+                
+                  <BsGlobe /> 
+                </span>
+
+            <select className="form-select ms-1" style={{ width: "70px" }} onChange={onChangeLang}>
+              <option  value="fr" className="lang">FR</option>
+              <option  value="en" className="lang">
+                EN
+              </option>
+            </select>
+              </div>
+          </div>
+
             <li className="nav-item">
               <button
                 onClick={() => {
@@ -275,7 +299,18 @@ if(connectedUser?.role==="admin")
                 <span className="ms-1"> Produits </span>
               </Link>
             </li>
-         
+            <li className="nav-item">
+                <span className={styles.icon}>
+                  {" "}
+                  <BsGlobe />
+                </span>
+                <span className="ms-1"> 
+                <select className="form-select">
+                  <option value="en">EN</option>
+                  <option value="fr">FR</option>
+                </select>
+                 </span>
+            </li>
             <li className="nav-item">
               <button
                 onClick={() => {
@@ -336,6 +371,18 @@ if(connectedUser?.role==="admin")
                 </span>
                 <span className="ms-1">Gestion des Demandes des Employés </span>
               </Link>
+            </li>
+            <li className="nav-item">
+                <span className={styles.icon}>
+                  {" "}
+                  <BsGlobe />
+                </span>
+                <span className="ms-1"> 
+                <select className="form-select">
+                  <option value="en">EN</option>
+                  <option value="fr">FR</option>
+                </select>
+                 </span>
             </li>
             <li className="nav-item">
               <button
@@ -407,7 +454,18 @@ if(connectedUser?.role==="admin")
                 <span className="ms-1"> Achats </span>
               </Link>
             </li>
-
+            <li className="nav-item">
+                <span className={styles.icon}>
+                  {" "}
+                  <BsGlobe />
+                </span>
+                <span className="ms-1"> 
+                <select className="form-select">
+                  <option value="en">EN</option>
+                  <option value="fr">FR</option>
+                </select>
+                 </span>
+            </li>
     
             <li className="nav-item">
               <button
@@ -478,7 +536,18 @@ if(connectedUser?.role==="admin")
                 <span className="ms-1">Ventes </span>
               </Link>
             </li>
-    
+            <li className="nav-item">
+                <span className={styles.icon}>
+                  {" "}
+                  <BsGlobe />
+                </span>
+                <span className="ms-1"> 
+                <select className="form-select">
+                  <option value="en">EN</option>
+                  <option value="fr">FR</option>
+                </select>
+                 </span>
+            </li>
             <li className="nav-item">
               <button
                 onClick={() => {
@@ -551,6 +620,18 @@ if(connectedUser?.role==="admin")
               </Link>
             </li>
             <li className="nav-item">
+                <span className={styles.icon}>
+                  {" "}
+                  <BsGlobe />
+                </span>
+                <span className="ms-1"> 
+                <select className="form-select">
+                  <option value="en">EN</option>
+                  <option value="fr">FR</option>
+                </select>
+                 </span>
+            </li>
+            <li className="nav-item">
               <button
                 onClick={() => {
                   LogCtx.seDeconnecter();
@@ -609,6 +690,18 @@ if(connectedUser?.role==="admin")
                 </span>
                 <span className="ms-1"> Demandes </span>
               </Link>
+            </li>
+            <li className="nav-item">
+                <span className={styles.icon}>
+                  {" "}
+                  <BsGlobe />
+                </span>
+                <span className="ms-1"> 
+                <select className="form-select">
+                  <option value="en">EN</option>
+                  <option value="fr">FR</option>
+                </select>
+                 </span>
             </li>
           
             <li className="nav-item">

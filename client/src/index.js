@@ -3,6 +3,7 @@ import "bootstrap/dist/css/bootstrap.min.css";
 import * as React from "react";
 import ReactDOM from "react-dom/client";
 import "./index.css";
+import i18n from './i18n'
 //import 'font-awesome/css/font-awesome.min.css';
 //import "bootstrap-icons/font/bootstrap-icons.css";
 import { BrowserRouter } from "react-router-dom";
