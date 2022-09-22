@@ -5,9 +5,10 @@ import React, { useContext, useRef } from "react";
 import { AiFillDropboxCircle } from "react-icons/ai";
 import { FaEdit, FaInfoCircle, FaTrash } from "react-icons/fa";
 import { categorieCtx } from "../../store/categoryContext";
-import swal from 'sweetalert';
+import swal from "sweetalert";
+import { useTranslation } from "react-i18next";
 
-const _ = require ('lodash')
+const _ = require("lodash");
 
 const style = {
   position: "absolute",
@@ -21,6 +22,8 @@ const style = {
   p: 4,
 };
 export default function OneCategory(props) {
+  const { t } = useTranslation();
+
   const [open, setOpen] = React.useState(false);
   const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
@@ -30,58 +33,50 @@ export default function OneCategory(props) {
       title: "Suppression",
       text: "Etes-vous sur de bien vouloir supprimer cette catégorie?",
       icon: "warning",
-      buttons: ["Annuler", "Supprimer"],
+      buttons: ["{t('buttons.cancel')}", "{t('buttons.delete')}"],
       dangerMode: true,
-    })
-    .then((willDelete) => {
+    }).then((willDelete) => {
       if (willDelete) {
         ctx.removeOneCategorie(props.categorie._id);
         swal("Catégorie supprimée avec succès", {
           icon: "success",
         });
-        setTimeout(()=>{
-
+        setTimeout(() => {
           window.location.reload();
-        }, 1500)
+        }, 1500);
       } else {
         swal("Catégorie selectionnée non supprimée");
       }
     });
 
-
-   // if (window.confirm('Etes-vous sur de bien vouloir supprimer cette catégorie ? Sachant que tous les produits y inclus seront supprimés ainsi'))
-    
+    // if (window.confirm('Etes-vous sur de bien vouloir supprimer cette catégorie ? Sachant que tous les produits y inclus seront supprimés ainsi'))
   }
-  
- 
-  const tabNotFiltred=_.map(ctx.tabCategories,"name")
-  console.log(tabNotFiltred);
-  const refName=useRef('')
 
-  function submitHandler(e){
-    e.preventDefault()
-    let uCategory={
+  const tabNotFiltred = _.map(ctx.tabCategories, "name");
+  console.log(tabNotFiltred);
+  const refName = useRef("");
+
+  function submitHandler(e) {
+    e.preventDefault();
+    let uCategory = {
       name: refName.current.value,
-    }  
-    if(tabNotFiltred.includes(uCategory.name)){
+    };
+    if (tabNotFiltred.includes(uCategory.name)) {
       swal({
         title: "Echec",
         text: "ce nom de catégorie existe déjà, veuillez entrer un nom différent!",
         icon: "error",
       });
-
-    }else{
-  ctx.updateCategorie(props.categorie._id,uCategory);
-  swal({
-    title: "Opération réussie!",
-    text: "La catégorie a été bien mise à jour!",
-    icon: "success",
-  });
-  e.target.reset()
-window.location.reload()
-
- 
-}
+    } else {
+      ctx.updateCategorie(props.categorie._id, uCategory);
+      swal({
+        title: "Opération réussie!",
+        text: "La catégorie a été bien mise à jour!",
+        icon: "success",
+      });
+      e.target.reset();
+      window.location.reload();
+    }
   }
   //if (tabCommandes){
   return (
@@ -97,17 +92,13 @@ window.location.reload()
           </div>
         </div>
         <div className="col-md-3 custom-border-right py-4 text-center">
-          <button
-            className=" btn btn-outline-success "
-            onClick={handleOpen}
-
-          >
-            Mettre à jour  <FaEdit />
+          <button className=" btn btn-outline-success " onClick={handleOpen}>
+            {t("buttons.update")} <FaEdit />
           </button>
         </div>
         <div className="col-md-3 my-4 px-4 text-center">
           <button className=" btn btn-outline-danger" onClick={removeC}>
-            Supprimer <FaTrash />
+            {t("buttons.delete")} <FaTrash />
           </button>
         </div>
       </div>
@@ -117,21 +108,28 @@ window.location.reload()
         onClose={handleClose}
         aria-labelledby="keep-mounted-modal-title"
         aria-describedby="keep-mounted-modal-description"
-        >
+      >
         <Box sx={style}>
-            <Typography id="keep-mounted-modal-title" variant="h6" component="h2">
-            <b>Modifier le libellé de la catégorie</b> 
-            </Typography>
-            <form    onSubmit={submitHandler}>
+          <Typography id="keep-mounted-modal-title" variant="h6" component="h2">
+            <b>Modifier le libellé de la catégorie</b>
+          </Typography>
+          <form onSubmit={submitHandler}>
+            <label htmlFor="name" className="my-2">
+              Nouveau Libellé
+            </label>
+            <input
+              className="form-control"
+              type="text"
+              name="name"
+              defaultValue={props.categorie.name}
+              ref={refName}
+            ></input>
 
-            
-                 <label htmlFor="name" className="my-2">Nouveau Libellé</label>
-                 <input className="form-control" type="text" name="name" defaultValue={props.categorie.name} ref={refName} ></input>
-                 
-               <button className="btn btn-success my-3" type="submit">Modifier</button>
-
-            </form>
-          </Box>
+            <button className="btn btn-success my-3" type="submit">
+              Modifier
+            </button>
+          </form>
+        </Box>
       </Modal>
     </>
   );

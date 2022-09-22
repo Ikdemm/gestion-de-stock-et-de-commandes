@@ -37,9 +37,9 @@ import NewEmployeForm from "./components/Gestion des Employes/employes/NewEmploy
 import OneEmploye from "./components/Gestion des Employes/employes/OneEmploye";
 import UpdateEmployee from "./components/Gestion des Employes/employes/UpdateEmployee";
 import Login from "./components/Login";
-import AddProductForm from "./components/Produits/AddProductForm";
-import HolderProduct from "./components/Produits/HolderProduct";
-import UpdateProduct from "./components/Produits/UpdateProduct";
+import AddProductForm from "./components/{t('produits')}/AddProductForm";
+import HolderProduct from "./components/{t('produits')}/HolderProduct";
+import UpdateProduct from "./components/{t('produits')}/UpdateProduct";
 import AllUsers from "./components/register/AllUsers";
 import HolderProfiles from "./components/register/HolderProfiles";
 import RegisterForm from "./components/register/RegisterForm";
@@ -110,9 +110,9 @@ function App() {
       console.log(error);
     }
   };
-   useEffect(() => {
+  useEffect(() => {
     isLoggedIn();
-  }, []); 
+  }, []);
   function PrivateOutlet() {
     //check if user logged in
     const auth = isLoggedIn();
@@ -122,196 +122,152 @@ function App() {
   const DefaultContainer = () => {
     <div>
       <div className="sticky-top">
-        <Sidebar ></Sidebar>
+        <Sidebar></Sidebar>
       </div>
-      <Route path="/dashboard" element={<PrivateOutlet />} >
+      <Route path="/dashboard" element={<PrivateOutlet />}>
         <Route path="" element={<DashbordHolder />} />
       </Route>
-      <Route path="/fournisseurs" element={<PrivateOutlet />} >
+      <Route path="/fournisseurs" element={<PrivateOutlet />}>
         <Route path="" element={<HolderFournisseurs />} />
       </Route>
-      <Route
-        path="/fournisseurs/:_id/edit"
-        element={<PrivateOutlet />}
-        
-      >
+      <Route path="/fournisseurs/:_id/edit" element={<PrivateOutlet />}>
         <Route path="" element={<UpdateFournisseur />} />
       </Route>
-      <Route path="/clients" element={<PrivateOutlet />} >
+      <Route path="/clients" element={<PrivateOutlet />}>
         <Route path="" element={<HolderCustomers />} />
       </Route>
-      <Route path="/clients/:_id/edit" element={<PrivateOutlet />} >
+      <Route path="/clients/:_id/edit" element={<PrivateOutlet />}>
         <Route path="" element={<UpdateCustomer />} />
       </Route>
-      <Route path="/stock/:_id/edit" element={<PrivateOutlet />} >
+      <Route path="/stock/:_id/edit" element={<PrivateOutlet />}>
         <Route path="" element={<UpdateStock />} />
       </Route>
-      <Route path="/addProduit" element={<PrivateOutlet />} >
+      <Route path="/addProduit" element={<PrivateOutlet />}>
         <Route path="" element={<AddProductForm />} />
       </Route>
-      <Route path="/listProduits" element={<PrivateOutlet />} >
+      <Route path="/listProduits" element={<PrivateOutlet />}>
         <Route path="" element={<HolderProduct />} />
       </Route>
-      <Route path="/directions" element={<PrivateOutlet />} >
+      <Route path="/directions" element={<PrivateOutlet />}>
         <Route path="" element={<HolderDirection />} />
       </Route>
-      <Route path="/listCategories" element={<PrivateOutlet />} >
+      <Route path="/listCategories" element={<PrivateOutlet />}>
         <Route path="" element={<CategoryHolder />} />
       </Route>
-      <Route
-        path="/categories/:_id/edit"
-        element={<PrivateOutlet />}
-        
-      >
+      <Route path="/categories/:_id/edit" element={<PrivateOutlet />}>
         <Route path="" element={<UpdateCategory />} />
       </Route>
-      <Route path="/produits/:_id/edit" element={<PrivateOutlet />} >
+      <Route path="/produits/:_id/edit" element={<PrivateOutlet />}>
         <Route path="" element={<UpdateProduct />} />
       </Route>
-      <Route
-        path="/directions/:_id/edit"
-        element={<PrivateOutlet />}
-        
-      >
+      <Route path="/directions/:_id/edit" element={<PrivateOutlet />}>
         <Route path="" element={<UpdateDirection />} />
       </Route>
-      <Route path="/addCategory" element={<PrivateOutlet />} >
+      <Route path="/addCategory" element={<PrivateOutlet />}>
         <Route path="" element={<Category />} />
       </Route>
       {/************************ GESTION DES EMPLOYES *************************/}
-      <Route path="/employes" element={<PrivateOutlet />} >
+      <Route path="/employes" element={<PrivateOutlet />}>
         <Route path="" element={<HolderEmployees />} />
       </Route>
-      <Route path="/employes/:_id/edit" element={<PrivateOutlet />} >
+      <Route path="/employes/:_id/edit" element={<PrivateOutlet />}>
         <Route path="" element={<UpdateEmployee />} />
       </Route>
-      <Route
-        path="/employes/:_id/details"
-        element={<PrivateOutlet />}
-        
-      >
+      <Route path="/employes/:_id/details" element={<PrivateOutlet />}>
         <Route path="" element={<OneEmploye />} />
       </Route>
-      <Route path="/nouveau-employe" element={<PrivateOutlet />} >
+      <Route path="/nouveau-employe" element={<PrivateOutlet />}>
         <Route element={<NewEmployeForm />} />
       </Route>
-      <Route path="/stock" element={<PrivateOutlet />} >
+      <Route path="/stock" element={<PrivateOutlet />}>
         <Route path="" element={<Stock />} />
       </Route>
-      <Route path="/caisse" element={<PrivateOutlet />} >
+      <Route path="/caisse" element={<PrivateOutlet />}>
         <Route element={<Caisse />} />
       </Route>
-      <Route path="/echeances" element={<PrivateOutlet />} >
+      <Route path="/echeances" element={<PrivateOutlet />}>
         <Route path="" element={<HolderEcheances />} />
       </Route>
       {/************************ GESTION DES FACTURES ACHAT *************************/}
-      <Route path="/achat" element={<PrivateOutlet />} >
+      <Route path="/achat" element={<PrivateOutlet />}>
         <Route path="" element={<Achats />} />
       </Route>
       //*Ordinaires**/
-      <Route path="/historique-achat" element={<PrivateOutlet />} >
+      <Route path="/historique-achat" element={<PrivateOutlet />}>
         <Route element={<HistoriqueAchats />} />
       </Route>
-      <Route
-        path="/ajout-facture-achat"
-        element={<PrivateOutlet />}
-        
-      >
+      <Route path="/ajout-facture-achat" element={<PrivateOutlet />}>
         <Route element={<NewAchatForm />} />
       </Route>
-      <Route
-        path="/facture-achat/panier"
-        element={<PrivateOutlet />}
-        
-      >
+      <Route path="/facture-achat/panier" element={<PrivateOutlet />}>
         <Route element={<AddToInvoice />} />
       </Route>
       {/*  <Route path="/facture-achat/:_id/panier" element={<AddToInvoice/>}/>  */}
       //*Avoir**/
-      <Route
-        path="/historique-avoir-achat"
-        element={<PrivateOutlet />}
-        
-      >
+      <Route path="/historique-avoir-achat" element={<PrivateOutlet />}>
         <Route path="" element={<HistoriqueAvoirSurAchat />} />
       </Route>
-      <Route path="/ajout-avoir-achat" element={<PrivateOutlet />} >
+      <Route path="/ajout-avoir-achat" element={<PrivateOutlet />}>
         <Route path="" element={<NewAchatAvoirForm />} />
       </Route>
       //*Appel d'offre**/
-      <Route
-        path="/historique-appel-doffre"
-        element={<PrivateOutlet />}
-        
-      >
+      <Route path="/historique-appel-doffre" element={<PrivateOutlet />}>
         <Route path="" element={<HistoriqueAppelsOffres />} />
       </Route>
-      <Route path="/ajout-appel-doffre" element={<PrivateOutlet />} >
+      <Route path="/ajout-appel-doffre" element={<PrivateOutlet />}>
         {" "}
         <Route path="" element={<NewAppelOffreForm />} />
       </Route>
       {/*   <Route path="/appel-doffre/:_id/details" element={<NewAppelOffreForm/>}/> */}
       {/************************ GESTION DES FACTURES VENTE *************************/}
-      <Route path="/ventes" element={<PrivateOutlet />} >
+      <Route path="/ventes" element={<PrivateOutlet />}>
         <Route path="" element={<HolderVentes />} />
       </Route>
       //*Ordinaires**/
-      <Route path="/historique-ventes" element={<PrivateOutlet />} >
+      <Route path="/historique-ventes" element={<PrivateOutlet />}>
         <Route path="" element={<HistoriqueVentes />} />
       </Route>
-      <Route
-        path="/ajout-facture-vente"
-        element={<PrivateOutlet />}
-        
-      >
+      <Route path="/ajout-facture-vente" element={<PrivateOutlet />}>
         <Route path="" element={<NewFormVente />} />
       </Route>
-      <Route
-        path="/facture-vente/panier"
-        element={<PrivateOutlet />}
-        
-      >
+      <Route path="/facture-vente/panier" element={<PrivateOutlet />}>
         <Route path="" element={<AjouterDesArticlesVentes />} />
       </Route>
       //*Avoir**/
-      <Route
-        path="/historique-avoir-vente"
-        element={<PrivateOutlet />}
-        
-      >
+      <Route path="/historique-avoir-vente" element={<PrivateOutlet />}>
         <Route path="" element={<HistoriqueAvoirVentes />} />
       </Route>
-      <Route path="/ajout-avoir-vente"  element={<PrivateOutlet />}>
+      <Route path="/ajout-avoir-vente" element={<PrivateOutlet />}>
         <Route element={<FormAvoirVentes />} />
       </Route>
       //*échéance**/
-      <Route path="/echeances-vente"  element={<PrivateOutlet />}>
+      <Route path="/echeances-vente" element={<PrivateOutlet />}>
         <Route element={<VenteEcheances />} />
       </Route>
       {/************************ GESTION DES DEMANDES *************************/}
-      <Route path="/demandes"  element={<PrivateOutlet />}>
+      <Route path="/demandes" element={<PrivateOutlet />}>
         <Route path="" element={<HolderDemande />} />
       </Route>
-      <Route path="/gestion-demandes"  element={<PrivateOutlet />}>
+      <Route path="/gestion-demandes" element={<PrivateOutlet />}>
         <Route path="" element={<HolderGestionDemandes />} />
       </Route>
-      <Route path="/non-traitees"  element={<PrivateOutlet />}>
+      <Route path="/non-traitees" element={<PrivateOutlet />}>
         <Route path="" element={<NonTraitees />} />
       </Route>
-      <Route path="/traitees"  element={<PrivateOutlet />}>
+      <Route path="/traitees" element={<PrivateOutlet />}>
         <Route path="" element={<Traitees />} />
       </Route>
       {/************************ GESTION DES PROFILES *************************/}
-      <Route path="/register"  element={<PrivateOutlet />}>
+      <Route path="/register" element={<PrivateOutlet />}>
         <Route path="" element={<HolderProfiles />} />
       </Route>
-      <Route path="/register-form"  element={<PrivateOutlet />}>
+      <Route path="/register-form" element={<PrivateOutlet />}>
         <Route path="" element={<RegisterForm />} />
       </Route>
-      <Route path="/all-users"  element={<PrivateOutlet />}>
+      <Route path="/all-users" element={<PrivateOutlet />}>
         <Route path="" element={<AllUsers />} />
       </Route>
-      <Route path="/logout"  element={<PrivateOutlet />}>
+      <Route path="/logout" element={<PrivateOutlet />}>
         <Route path="" element={<Logout />} />
       </Route>
     </div>;
@@ -319,19 +275,18 @@ function App() {
 
   const LoginContainer = () => (
     <div className="container">
-   
-      <Route path="/" element={<Login></Login> } />
+      <Route path="/" element={<Login></Login>} />
     </div>
   );
 
   return (
     <BrowserRouter>
-        <div className="App">
-      <Routes>
+      <div className="App">
+        <Routes>
           <Route exact path="/" component={LoginContainer} />
           <Route component={DefaultContainer} />
-      </Routes>
-        </div>
+        </Routes>
+      </div>
     </BrowserRouter>
   );
 }

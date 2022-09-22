@@ -2,6 +2,7 @@ import Box from "@mui/material/Box";
 import Modal from "@mui/material/Modal";
 import axios from "axios";
 import React, { useEffect, useState } from "react";
+import { useTranslation } from "react-i18next";
 import { BiAddToQueue } from "react-icons/bi";
 import { FaSpinner } from "react-icons/fa";
 import CategoryForm from "./CategoryForm";
@@ -20,6 +21,8 @@ const style = {
 };
 
 export default function ListeCategories() {
+  const { t } = useTranslation();
+
   const [open, setOpen] = React.useState(false);
   const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
@@ -39,19 +42,24 @@ export default function ListeCategories() {
 
           <div className="col-md-2">
             <button onClick={handleOpen} className="btn bg-blue m-4 p-2">
-              Ajouter <BiAddToQueue></BiAddToQueue>
+              {t("buttons.new")} <BiAddToQueue></BiAddToQueue>
             </button>
           </div>
         </div>
-        {
-      TabCategories.length>0?  
-        <div className="card col m-3 px-2">
-          {TabCategories.map((p) => {
-            return <OneCategory categorie={p} key={p._id}></OneCategory>;
-          })}
-        </div>
-        : <div className='text-center'><img src={require("../../assets/images/nothing.png")} alt="nothing to display"/> </div>
-      }
+        {TabCategories.length > 0 ? (
+          <div className="card col m-3 px-2">
+            {TabCategories.map((p) => {
+              return <OneCategory categorie={p} key={p._id}></OneCategory>;
+            })}
+          </div>
+        ) : (
+          <div className="text-center">
+            <img
+              src={require("../../assets/images/nothing.png")}
+              alt="nothing to display"
+            />{" "}
+          </div>
+        )}
         <Modal
           keepMounted
           open={open}
@@ -60,7 +68,7 @@ export default function ListeCategories() {
           aria-describedby="keep-mounted-modal-description"
         >
           <Box sx={style}>
-            <div >
+            <div>
               <CategoryForm></CategoryForm>
             </div>
           </Box>

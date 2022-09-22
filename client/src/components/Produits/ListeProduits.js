@@ -1,5 +1,6 @@
 import axios from "axios";
 import React, { useEffect, useState } from "react";
+import { useTranslation } from "react-i18next";
 import { BiAddToQueue } from "react-icons/bi";
 import { FaSpinner } from "react-icons/fa";
 import { Link } from "react-router-dom";
@@ -7,6 +8,8 @@ import "../Form.module.css";
 import OneProduct from "./OneProduct";
 
 export default function ListeProduits() {
+  const { t } = useTranslation();
+
   const [tabProduits, settabProduits] = useState([]);
 
   useEffect(() => {
@@ -23,7 +26,7 @@ export default function ListeProduits() {
 
           <div className="col-md-2">
             <Link to="/addProduit" className="btn bg-blue m-4 p-2">
-              Ajouter <BiAddToQueue></BiAddToQueue>
+              {t("buttons.new")} <BiAddToQueue></BiAddToQueue>
             </Link>
           </div>
         </div>

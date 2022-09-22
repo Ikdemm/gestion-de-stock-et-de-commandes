@@ -6,9 +6,15 @@ import Box from "@mui/material/Box";
 import Button from "@mui/material/Button";
 import Modal from "@mui/material/Modal";
 import Typography from "@mui/material/Typography";
-import { FcInfo , FcMoneyTransfer, FcPackage, FcRating, FcSalesPerformance} from "react-icons/fc";
+import {
+  FcInfo,
+  FcMoneyTransfer,
+  FcPackage,
+  FcRating,
+  FcSalesPerformance,
+} from "react-icons/fc";
 import axios from "axios";
-import swal from 'sweetalert';
+import swal from "sweetalert";
 
 const style = {
   position: "absolute",
@@ -31,120 +37,132 @@ export default function OneProduct(props) {
       seTabCategories(response.data);
     });
   }, []);
-  var category=tabCategories.find((c)=>c._id===props.produit.categorie.categorie_id)
-  console.log('category', category)
+  var category = tabCategories.find(
+    (c) => c._id === props.produit.categorie.categorie_id
+  );
+  console.log("category", category);
   let ctx = useContext(produitCtx);
   function removeC() {
     swal({
       title: "Suppression",
       text: "Etes-vous sur de bien vouloir supprimer ce produit?",
       icon: "warning",
-      buttons: ["Annuler", "Supprimer"],
+      buttons: ["{t('buttons.cancel')}", "{t('buttons.delete')}"],
       dangerMode: true,
-    })
-    .then((willDelete) => {
+    }).then((willDelete) => {
       if (willDelete) {
         ctx.removeOneProduit(props.produit._id);
         swal("Produit supprimé avec succès", {
           icon: "success",
         });
-        setTimeout(()=>{
-
+        setTimeout(() => {
           window.location.reload();
-        }, 1500)
+        }, 1500);
       } else {
         swal("Produit selectionné non supprimé");
       }
     });
-
-
-  
   }
-  if(category){
+  if (category) {
     return (
       <div className="row mb-1 mr-0 custom-border ">
- <div className="col-md-2 custom-border-right p-1 text-center">
-  {
-   props.produit.image?
-     <img src={props.produit.image} alt="article from DB" width="100px" height="100px" />
-     
-    :
-      
-      <img src={require("../../assets/images/box.jpg")} alt="article static" width="100px" height="100px" />
-   }
+        <div className="col-md-2 custom-border-right p-1 text-center">
+          {props.produit.image ? (
+            <img
+              src={props.produit.image}
+              alt="article from DB"
+              width="100px"
+              height="100px"
+            />
+          ) : (
+            <img
+              src={require("../../assets/images/box.jpg")}
+              alt="article static"
+              width="100px"
+              height="100px"
+            />
+          )}
+        </div>
+        {/* détails produit */}
 
-
-  </div>
-                    {/* détails produit */}
-  
         <div className="col-md-4 custom-border-right my-1">
-        <div className="col">
+          <div className="col">
             <div className="row">
-                    <div className="col-md-1">  <FcInfo></FcInfo></div>
-                    <div className="col-11">Libellé: {props.produit.title}</div>
+              <div className="col-md-1">
+                {" "}
+                <FcInfo></FcInfo>
+              </div>
+              <div className="col-11">Libellé: {props.produit.title}</div>
             </div>
-          <div className="row">
-                  <div className="col-md-1">  <FcMoneyTransfer></FcMoneyTransfer></div>
-                  <div className="col-11">Prix d'achat: {props.produit.price_a} dt</div>
-          </div>
-          <div className="row">
-                  <div className="col-md-1">  <FcSalesPerformance></FcSalesPerformance></div>
-                  <div className="col-11">Prix de vente: {props.produit.price_v} dt</div>
-          </div>
-          <div className="row">
-                  <div className="col-md-1"> <FcPackage></FcPackage></div>
-                  <div className="col-11">Etat: 
-                   {
-                    props.produit.stock_final>0?
-                    
-                    props.produit.etat="en stock"
-                    :
-                    props.produit.etat="en rupture de stock"
-                    
-  
-                  }
-                  </div>
-          </div>
-          </div>
-          </div>
-  
-  
-              {/* catégorie */}
-              <div className="col-md-3 my-1 custom-border-right">
-      <div className="row">
-        <div className="col-md-2 ">
-         <FcRating></FcRating>
-        </div>
-        <div className="col-md-10">
-          <div className="row ">
-          {category.name}
+            <div className="row">
+              <div className="col-md-1">
+                {" "}
+                <FcMoneyTransfer></FcMoneyTransfer>
+              </div>
+              <div className="col-11">
+                Prix d'achat: {props.produit.price_a} dt
+              </div>
+            </div>
+            <div className="row">
+              <div className="col-md-1">
+                {" "}
+                <FcSalesPerformance></FcSalesPerformance>
+              </div>
+              <div className="col-11">
+                Prix de vente: {props.produit.price_v} dt
+              </div>
+            </div>
+            <div className="row">
+              <div className="col-md-1">
+                {" "}
+                <FcPackage></FcPackage>
+              </div>
+              <div className="col-11">
+                Etat:
+                {props.produit.stock_final > 0
+                  ? (props.produit.etat = "en stock")
+                  : (props.produit.etat = "en rupture de stock")}
+              </div>
+            </div>
           </div>
         </div>
-      </div>
-    </div>
-              {/* buttons */}
-  
-              <div className="col-md-3 my-4 px-4">
-      <div className="row px-3 d-flex  justify-content-between" >
-        <Button className=" btn btn-outline-dark  col-md-3 " onClick={handleOpen}>
-             
-             <FaRegEye />
-           </Button>
-        <Link
-             className=" btn btn-outline-success col-md-3 "
-             to={"/produits/" + props.produit._id + "/edit"}
-           >
-          
-             <FaEdit />
-           </Link>
-        <button className=" btn btn-outline-danger col-md-3 " onClick={removeC}>
-           
-             <FaTrash />
-           </button>
-      </div>
-    </div>
-  
-  
+
+        {/* catégorie */}
+        <div className="col-md-3 my-1 custom-border-right">
+          <div className="row">
+            <div className="col-md-2 ">
+              <FcRating></FcRating>
+            </div>
+            <div className="col-md-10">
+              <div className="row ">{category.name}</div>
+            </div>
+          </div>
+        </div>
+        {/* buttons */}
+
+        <div className="col-md-3 my-4 px-4">
+          <div className="row px-3 d-flex  justify-content-between">
+            <Button
+              className=" btn btn-outline-dark  col-md-3 "
+              onClick={handleOpen}
+            >
+              <FaRegEye />
+            </Button>
+            <Link
+              className=" btn btn-outline-success col-md-3 "
+              to={"/produits/" + props.produit._id + "/edit"}
+            >
+              <FaEdit />
+            </Link>
+            <button
+              className=" btn btn-outline-danger col-md-3 "
+              onClick={removeC}
+            >
+              <FaTrash />
+            </button>
+          </div>
+        </div>
+
         <Modal
           keepMounted
           open={open}
@@ -153,30 +171,36 @@ export default function OneProduct(props) {
           aria-describedby="keep-mounted-modal-description"
         >
           <Box sx={style}>
-            <Typography id="keep-mounted-modal-title" variant="h6" component="h2">
+            <Typography
+              id="keep-mounted-modal-title"
+              variant="h6"
+              component="h2"
+            >
               {props.produit.title}
             </Typography>
             <Typography id="keep-mounted-modal-description" sx={{ mt: 2 }}>
-              {props.produit.description} <hr/>
+              {props.produit.description} <hr />
               <ul>
                 <li> En stock: {props.produit.stock_final}</li>
-                <li className="text-danger"> Stock MIN: {props.produit.stock_min}</li>
-                <li className="text-danger"> Stock MAX: {props.produit.stock_max}</li>
-                
-               
+                <li className="text-danger">
+                  {" "}
+                  Stock MIN: {props.produit.stock_min}
+                </li>
+                <li className="text-danger">
+                  {" "}
+                  Stock MAX: {props.produit.stock_max}
+                </li>
               </ul>
-             
             </Typography>
           </Box>
         </Modal>
       </div>
     );
+  } else {
+    return (
+      <div className="fetching">
+        <FaSpinner className="spinner"></FaSpinner>
+      </div>
+    );
   }
- else{
-  return(
-    <div className="fetching">      
-    <FaSpinner className="spinner"></FaSpinner>
-          </div>
-  )
- }
 }

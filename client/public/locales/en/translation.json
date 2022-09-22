@@ -1,0 +1,48 @@
+{
+    "home": "Home",
+    "dashboard": "Dashboard",
+    "inventaire": "Inventory",
+    "categories": "Product Categories",
+    "produits": "Products",
+    "clients": "Customers",
+    "fournisseurs": "Suppliers",
+    "ventes": "Sales",
+    "achats": "Purchases",
+    "directions": "Departments",
+    "employes": "Employees",
+    "g-demandes": "Management of Employee Requests",
+    "demandes": "Requests",
+    "g-users": "Management of user profiles",
+    "logout": "Logout",
+    "buttons":{
+        "new": "Add",
+        "confirm":"Confirm",
+        "cancel":"Cancel",
+        "update":"Update",
+        "delete":"Delete"
+    },
+    "generalInformations":{
+        "phone":"Phone number",
+        "adress":"",
+        "email":""
+    },
+    "page": {
+        "clients": {
+            "list": "List Of Customers",
+            "form":{
+                "add":"Add New Customer",
+                "name":"Full Name",
+                "adress":"Delivery Address"
+              
+                }
+        },
+        "fournisseurs": {
+            "list": "List Of Suppliers",
+            "form":{
+                "add":"Add New Supplier",
+                "name":"Trading Name",
+                "adress":"Address"
+            }
+    }
+     }
+}
