@@ -3,6 +3,7 @@ import React, { useEffect, useState } from 'react';
 import { FaBan, FaSave, FaSpinner } from 'react-icons/fa';
 import { Link, useNavigate } from 'react-router-dom';
 import { toast } from 'react-toastify';
+import {validPhoneNumber ,validCIN } from '../../../regex';
 
 export default function NewEmployeForm() {
 
@@ -18,6 +19,8 @@ const [date_de_naissance, setDate_de_naissance] = useState('');
 const [date_de_recrutement, setDate_de_recrutement] = useState('');
 const [poste, setPoste] = useState('');
 const [direction_id, setDirection_id] = useState('');
+const [phoneNbrErr, setPhoneNbrErr] = useState(false);
+const [CINErr, setCinErr] = useState(false);
 
 //directions from the backend
 const [listeDirections, setTlisteDirections] = useState([]);
@@ -48,6 +51,20 @@ const setFileToBase = (file) =>{
 const submitForm = async (e) =>{
     e.preventDefault();
     try {
+      if(!validPhoneNumber.test(numTel) && !validPhoneNumber.test(numTel)){
+setPhoneNbrErr(true)
+setCinErr(true)
+
+return
+      }
+      if(!validPhoneNumber.test(numTel)){
+setPhoneNbrErr(true)
+return
+      }
+      if(!validCIN.test(numCIN)){
+setCinErr(true)
+return
+      }
         const {data} = await axios.post('/api/staff', {nom, prenom, adresse, direction_id, imageUrl,date_de_naissance, date_de_recrutement, numCIN, numTel,poste  })
         console.log('data', data)
         if  (data.success === true){
@@ -61,6 +78,8 @@ const submitForm = async (e) =>{
             setPoste('');
             setDirection_id('');
             setImageUrl(null);
+            setPhoneNbrErr(false);
+            setCinErr(false);
             toast.success("L'employé est bien ajouté!")
           }
         navigate('/employes')
@@ -84,6 +103,8 @@ if(listeDirections){
     <div className="col-md-6">
     <label htmlFor="numCIN">N° de CIN</label>
         <input onChange={(e)=>setNumCIN(e.target.value)} className='form-control' type="number" name='numCIN' value={numCIN}   ></input>
+        {CINErr && <p className="alert alert-danger" role="alert">Le N° de la CIN est invalide</p>}
+
     </div>
     <div className="col-md-6">
     <label htmlFor="imageUrl">Photo</label>
@@ -136,7 +157,8 @@ if(listeDirections){
     <div className="col-md-6">
     <label htmlFor='numTel'>Numéro de téléphone</label>
         <input className='form-control' type="number"  name='numTel' onChange={(e)=>setNumTel(e.target.value)}  value={numTel}   ></input>
-     
+        {phoneNbrErr && <p className="alert alert-danger" role="alert">Le N° de téléphone est invalide</p>}
+
     </div>
     </div>
 
