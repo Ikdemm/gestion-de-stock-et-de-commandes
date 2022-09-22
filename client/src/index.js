@@ -2,10 +2,11 @@ import { StyledEngineProvider } from "@mui/material/styles";
 import "bootstrap/dist/css/bootstrap.min.css";
 import * as React from "react";
 import ReactDOM from "react-dom/client";
+import './i18n';
 import "./index.css";
-import i18n from './i18n'
 //import 'font-awesome/css/font-awesome.min.css';
 //import "bootstrap-icons/font/bootstrap-icons.css";
+import { Suspense } from "react";
 import { BrowserRouter } from "react-router-dom";
 import App from "./App";
 import AchatAvoirContextProvider from "./store/achatAVOIRContext";
@@ -48,9 +49,11 @@ root.render(
                                   <AddNewCategorieContextProvider>
                                     <UserContextProvider>
                                       <LoginContextProvider>
+                                      <Suspense fallback="loading">
                                         <StyledEngineProvider injectFirst>
                                           <App />
                                         </StyledEngineProvider>
+                                        </Suspense>,
                                       </LoginContextProvider>
                                     </UserContextProvider>
                                   </AddNewCategorieContextProvider>

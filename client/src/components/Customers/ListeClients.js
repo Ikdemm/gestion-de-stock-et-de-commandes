@@ -1,5 +1,6 @@
 import axios from "axios";
 import React, { useEffect, useState } from "react";
+import { useTranslation } from "react-i18next";
 import { BiAddToQueue } from "react-icons/bi";
 import { FaSpinner } from "react-icons/fa";
 import { Link } from "react-router-dom";
@@ -7,6 +8,8 @@ import "../Form.module.css";
 import OneCustomer from "./OneCustomer";
 
 export default function ListeClients() {
+  const {t} = useTranslation()
+
   const [tabClients, setTabClients] = useState([]);
   useEffect(() => {
     axios.get(`/api/clients`).then((response) => {
@@ -18,11 +21,11 @@ export default function ListeClients() {
     return (
       <div>
       <div className="row d-flex">
-        <h6 className="col-md-9 flex-fill display-4">Liste des clients</h6>
+        <h6 className="col-md-9 flex-fill display-4">{t('page.clients.list')}</h6>
 
         <div className="col-md-2">
           <Link to="/addClient" className="btn bg-blue m-4 p-2">
-            Ajouter <BiAddToQueue></BiAddToQueue>
+          {t('buttons.new')} <BiAddToQueue></BiAddToQueue>
           </Link>
         </div>
       </div>

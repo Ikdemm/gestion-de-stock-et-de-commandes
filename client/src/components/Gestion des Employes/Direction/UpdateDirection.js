@@ -26,7 +26,7 @@ export default function UpdateDirection() {
           </div>
           <div className="col-md-6" style={{ marginTop: 30 + "vh" }}>
             <h6 className="display-6" style={{ color: "#4125D9" }}>
-              Mettre à jour la direction
+              {t("buttons.update")} la direction
             </h6>
 
             <form

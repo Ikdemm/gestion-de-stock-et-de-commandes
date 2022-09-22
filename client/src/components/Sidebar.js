@@ -60,7 +60,15 @@ const {t, i18n} = useTranslation()
 const onChangeLang = (e)=>{
   i18n.changeLanguage(e.target.value)
 }
-  if (!isLogged) {
+useEffect(()=>{
+  for (let index = 0; index < document.getElementsByClassName('lang').length; index++) {
+    const element = document.getElementsByClassName('lang')[index];
+    if(element.value === i18n.language){
+      element.setAttribute("selected", "true")
+    }
+  }
+}) 
+if (!isLogged) {
 return<div></div>
   }else
 if(connectedUser?.role==="admin")
@@ -90,7 +98,7 @@ if(connectedUser?.role==="admin")
                 <span className={styles.icon}>
                   <AiOutlineHome />
                 </span>
-                <span className="ms-1"> Page d'accueil</span>
+                <span className="ms-1"> {t("home")}</span>
               </Link>
             </li>
             <li className="nav-item">
@@ -98,7 +106,7 @@ if(connectedUser?.role==="admin")
                 <span className={styles.icon}>
                   <BsSpeedometer2 />
                 </span>
-                <span className="ms-1"> Tableau de bord</span>
+                <span className="ms-1"> {t("dashboard")}</span>
               </Link>
             </li>
             <li className="nav-item">
@@ -106,7 +114,7 @@ if(connectedUser?.role==="admin")
                 <span className={styles.icon}>
                   <BsBoxSeam />
                 </span>
-                <span className="ms-1"> Inventaire </span>
+                <span className="ms-1"> {t("inventaire")} </span>
               </Link>
             </li>
             <li className="nav-item">
@@ -115,7 +123,7 @@ if(connectedUser?.role==="admin")
                   {" "}
                   <BsList />
                 </span>
-                <span className="ms-1"> Catégories des produits</span>
+                <span className="ms-1"> {t("categories")}</span>
               </Link>
             </li>
             <li className="nav-item">
@@ -124,7 +132,7 @@ if(connectedUser?.role==="admin")
                   {" "}
                   <BsShop />
                 </span>
-                <span className="ms-1"> Produits </span>
+                <span className="ms-1"> {t("produits")} </span>
               </Link>
             </li>
             <li className="nav-item">
@@ -133,7 +141,7 @@ if(connectedUser?.role==="admin")
                   {" "}
                   <BsFillPeopleFill />
                 </span>
-                <span className="ms-1">Clients </span>
+                <span className="ms-1">{t("clients")} </span>
               </Link>
             </li>
             <li className="nav-item">
@@ -142,7 +150,7 @@ if(connectedUser?.role==="admin")
                   {" "}
                   <BsFillPersonBadgeFill />
                 </span>
-                <span className="ms-1">Fournisseurs</span>
+                <span className="ms-1">{t("fournisseurs")}</span>
               </Link>
             </li>
             <li className="nav-item">
@@ -151,7 +159,7 @@ if(connectedUser?.role==="admin")
                   {" "}
                   <BsCalculatorFill />
                 </span>
-                <span className="ms-1">Ventes </span>
+                <span className="ms-1">{t("ventes")} </span>
               </Link>
             </li>
             <li className="nav-item">
@@ -161,7 +169,7 @@ if(connectedUser?.role==="admin")
                   <BsCart4 />
                 </span>
 
-                <span className="ms-1"> Achats </span>
+                <span className="ms-1"> {t("achats")} </span>
               </Link>
             </li>
 
@@ -171,7 +179,7 @@ if(connectedUser?.role==="admin")
                   {" "}
                   <FaRegBuilding />
                 </span>
-                <span className="ms-1"> Directions </span>
+                <span className="ms-1"> {t("directions")} </span>
               </Link>
             </li>
             <li className="nav-item">
@@ -180,7 +188,7 @@ if(connectedUser?.role==="admin")
                   {" "}
                   <BsPeople />
                 </span>
-                <span className="ms-1"> Employés </span>
+                <span className="ms-1"> {t("employes")} </span>
               </Link>
             </li>
                   <li className="nav-item">
@@ -189,7 +197,7 @@ if(connectedUser?.role==="admin")
                   {" "}
                   <BsFillFileEarmarkArrowDownFill />
                 </span>
-                <span className="ms-1">Gestion des Demandes des Employés </span>
+                <span className="ms-1">{t("g-demandes")} </span>
               </Link>
             </li>
             <li className="nav-item">
@@ -199,7 +207,7 @@ if(connectedUser?.role==="admin")
                   <BsFillGearFill />
                 </span>
                 <span className="ms-1">
-                  Gestion des profiles des utilisateurs{" "}
+                  {t("g-users")}{" "}
                 </span>
               </Link>
             </li>
@@ -213,9 +221,7 @@ if(connectedUser?.role==="admin")
 
             <select className="form-select ms-1" style={{ width: "70px" }} onChange={onChangeLang}>
               <option  value="fr" className="lang">FR</option>
-              <option  value="en" className="lang">
-                EN
-              </option>
+              <option  value="en" className="lang">EN </option>
             </select>
               </div>
           </div>
@@ -233,7 +239,7 @@ if(connectedUser?.role==="admin")
                   {" "}
                   <BsBoxArrowLeft />
                 </span>
-                <span className="ms-1">Se Déconnecter </span>
+                <span className="ms-1">{t("logout")} </span>
               </button>
             </li>
           </ul>
@@ -269,7 +275,7 @@ if(connectedUser?.role==="admin")
                 <span className={styles.icon}>
                   <AiOutlineHome />
                 </span>
-                <span className="ms-1"> Page d'accueil</span>
+                <span className="ms-1"> {t("home")}</span>
               </Link>
             </li>
      
@@ -278,7 +284,7 @@ if(connectedUser?.role==="admin")
                 <span className={styles.icon}>
                   <BsBoxSeam />
                 </span>
-                <span className="ms-1"> Inventaire </span>
+                <span className="ms-1"> {t("inventaire")} </span>
               </Link>
             </li>
             <li className="nav-item">
@@ -287,7 +293,7 @@ if(connectedUser?.role==="admin")
                   {" "}
                   <BsList />
                 </span>
-                <span className="ms-1"> Catégories des produits</span>
+                <span className="ms-1"> {t("categories")}</span>
               </Link>
             </li>
             <li className="nav-item">
@@ -296,21 +302,23 @@ if(connectedUser?.role==="admin")
                   {" "}
                   <BsShop />
                 </span>
-                <span className="ms-1"> Produits </span>
+                <span className="ms-1"> {t("produits")} </span>
               </Link>
             </li>
-            <li className="nav-item">
-                <span className={styles.icon}>
-                  {" "}
-                  <BsGlobe />
+            <div className="nav-item">
+              <div className="d-flex">
+                
+            <span className={styles.icon} style={{marginLeft: 15+"px"}}>
+                
+                  <BsGlobe /> 
                 </span>
-                <span className="ms-1"> 
-                <select className="form-select">
-                  <option value="en">EN</option>
-                  <option value="fr">FR</option>
-                </select>
-                 </span>
-            </li>
+
+            <select className="form-select ms-1" style={{ width: "70px" }} onChange={onChangeLang}>
+              <option  value="fr" className="lang">FR</option>
+              <option  value="en" className="lang">EN </option>
+            </select>
+              </div>
+          </div>
             <li className="nav-item">
               <button
                 onClick={() => {
@@ -324,7 +332,7 @@ if(connectedUser?.role==="admin")
                   {" "}
                   <BsBoxArrowLeft />
                 </span>
-                <span className="ms-1">Se Déconnecter </span>
+                <span className="ms-1">{t("logout")} </span>
               </button>
             </li>
           </ul>
@@ -359,7 +367,7 @@ if(connectedUser?.role==="admin")
                 <span className={styles.icon}>
                   <AiOutlineHome />
                 </span>
-                <span className="ms-1"> Page d'accueil</span>
+                <span className="ms-1"> {t("home")}</span>
               </Link>
             </li>
          
@@ -369,21 +377,23 @@ if(connectedUser?.role==="admin")
                   {" "}
                   <BsFillFileEarmarkArrowDownFill />
                 </span>
-                <span className="ms-1">Gestion des Demandes des Employés </span>
+                <span className="ms-1">{t("g-demandes")} </span>
               </Link>
             </li>
-            <li className="nav-item">
-                <span className={styles.icon}>
-                  {" "}
-                  <BsGlobe />
+            <div className="nav-item">
+              <div className="d-flex">
+                
+            <span className={styles.icon} style={{marginLeft: 15+"px"}}>
+                
+                  <BsGlobe /> 
                 </span>
-                <span className="ms-1"> 
-                <select className="form-select">
-                  <option value="en">EN</option>
-                  <option value="fr">FR</option>
-                </select>
-                 </span>
-            </li>
+
+            <select className="form-select ms-1" style={{ width: "70px" }} onChange={onChangeLang}>
+              <option  value="fr" className="lang">FR</option>
+              <option  value="en" className="lang">EN </option>
+            </select>
+              </div>
+          </div>
             <li className="nav-item">
               <button
                 onClick={() => {
@@ -397,7 +407,7 @@ if(connectedUser?.role==="admin")
                   {" "}
                   <BsBoxArrowLeft />
                 </span>
-                <span className="ms-1">Se Déconnecter </span>
+                <span className="ms-1">{t("logout")} </span>
               </button>
             </li>
           </ul>
@@ -432,7 +442,7 @@ if(connectedUser?.role==="admin")
                 <span className={styles.icon}>
                   <AiOutlineHome />
                 </span>
-                <span className="ms-1"> Page d'accueil</span>
+                <span className="ms-1"> {t("home")}</span>
               </Link>
             </li>
             <li className="nav-item">
@@ -441,7 +451,7 @@ if(connectedUser?.role==="admin")
                   {" "}
                   <BsFillPersonBadgeFill />
                 </span>
-                <span className="ms-1">Fournisseurs</span>
+                <span className="ms-1">{t("fournisseurs")}</span>
               </Link>
             </li>
   <li className="nav-item">
@@ -451,21 +461,23 @@ if(connectedUser?.role==="admin")
                   <BsCart4 />
                 </span>
 
-                <span className="ms-1"> Achats </span>
+                <span className="ms-1"> {t("achats")} </span>
               </Link>
             </li>
-            <li className="nav-item">
-                <span className={styles.icon}>
-                  {" "}
-                  <BsGlobe />
+            <div className="nav-item">
+              <div className="d-flex">
+                
+            <span className={styles.icon} style={{marginLeft: 15+"px"}}>
+                
+                  <BsGlobe /> 
                 </span>
-                <span className="ms-1"> 
-                <select className="form-select">
-                  <option value="en">EN</option>
-                  <option value="fr">FR</option>
-                </select>
-                 </span>
-            </li>
+
+            <select className="form-select ms-1" style={{ width: "70px" }} onChange={onChangeLang}>
+              <option  value="fr" className="lang">FR</option>
+              <option  value="en" className="lang">EN </option>
+            </select>
+              </div>
+          </div>
     
             <li className="nav-item">
               <button
@@ -480,7 +492,7 @@ if(connectedUser?.role==="admin")
                   {" "}
                   <BsBoxArrowLeft />
                 </span>
-                <span className="ms-1">Se Déconnecter </span>
+                <span className="ms-1">{t("logout")} </span>
               </button>
             </li>
           </ul>
@@ -515,7 +527,7 @@ if(connectedUser?.role==="admin")
                 <span className={styles.icon}>
                   <AiOutlineHome />
                 </span>
-                <span className="ms-1"> Page d'accueil</span>
+                <span className="ms-1"> {t("home")}</span>
               </Link>
             </li>
             <li className="nav-item">
@@ -524,7 +536,7 @@ if(connectedUser?.role==="admin")
                   {" "}
                   <BsFillPeopleFill />
                 </span>
-                <span className="ms-1">Clients </span>
+                <span className="ms-1">{t("clients")} </span>
               </Link>
             </li>
            <li className="nav-item">
@@ -533,21 +545,23 @@ if(connectedUser?.role==="admin")
                   {" "}
                   <BsCalculatorFill />
                 </span>
-                <span className="ms-1">Ventes </span>
+                <span className="ms-1">{t("ventes")} </span>
               </Link>
             </li>
-            <li className="nav-item">
-                <span className={styles.icon}>
-                  {" "}
-                  <BsGlobe />
+            <div className="nav-item">
+              <div className="d-flex">
+                
+            <span className={styles.icon} style={{marginLeft: 15+"px"}}>
+                
+                  <BsGlobe /> 
                 </span>
-                <span className="ms-1"> 
-                <select className="form-select">
-                  <option value="en">EN</option>
-                  <option value="fr">FR</option>
-                </select>
-                 </span>
-            </li>
+
+            <select className="form-select ms-1" style={{ width: "70px" }} onChange={onChangeLang}>
+              <option  value="fr" className="lang">FR</option>
+              <option  value="en" className="lang">EN </option>
+            </select>
+              </div>
+          </div>
             <li className="nav-item">
               <button
                 onClick={() => {
@@ -561,7 +575,7 @@ if(connectedUser?.role==="admin")
                   {" "}
                   <BsBoxArrowLeft />
                 </span>
-                <span className="ms-1">Se Déconnecter </span>
+                <span className="ms-1">{t("logout")} </span>
               </button>
             </li>
           </ul>
@@ -596,7 +610,7 @@ if(connectedUser?.role==="admin")
                 <span className={styles.icon}>
                   <AiOutlineHome />
                 </span>
-                <span className="ms-1"> Page d'accueil</span>
+                <span className="ms-1"> {t("home")}</span>
               </Link>
             </li>
 
@@ -605,7 +619,7 @@ if(connectedUser?.role==="admin")
                 <span className={styles.icon}>
                   <BsSpeedometer2 />
                 </span>
-                <span className="ms-1"> Tableau de bord</span>
+                <span className="ms-1"> {t("dashboard")}</span>
               </Link>
             </li>
    <li className="nav-item">
@@ -615,22 +629,24 @@ if(connectedUser?.role==="admin")
                   <BsFillGearFill />
                 </span>
                 <span className="ms-1">
-                  Gestion des profiles des utilisateurs{" "}
+                  {t("g-users")}{" "}
                 </span>
               </Link>
             </li>
-            <li className="nav-item">
-                <span className={styles.icon}>
-                  {" "}
-                  <BsGlobe />
+            <div className="nav-item">
+              <div className="d-flex">
+                
+            <span className={styles.icon} style={{marginLeft: 15+"px"}}>
+                
+                  <BsGlobe /> 
                 </span>
-                <span className="ms-1"> 
-                <select className="form-select">
-                  <option value="en">EN</option>
-                  <option value="fr">FR</option>
-                </select>
-                 </span>
-            </li>
+
+            <select className="form-select ms-1" style={{ width: "70px" }} onChange={onChangeLang}>
+              <option  value="fr" className="lang">FR</option>
+              <option  value="en" className="lang">EN </option>
+            </select>
+              </div>
+          </div>
             <li className="nav-item">
               <button
                 onClick={() => {
@@ -644,7 +660,7 @@ if(connectedUser?.role==="admin")
                   {" "}
                   <BsBoxArrowLeft />
                 </span>
-                <span className="ms-1">Se Déconnecter </span>
+                <span className="ms-1">{t("logout")} </span>
               </button>
             </li>
           </ul>
@@ -679,7 +695,7 @@ if(connectedUser?.role==="admin")
                 <span className={styles.icon}>
                   <AiOutlineHome />
                 </span>
-                <span className="ms-1"> Page d'accueil</span>
+                <span className="ms-1"> {t("home")}</span>
               </Link>
             </li>
             <li className="nav-item">
@@ -691,18 +707,20 @@ if(connectedUser?.role==="admin")
                 <span className="ms-1"> Demandes </span>
               </Link>
             </li>
-            <li className="nav-item">
-                <span className={styles.icon}>
-                  {" "}
-                  <BsGlobe />
+            <div className="nav-item">
+              <div className="d-flex">
+                
+            <span className={styles.icon} style={{marginLeft: 15+"px"}}>
+                
+                  <BsGlobe /> 
                 </span>
-                <span className="ms-1"> 
-                <select className="form-select">
-                  <option value="en">EN</option>
-                  <option value="fr">FR</option>
-                </select>
-                 </span>
-            </li>
+
+            <select className="form-select ms-1" style={{ width: "70px" }} onChange={onChangeLang}>
+              <option  value="fr" className="lang">FR</option>
+              <option  value="en" className="lang">EN </option>
+            </select>
+              </div>
+          </div>
           
             <li className="nav-item">
               <button
@@ -717,7 +735,7 @@ if(connectedUser?.role==="admin")
                   {" "}
                   <BsBoxArrowLeft />
                 </span>
-                <span className="ms-1">Se Déconnecter </span>
+                <span className="ms-1">{t("logout")} </span>
               </button>
             </li>
           </ul>

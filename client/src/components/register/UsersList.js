@@ -22,7 +22,7 @@ export default function UsersList(props) {
 
           <div className="col-md-2">
             <Link to="/register-form" className="btn bg-blue m-4 p-2">
-              Ajouter <BiAddToQueue></BiAddToQueue>
+              {t("buttons.new")} <BiAddToQueue></BiAddToQueue>
             </Link>
           </div>
         </div>
@@ -40,26 +40,20 @@ export default function UsersList(props) {
               return (
                 <tr key={u._id}>
                   <td>
-                  {
-                        employee.imageUrl.url?
-                        <img
+                    {employee.imageUrl.url ? (
+                      <img
                         src={employee.imageUrl.url}
                         alt="employee avatar from cloud"
                         className="avatar"
-
                       />
-    
-                                            : 
-
-                        <img
+                    ) : (
+                      <img
                         src={`http://localhost:4000/getfile/${employee.imageUrl}`}
                         alt="employee avatar from server"
                         className="avatar"
-
-                      /> 
-                    
-              }        
-                  {employee.prenom} {employee.nom}
+                      />
+                    )}
+                    {employee.prenom} {employee.nom}
                   </td>
                   <td className="py-2">{u.email} </td>
                   <td className="py-2"> {u.role} </td>

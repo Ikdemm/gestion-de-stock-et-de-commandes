@@ -6,6 +6,7 @@ import { FaSpinner } from "react-icons/fa";
 import OneDirection from "./OneDirection";
 import { BiAddToQueue } from "react-icons/bi";
 import AddNewDirection from "./AddNewDirection";
+import { useTranslation } from "react-i18next";
 const style = {
   position: "absolute",
   top: "50%",
@@ -18,6 +19,8 @@ const style = {
   p: 4,
 };
 export default function ListeDirections() {
+  const { t } = useTranslation();
+
   const [open, setOpen] = React.useState(false);
   const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
@@ -28,27 +31,32 @@ export default function ListeDirections() {
     });
   }, []);
 
-  if (tabDirections.length>=0) {
+  if (tabDirections.length >= 0) {
     return (
       <div>
-      <div className="row d-flex">
-        <h6 className="col-md-9 flex-fill display-4">Liste des directions</h6>
+        <div className="row d-flex">
+          <h6 className="col-md-9 flex-fill display-4">Liste des directions</h6>
 
-        <div className="col-md-2">
-          <button onClick={handleOpen} className="btn bg-blue m-4 p-2">
-            Ajouter <BiAddToQueue></BiAddToQueue>
-          </button>
+          <div className="col-md-2">
+            <button onClick={handleOpen} className="btn bg-blue m-4 p-2">
+              {t("buttons.new")} <BiAddToQueue></BiAddToQueue>
+            </button>
+          </div>
         </div>
-      </div>
-      {
-    tabDirections.length>0?  
-      <div className="card col m-3 px-2">
-          {tabDirections.map((p) => {
-            return <OneDirection direction={p} key={p._id}></OneDirection>;
-          })}
- </div>
-        : <div className='text-center'><img src={require("../../../assets/images/nothing.png")} alt="nothing to display"/> </div>
-      }        
+        {tabDirections.length > 0 ? (
+          <div className="card col m-3 px-2">
+            {tabDirections.map((p) => {
+              return <OneDirection direction={p} key={p._id}></OneDirection>;
+            })}
+          </div>
+        ) : (
+          <div className="text-center">
+            <img
+              src={require("../../../assets/images/nothing.png")}
+              alt="nothing to display"
+            />{" "}
+          </div>
+        )}
         <Modal
           keepMounted
           open={open}
@@ -57,7 +65,7 @@ export default function ListeDirections() {
           aria-describedby="keep-mounted-modal-description"
         >
           <Box sx={style}>
-            <div >
+            <div>
               <AddNewDirection></AddNewDirection>
             </div>
           </Box>

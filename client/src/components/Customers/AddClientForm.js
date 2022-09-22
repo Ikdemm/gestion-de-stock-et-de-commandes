@@ -3,10 +3,13 @@ import { FaBan, FaSave } from "react-icons/fa";
 import { Link, useNavigate } from "react-router-dom";
 import { clientCtx } from "./../../store/clientContext";
 import swal from "sweetalert";
+import { useTranslation } from "react-i18next";
 
 const _ = require("lodash");
 
 export default function AddClientForm() {
+  const { t } = useTranslation();
+
   let navigate = useNavigate();
   const cctx = useContext(clientCtx);
   const tabNotFiltred = _.map(cctx.tabClients, "numero_de_tel");
@@ -28,7 +31,7 @@ export default function AddClientForm() {
     }
   }
   function verifyEmail(email) {
-    var regex = new RegExp('^[a-zA-Z0-9._:$!%-]+@[a-zA-Z0-9.-]+.[a-zA-Z]$');
+    var regex = new RegExp("^[a-zA-Z0-9._:$!%-]+@[a-zA-Z0-9.-]+.[a-zA-Z]$");
     var is_email = regex.test(email);
     if (is_email) {
       //alert("ok");
@@ -51,7 +54,7 @@ export default function AddClientForm() {
     if (!verifyPhoneNumber(refTel.current.value)) {
       swal({
         title: "Echec",
-        text: "Mauvais format de numéro de téléphone!",
+        text: "Mauvais format de {t('generalInformations.phone')}!",
         icon: "error",
       });
       return;
@@ -77,12 +80,11 @@ export default function AddClientForm() {
       });
       e.target.reset();
       navigate("/clients");
-      window.location.reload()
-
+      window.location.reload();
     } else {
       swal({
         title: "Echec",
-        text: "Ce numéro de téléphone existe déjà, veuillez entrer un numéro différent!",
+        text: "Ce {t('generalInformations.phone')} existe déjà, veuillez entrer un numéro différent!",
         icon: "error",
       });
     }
@@ -91,13 +93,14 @@ export default function AddClientForm() {
     <div className="container">
       <div style={{ display: "flex" }}>
         <div className="container-fluid">
-          <h6 className="display-6 my-4"> Ajouter un client </h6> <hr />
+          <h6 className="display-6 my-4"> {t("page.clients.form.add")} </h6>{" "}
+          <hr />
           <form
             onSubmit={submitHandler}
             method="post"
             className="container shadow p-3 bg-light"
           >
-            <label htmlFor="nomClient">Nom Complet du Client</label>
+            <label htmlFor="nomClient">{t("page.clients.form.name")}</label>
             <input
               type="text"
               name="nomClient"
@@ -105,7 +108,9 @@ export default function AddClientForm() {
               className="form-control"
               required
             />
-            <label htmlFor="numero_de_tel">Numéro de téléphone</label>
+            <label htmlFor="numero_de_tel">
+              {t("generalInformations.phone")}
+            </label>
             <input
               type="number"
               name="numero_de_tel"
@@ -113,7 +118,7 @@ export default function AddClientForm() {
               className="form-control"
               required
             />
-            <label htmlFor="adresse">Adresse de livraison</label>
+            <label htmlFor="adresse">{t("page.clients.form.adress")}</label>
             <input
               type="text"
               name="adresse"
@@ -132,12 +137,12 @@ export default function AddClientForm() {
             <div className="d-flex flex-row-reverse">
               <div className="p-2">
                 <button className="btn bg-green my-2 " type="submit">
-                  Confirmer <FaSave></FaSave>
+                  {t("buttons.confirm")} <FaSave></FaSave>
                 </button>
               </div>
               <div className="p-2">
                 <Link to="/clients" className="btn btn-danger my-2 mr-2">
-                  Annuler <FaBan></FaBan>{" "}
+                  {t("buttons.cancel")} <FaBan></FaBan>{" "}
                 </Link>
               </div>
             </div>
