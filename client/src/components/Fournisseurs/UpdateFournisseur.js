@@ -1,21 +1,20 @@
-import axios from "axios";
-import React, { useContext, useEffect, useRef, useState } from "react";
-import { FaSpinner } from "react-icons/fa";
-import { Link, useNavigate, useParams } from "react-router-dom";
-import { fournisseurtCtx } from "./../../store/fournisseurContext";
-import swal from "sweetalert";
+/* eslint-disable react-hooks/exhaustive-deps */
+import React, { useEffect, useRef } from "react";
 import { useTranslation } from "react-i18next";
+import { FaSpinner } from "react-icons/fa";
+import { useDispatch, useSelector } from "react-redux";
+import { Link, useNavigate, useParams } from "react-router-dom";
+import swal from "sweetalert";
+import { GetAllFournisseurs, selectFournisseur, updateFournisseur } from "../../features/supplier/fournisseurSlice";
 
 export default function UpdateFournisseur() {
   const { t } = useTranslation();
-
+  const tabFournisseurs = useSelector(selectFournisseur)
+  const dispatch = useDispatch()
   let { _id } = useParams();
-  const fourCtx = useContext(fournisseurtCtx);
-  const [tabFournisseurs, setTabFournisseurs] = useState([]);
   useEffect(() => {
-    axios.get(`/api/fournisseurs`).then((response) => {
-      setTabFournisseurs(response.data);
-    });
+    dispatch(GetAllFournisseurs())
+    
   }, []);
   let selectedFour = tabFournisseurs.find((c) => c._id === _id);
   let navigate = useNavigate();
@@ -34,7 +33,12 @@ export default function UpdateFournisseur() {
       email: emailValue.current.value,
       logo: refLogo.current.value,
     };
-    fourCtx.updateFournisseur(_id, uFour);
+    let data = {
+      id:_id ,
+      data: uFour
+    }  
+    dispatch(updateFournisseur(data))
+    //fourCtx.updateFournisseur(_id, uFour);
     swal({
       title: "Opération réussie!",
       text: "Le fournisseur a été bien mis à jour!",

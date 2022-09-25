@@ -1,4 +1,5 @@
 import React from "react";
+import { useTranslation } from "react-i18next";
 import {
   FcCalculator,
   FcCalendar,
@@ -9,6 +10,8 @@ import {
 } from "react-icons/fc";
 import { Link } from "react-router-dom";
 export default function HolderVentes() {
+  const { t } = useTranslation();
+
   return (
     <div>
       <h1 className="display-3">Vente</h1> <hr />

@@ -1,20 +1,21 @@
-import axios from "axios";
-import React, { useEffect, useState } from "react";
+import React, { useEffect } from "react";
 import { useTranslation } from "react-i18next";
 import { BiAddToQueue } from "react-icons/bi";
 import { FaSpinner } from "react-icons/fa";
+import { useDispatch, useSelector } from "react-redux";
 import { Link } from "react-router-dom";
+import { GetAllClients, selectClient } from "../../features/customer/customerSlice";
 import "../Form.module.css";
 import OneCustomer from "./OneCustomer";
 
 export default function ListeClients() {
   const {t} = useTranslation()
+  const dispatch = useDispatch()
+  const tabClients = useSelector(selectClient)
 
-  const [tabClients, setTabClients] = useState([]);
   useEffect(() => {
-    axios.get(`/api/clients`).then((response) => {
-      setTabClients(response.data);
-    });
+    dispatch(GetAllClients())
+
   }, []);
 
   if (tabClients) {

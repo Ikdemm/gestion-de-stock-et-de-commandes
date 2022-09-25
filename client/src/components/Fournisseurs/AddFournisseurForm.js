@@ -1,17 +1,20 @@
-import React, { useContext, useRef } from "react";
-import { FaBan, FaSave } from "react-icons/fa";
-import { Link, useNavigate } from "react-router-dom";
-import { fournisseurtCtx } from "../../store/fournisseurContext";
-import swal from "sweetalert";
+import React, { useRef } from "react";
 import { useTranslation } from "react-i18next";
+import { FaBan, FaSave } from "react-icons/fa";
+import { useDispatch, useSelector } from "react-redux";
+import { Link, useNavigate } from "react-router-dom";
+import swal from "sweetalert";
+import { CreateFournisseur, selectFournisseur } from "../../features/supplier/fournisseurSlice";
 const _ = require("lodash");
 
 export default function AddFournisseurForm() {
   const { t } = useTranslation();
+  const dispatch = useDispatch()
+  const tabFournisseurs = useSelector(selectFournisseur)
 
   let navigate = useNavigate();
-  const fctx = useContext(fournisseurtCtx);
-  const tabNotFiltred = _.map(fctx.tabFournisseurs, "email");
+  //const fctx = useContext(fournisseurtCtx);
+  const tabNotFiltred = _.map(tabFournisseurs, "email");
   function verifyPhoneNumber(nb) {
     var regex = new RegExp("^([234579]{1})([0-9]{7})$");
     var is_phone = regex.test(nb);
@@ -48,6 +51,15 @@ export default function AddFournisseurForm() {
       email: refEmail.current.value,
       logo: refLogo.current.value,
     };
+    if (!verifyPhoneNumber(refTel.current.value) && !verifyEmail(refEmail.current.value)) {
+      swal({
+        title: "Echec",
+        text: "Mauvais format de {t('generalInformations.phone')} et de l'adresse email !!",
+        icon: "error",
+      });
+      return;
+    } else {
+    }
     //verification du numero de tel
     //Guard clause
     if (!verifyPhoneNumber(refTel.current.value)) {
@@ -77,7 +89,9 @@ export default function AddFournisseurForm() {
         icon: "error",
       });
     } else {
-      fctx.addNewFournisseur(newFournisseur);
+      dispatch(CreateFournisseur(newFournisseur))
+
+      //fctx.addNewFournisseur(newFournisseur);
       swal({
         title: "Opération réussie!",
         text: "Le fournisseur est bien ajouté!",

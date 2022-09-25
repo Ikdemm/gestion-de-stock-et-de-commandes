@@ -1,26 +1,45 @@
-import React, { useContext } from "react";
+import React from "react";
+import { useTranslation } from "react-i18next";
 import { FaEdit, FaTrash } from "react-icons/fa";
-import { Link } from "react-router-dom";
-
 import { FcHome, FcInfo, FcPhoneAndroid, FcSms } from "react-icons/fc";
-import { fournisseurtCtx } from "./../../store/fournisseurContext";
+import { useDispatch } from "react-redux";
+import { Link } from "react-router-dom";
+import swal from "sweetalert";
+import { DeleteFournisseur } from "../../features/supplier/fournisseurSlice";
 
-export default function OneFournisseur(props) {
-  let ctx = useContext(fournisseurtCtx);
+export default function OneFournisseur({fournisseur}) {
+  const dispatch = useDispatch()
+  const { t } = useTranslation();
+
   function removeC() {
-    if (window.confirm('Etes-vous sur de bien vouloir supprimer ce fournisseur ? ')) {
-  
-    ctx.removeOneFournisseur(props.fournisseur._id);
-    window.location.reload();
-  }
+    swal({
+      title: "Suppression",
+      text: "Etes-vous sur de bien vouloir supprimer ce fournisseur?",
+      icon: "warning",
+      buttons: [t('buttons.cancel'), t('buttons.delete')],
+      dangerMode: true,
+    }).then((willDelete) => {
+      if (willDelete) {
+        dispatch(DeleteFournisseur(fournisseur._id))
+        swal("Fournisseur supprimé avec succès!", {
+          icon: "success",
+        });
+        setTimeout(() => {
+          window.location.reload();
+        }, 1500);
+      } else {
+        swal("Fournisseur selectionné non supprimé");
+      }
+    });
+   
   }
   return (
     <>
       <div className="row mb-1 mr-0 custom-border ">
         <div className="col-md-2 custom-border-right p-1 text-center">
         {
-   props.fournisseur.logo?
-     <img src={props.fournisseur.logo} alt="logo from DB" width="100px" height="100px" />
+    fournisseur.logo?
+     <img src={ fournisseur.logo} alt="logo from DB" width="100px" height="100px" />
      
     :
       
@@ -40,28 +59,28 @@ export default function OneFournisseur(props) {
                 {" "}
                 <FcInfo></FcInfo>
               </div>
-              <div className="col-11">{props.fournisseur.nom_commercial}</div>
+              <div className="col-11">{ fournisseur.nom_commercial}</div>
             </div>
             <div className="row">
               <div className="col-md-1">
                 {" "}
                 <FcPhoneAndroid></FcPhoneAndroid>
               </div>
-              <div className="col-11">{props.fournisseur.numero_de_tel}</div>
+              <div className="col-11">{ fournisseur.numero_de_tel}</div>
             </div>
             <div className="row">
               <div className="col-md-1">
                 {" "}
                 <FcSms></FcSms>
               </div>
-              <div className="col-11">{props.fournisseur.email}</div>
+              <div className="col-11">{ fournisseur.email}</div>
             </div>
             <div className="row">
               <div className="col-md-1">
                 {" "}
                 <FcHome></FcHome>
               </div>
-              <div className="col-11">{props.fournisseur.adresse}</div>
+              <div className="col-11">{ fournisseur.adresse}</div>
             </div>
           </div>
         </div>
@@ -70,7 +89,7 @@ export default function OneFournisseur(props) {
           <div className="row px-3 d-flex  justify-content-between">
             <Link
               className=" btn btn-outline-success col-md-5"
-              to={"/fournisseurs/" + props.fournisseur._id + "/edit"}
+              to={"/fournisseurs/" +  fournisseur._id + "/edit"}
             >
               {" "}
               <FaEdit />

@@ -1,10 +1,13 @@
 import axios from "axios";
 import React, { useEffect, useState } from "react";
+import { useTranslation } from "react-i18next";
 import { BiAddToQueue } from "react-icons/bi";
 import { FaSpinner } from "react-icons/fa";
 import { Link } from "react-router-dom";
 
 export default function UsersList(props) {
+  const { t } = useTranslation();
+
   const [tabStaff, setTabStaff] = useState([]);
   useEffect(() => {
     axios.get(`/api/staff`).then((response) => {

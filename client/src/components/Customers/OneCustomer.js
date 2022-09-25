@@ -1,19 +1,37 @@
-import React, { useContext } from "react";
+import React from "react";
+import { useTranslation } from "react-i18next";
 import { FaEdit, FaTrash } from "react-icons/fa";
 import { FcHome, FcInfo, FcPhoneAndroid, FcSms } from "react-icons/fc";
+import { useDispatch } from "react-redux";
 import { Link } from "react-router-dom";
-import { clientCtx } from './../../store/clientContext';
+import swal from "sweetalert";
+import { DeleteClient } from "../../features/customer/customerSlice";
 
 
 export default function OneCustomer(props) {
-
-  let ctx=useContext(clientCtx)
+  const dispatch = useDispatch()
+  const { t } = useTranslation();
   function removeC(){
-    if (window.confirm('Etes-vous sur de bien vouloir supprimer ce client ? ')) {
+    swal({
+      title: "Suppression",
+      text: "Etes-vous sur de bien vouloir supprimer ce client?",
+      icon: "warning",
+      buttons: [t('buttons.cancel'), t('buttons.delete')],
+      dangerMode: true,
+    }).then((willDelete) => {
+      if (willDelete) {
+        dispatch(DeleteClient(props.client._id))
+        swal("Client supprimé avec succès!", {
+          icon: "success",
+        });
+        setTimeout(() => {
+          window.location.reload();
+        }, 1500);
+      } else {
+        swal("Client selectionné non supprimé");
+      }
+    });  
 
-    ctx.removeOneClient(props.client._id)
-     window.location.reload()
-  }
   }
   
   return (

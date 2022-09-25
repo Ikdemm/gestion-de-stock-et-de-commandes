@@ -1,22 +1,23 @@
-import axios from "axios";
-import React, { useEffect, useState } from "react";
+import React, { useEffect } from "react";
 import { useTranslation } from "react-i18next";
 import { BiAddToQueue } from "react-icons/bi";
 import { FaSpinner } from "react-icons/fa";
+import { useDispatch, useSelector } from "react-redux";
 import { Link } from "react-router-dom";
+import { GetAllFournisseurs, selectFournisseur } from "../../features/supplier/fournisseurSlice";
 import "../Form.module.css";
 import OneFournisseur from "./OneFournisseur";
 
 export default function ListeFournisseur() {
   const { t } = useTranslation();
+  const dispatch = useDispatch()
+  const tabF = useSelector(selectFournisseur)
+console.log('tabF', tabF)
+useEffect(()=>{
+  dispatch(GetAllFournisseurs())
+// eslint-disable-next-line react-hooks/exhaustive-deps
+},[])
 
-  const [tabF, setTabFournisseurs] = useState([]);
-
-  useEffect(() => {
-    axios.get(`/api/fournisseurs`).then((response) => {
-      setTabFournisseurs(response.data);
-    });
-  }, []);
 
   if (tabF) {
     return (

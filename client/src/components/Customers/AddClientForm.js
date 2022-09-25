@@ -1,18 +1,21 @@
-import React, { useContext, useRef } from "react";
-import { FaBan, FaSave } from "react-icons/fa";
-import { Link, useNavigate } from "react-router-dom";
-import { clientCtx } from "./../../store/clientContext";
-import swal from "sweetalert";
+import React, { useRef } from "react";
 import { useTranslation } from "react-i18next";
+import { FaBan, FaSave } from "react-icons/fa";
+import { useDispatch, useSelector } from "react-redux";
+import { Link, useNavigate } from "react-router-dom";
+import swal from "sweetalert";
+import { CreateClient, selectClient } from "../../features/customer/customerSlice";
 
 const _ = require("lodash");
 
 export default function AddClientForm() {
   const { t } = useTranslation();
+  const tabClients = useSelector(selectClient)
+  const dispatch = useDispatch()
 
   let navigate = useNavigate();
-  const cctx = useContext(clientCtx);
-  const tabNotFiltred = _.map(cctx.tabClients, "numero_de_tel");
+  //const cctx = useContext(clientCtx);
+  const tabNotFiltred = _.map(tabClients, "numero_de_tel");
 
   const refNom = useRef("");
   const refTel = useRef("");
@@ -72,7 +75,8 @@ export default function AddClientForm() {
     } else {
     }
     if (!tabNotFiltred.includes(newClient.numero_de_tel)) {
-      cctx.addNewClient(newClient);
+      dispatch(CreateClient(newClient))
+      //cctx.addNewClient(newClient);
       swal({
         title: "Ajout Client!",
         text: "Le client est bien ajouté!",
