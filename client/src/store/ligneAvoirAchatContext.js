@@ -10,7 +10,6 @@ export const ligneAvoirSurAchatCtx = createContext({
 });
 
 function LigneAvoirSurAchatContextProvider(props) {
-
   const [tabLigneAvoirSurAchats, setTabLigneAvoirSurAchats] = useState([]);
   function addNewLigneAvoirSurAchat(newLigneAvoirSurAchat) {
     fetch("/api/avoirSurachat/addToInvoice", {
@@ -19,7 +18,6 @@ function LigneAvoirSurAchatContextProvider(props) {
       headers: { "Content-Type": "application/json" },
     })
       .then((res) => {
-
         console.log("la LigneAvoirSurAchat est bien ajoutée");
         console.log(res);
       })
@@ -40,36 +38,28 @@ function LigneAvoirSurAchatContextProvider(props) {
       .then((res) => {
         console.log("la LigneAvoirSurAchat est bien supprimée");
         console.log(res);
-
-
       })
       .catch((err) => {
         console.log("erreur removeOneLigneAvoirSurAchat");
         console.log(err);
       });
- 
-        getAllLigneAvoirSurAchats()
-  
-    ;
+
+    getAllLigneAvoirSurAchats();
   }
   function getLigneAvoirSurAchatById(id) {
     fetch(`/api/avoirSurachat/addToInvoice/${id}`, {
       method: "GET",
       body: JSON.stringify(),
       headers: { "Content-Type": "application/json" },
-    })
+    });
     return tabLigneAvoirSurAchats.find((c) => c._id === id);
   }
   function getAllLigneAvoirSurAchats() {
-
-
     fetch("/api/avoirSurachat/addToInvoice", {
       method: "GET",
       headers: { "Content-Type": "application/json" },
     })
       .then((res) => {
-
-
         return res.json();
       })
       .then((data) => setTabLigneAvoirSurAchats(data));
@@ -88,8 +78,8 @@ function LigneAvoirSurAchatContextProvider(props) {
         console.log("erreur inconnue");
       });
 
-        getAllLigneAvoirSurAchats()
-    }
+    getAllLigneAvoirSurAchats();
+  }
   const context = {
     tabLigneAvoirSurAchats: tabLigneAvoirSurAchats,
     addNewLigneAvoirSurAchat: addNewLigneAvoirSurAchat,
@@ -99,10 +89,9 @@ function LigneAvoirSurAchatContextProvider(props) {
     getAllLigneAvoirSurAchats: getAllLigneAvoirSurAchats,
   };
   return (
-   <ligneAvoirSurAchatCtx.Provider value={context}>
+    <ligneAvoirSurAchatCtx.Provider value={context}>
       {props.children}
-
-   </ligneAvoirSurAchatCtx.Provider>
+    </ligneAvoirSurAchatCtx.Provider>
   );
 }
 export default LigneAvoirSurAchatContextProvider;

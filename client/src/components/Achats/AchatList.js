@@ -5,7 +5,7 @@ export default function AchatList(props) {
   return (
     <>
       {props.listOfAchats.map((l) => {
-        return <OneFactureAchat facture={l} key={l.numFacture}></OneFactureAchat>;
+        return <OneFactureAchat facture={l} key={l._id}></OneFactureAchat>;
       })}
     </>
   );

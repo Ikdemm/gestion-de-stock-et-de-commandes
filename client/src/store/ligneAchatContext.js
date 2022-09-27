@@ -10,7 +10,6 @@ export const ligneAchatCtx = createContext({
 });
 
 function AddNewLigneAchatContextProvider(props) {
-
   const [tabLigneAchats, setTabLigneAchats] = useState([]);
   function addNewLigneAchat(newLigneAchat) {
     fetch("/api/achat/addToInvoice", {
@@ -19,7 +18,6 @@ function AddNewLigneAchatContextProvider(props) {
       headers: { "Content-Type": "application/json" },
     })
       .then((res) => {
-
         console.log("la LigneAchat est bien ajoutée");
         console.log(res);
       })
@@ -40,36 +38,28 @@ function AddNewLigneAchatContextProvider(props) {
       .then((res) => {
         console.log("la LigneAchat est bien supprimée");
         console.log(res);
-
-
       })
       .catch((err) => {
         console.log("erreur removeOneLigneAchat");
         console.log(err);
       });
- 
-        getAllLigneAchats()
-  
-    ;
+
+    getAllLigneAchats();
   }
   function getLigneAchatById(id) {
     fetch(`/api/achat/addToInvoice/${id}`, {
       method: "GET",
       body: JSON.stringify(),
       headers: { "Content-Type": "application/json" },
-    })
+    });
     return tabLigneAchats.find((c) => c._id === id);
   }
   function getAllLigneAchats() {
-
-
     fetch("/api/achat/addToInvoice", {
       method: "GET",
       headers: { "Content-Type": "application/json" },
     })
       .then((res) => {
-
-
         return res.json();
       })
       .then((data) => setTabLigneAchats(data));
@@ -88,8 +78,8 @@ function AddNewLigneAchatContextProvider(props) {
         console.log("erreur inconnue");
       });
 
-        getAllLigneAchats()
-    }
+    getAllLigneAchats();
+  }
   const context = {
     tabLigneAchats: tabLigneAchats,
     addNewLigneAchat: addNewLigneAchat,
@@ -99,10 +89,9 @@ function AddNewLigneAchatContextProvider(props) {
     getAllLigneAchats: getAllLigneAchats,
   };
   return (
-   <ligneAchatCtx.Provider value={context}>
+    <ligneAchatCtx.Provider value={context}>
       {props.children}
-
-   </ligneAchatCtx.Provider>
+    </ligneAchatCtx.Provider>
   );
 }
 export default AddNewLigneAchatContextProvider;

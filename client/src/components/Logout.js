@@ -1,3 +1,4 @@
+import axios from '../Services/instance';
 import React, { useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 
@@ -7,7 +8,7 @@ const Logout = () => {
 
     const logout = async () => {
         try {
-            const res = await fetch('/logout', {
+            const res = await axios.get('/logout', {
                 method : "GET",
                 headers : {
                     Accept : "application/json",

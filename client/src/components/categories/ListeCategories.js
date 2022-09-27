@@ -21,7 +21,6 @@ const style = {
   boxShadow: 24,
   p: 4,
 };
-
 export default function ListeCategories() {
   const { t } = useTranslation();
   const dispatch = useDispatch();
@@ -29,7 +28,7 @@ export default function ListeCategories() {
   console.log("TabCategories", TabCategories);
   useEffect(() => {
     dispatch(GetCategories());
-  }, []);
+  }, [dispatch]);
   const [open, setOpen] = React.useState(false);
   const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);

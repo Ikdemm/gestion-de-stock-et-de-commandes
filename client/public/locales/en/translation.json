@@ -22,9 +22,8 @@
         "delete":"Delete"
     },
     "generalInformations":{
-        "phone":"Phone number",
-        "adress":"",
-        "email":""
+        "phone":"Phone number"
+   
     },
     "page": {
         "clients": {

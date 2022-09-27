@@ -1,3 +1,4 @@
+import axios from "../Services/instance";
 import { createContext, useState } from "react";
 
 export const UserContext = createContext(
@@ -14,7 +15,7 @@ function UserContextProvider(props) {
     const [tabUsers, setTabUsers] = useState([]);
 
     function register(user) {
-        fetch('/api/auth/register',
+        axios.post('/api/auth/register',
             {
                 method: 'POST',
                 body: JSON.stringify(user),
@@ -33,7 +34,7 @@ setTabUsers((prev) => {
     }
 
     function getAllUsers() {
-        fetch('/api/auth/all-users')
+        axios.get('/api/auth/all-users')
         .then(res => {return res.json()})
         .then(data => {
                   

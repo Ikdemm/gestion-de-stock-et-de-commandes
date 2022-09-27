@@ -1,4 +1,4 @@
-import axios from "axios";
+import axios from "../../Services/instance";
 import React, { useContext, useEffect, useRef, useState } from "react";
 import { FaBan, FaSave, FaSpinner } from "react-icons/fa";
 import { Link, useNavigate, useParams } from "react-router-dom";

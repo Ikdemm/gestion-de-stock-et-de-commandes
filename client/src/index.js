@@ -50,13 +50,13 @@ root.render(
                                   <AddNewCategorieContextProvider>
                                     <UserContextProvider>
                                       <LoginContextProvider>
-                                          <Suspense fallback="loading">
                                         <Provider store={store}>
+                                          <Suspense fallback="loading">
                                             <StyledEngineProvider injectFirst>
                                               <App />
                                             </StyledEngineProvider>
-                                        </Provider>
                                           </Suspense>
+                                        </Provider>
                                       </LoginContextProvider>
                                     </UserContextProvider>
                                   </AddNewCategorieContextProvider>

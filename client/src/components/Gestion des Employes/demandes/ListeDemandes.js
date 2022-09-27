@@ -1,13 +1,12 @@
-import axios from "axios";
+import axios from "../../../Services/instance";
 import React, { useEffect, useState } from "react";
 import { FaSpinner } from "react-icons/fa";
 import OneDemande from "./OneDemande";
 
 export default function ListeDemandes(props) {
-
   const [tabDemandes, setTtabDemandes] = useState([]);
-var listeUsers=props.tabUsers;
-var tabStaff=props.tabStaff;
+  var listeUsers = props.tabUsers;
+  var tabStaff = props.tabStaff;
 
   useEffect(() => {
     axios.get(`/api/demandes`).then((response) => {
@@ -37,24 +36,23 @@ var tabStaff=props.tabStaff;
     mesDemandes
   ) {
     return (
-      <div >
+      <div>
         <h6 className="display-6">Historique de mes demandes</h6>
-        
+
         <ol className="list-group">
-           {connectedUser.role === "employe"
+          {connectedUser.role === "employe"
             ? mesDemandes &&
               mesDemandes.map((p) => {
-                if(mesDemandes.length>0){
-
+                if (mesDemandes.length > 0) {
                   return <OneDemande demande={p} key={p._id}></OneDemande>;
-                }else{
-                  return <div>Vous n'avez envoyé aucune demande</div>
+                } else {
+                  return <div>Vous n'avez envoyé aucune demande</div>;
                 }
               })
             : tabDemandes &&
               tabDemandes.map((p) => {
                 return <OneDemande demande={p} key={p._id}></OneDemande>;
-              })} 
+              })}
         </ol>
       </div>
     );

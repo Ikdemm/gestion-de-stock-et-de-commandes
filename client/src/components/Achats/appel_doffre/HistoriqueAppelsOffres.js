@@ -1,9 +1,12 @@
-import axios from "axios";
+import axios from "../../../Services/instance"; 
 import React, { useEffect, useState } from "react";
 import { FaSpinner } from "react-icons/fa";
 import OneAPO from "./OneAPO";
+import { useTranslation } from "react-i18next";
 
 export default function HistoriqueAppelsOffres() {
+  const { t } = useTranslation();
+
   const [tabApo, setTabAPO] = useState([]);
   useEffect(() => {
     axios.get(`/api/appelDoffres`).then((response) => {

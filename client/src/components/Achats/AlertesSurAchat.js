@@ -1,4 +1,4 @@
-import axios from "axios";
+import axios from "../../Services/instance"; 
 import React, { useEffect, useState } from "react";
 import OneProduct from "../Produits/OneProduct";
 

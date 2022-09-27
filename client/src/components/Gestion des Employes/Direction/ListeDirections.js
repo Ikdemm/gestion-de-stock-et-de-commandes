@@ -1,4 +1,4 @@
-import axios from "axios";
+import axios from "../../../Services/instance";
 import Box from "@mui/material/Box";
 import Modal from "@mui/material/Modal";
 import React, { useEffect, useState } from "react";

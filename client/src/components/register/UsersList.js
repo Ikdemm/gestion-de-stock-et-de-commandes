@@ -1,4 +1,4 @@
-import axios from "axios";
+import axios from "../../Services/instance";
 import React, { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { BiAddToQueue } from "react-icons/bi";

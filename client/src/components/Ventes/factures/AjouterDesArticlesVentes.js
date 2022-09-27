@@ -2,7 +2,7 @@ import Box from "@mui/material/Box";
 import Button from "@mui/material/Button";
 import Modal from "@mui/material/Modal";
 import Typography from "@mui/material/Typography";
-import axios from "axios";
+import axios from "../../../Services/instance";
 import moment from "moment";
 import "moment/locale/fr";
 import React, { useContext, useEffect, useRef, useState } from "react";
@@ -10,6 +10,7 @@ import { FaSpinner } from "react-icons/fa";
 import { useNavigate } from "react-router-dom";
 import { ligneVenteCtx } from "../../../store/ligneVenteContext";
 import ListeVentes from "./ListeVentes";
+import { useTranslation } from "react-i18next";
 
 const style = {
   position: "absolute",
@@ -24,6 +25,8 @@ const style = {
 };
 
 export default function AjouterDesArticlesVentes() {
+  const { t } = useTranslation();
+
   let navigate = useNavigate();
   let ligneCtx = useContext(ligneVenteCtx);
   const [open, setOpen] = React.useState(false);

@@ -16,7 +16,7 @@ export default function ListeClients() {
   useEffect(() => {
     dispatch(GetAllClients())
 
-  }, []);
+  }, [dispatch]);
 
   if (tabClients) {
     return (

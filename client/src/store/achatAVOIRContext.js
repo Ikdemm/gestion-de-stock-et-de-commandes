@@ -9,20 +9,16 @@ export const achatAvoirCtx = createContext({
 });
 
 function AchatAvoirContextProvider(props) {
-
   const [tabAchatAvoirs, setTabAchatAvoirs] = useState([]);
   function addNewAchatAvoir(newAchatAvoir) {
-
     fetch("/api/avoirs/achat", {
       method: "POST",
       body: JSON.stringify(newAchatAvoir),
-      headers: { "Content-Type": "application/json"
-      },
+      headers: { "Content-Type": "application/json" },
     })
       .then((res) => {
-
         console.log("la facture est bien ajoutée");
-        getAllAchatAvoirs()
+        getAllAchatAvoirs();
         console.log(res);
       })
       .catch((err) => {
@@ -38,21 +34,20 @@ function AchatAvoirContextProvider(props) {
       method: "GET",
       body: JSON.stringify(),
       headers: { "Content-Type": "application/json" },
-    })
+    });
     return tabAchatAvoirs.find((c) => c._id === id);
   }
   function getAllAchatAvoirs() {
-
- fetch("/api/avoirs/achat", {
-  method: "GET",
-  headers: { "Content-Type": "application/json" },
-})
-  .then((res) =>  res.json())
-  .then((data) => {
-    console.log(data);
-    setTabAchatAvoirs(data)
-  });
-}
+    fetch("/api/avoirs/achat", {
+      method: "GET",
+      headers: { "Content-Type": "application/json" },
+    })
+      .then((res) => res.json())
+      .then((data) => {
+        console.log(data);
+        setTabAchatAvoirs(data);
+      });
+  }
 
   function updateAchatAvoir(id, updatedC) {
     fetch(`/api/avoirs/achat/${id}`, {
@@ -67,9 +62,7 @@ function AchatAvoirContextProvider(props) {
       .catch((err) => {
         console.log("erreur inconnue");
       });
-
-     
-    }
+  }
   const context = {
     tabAchatAvoirs: tabAchatAvoirs,
     addNewAchatAvoir: addNewAchatAvoir,
@@ -78,10 +71,9 @@ function AchatAvoirContextProvider(props) {
     getAllAchatAvoirs: getAllAchatAvoirs,
   };
   return (
-   <achatAvoirCtx.Provider value={context}>
+    <achatAvoirCtx.Provider value={context}>
       {props.children}
-
-   </achatAvoirCtx.Provider>
+    </achatAvoirCtx.Provider>
   );
 }
 export default AchatAvoirContextProvider;

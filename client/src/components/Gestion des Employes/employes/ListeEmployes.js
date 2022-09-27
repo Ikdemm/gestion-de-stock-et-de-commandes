@@ -2,7 +2,7 @@
 import { Button } from "@mui/material";
 import Box from "@mui/material/Box";
 import Modal from "@mui/material/Modal";
-import axios from "axios";
+import axios from "../../../Services/instance";
 import moment from "moment";
 import "moment/locale/fr";
 import { default as React, useContext, useEffect, useState } from "react";

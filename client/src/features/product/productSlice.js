@@ -1,106 +1,124 @@
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
-import {CreateProduct,UpdateProduct,  GetProducts,GetProductById, DeleteProduct  } from './productAPI';
+import {CreateProduct,UpdateProduct,  GetProducts , GetProductById, DeleteProduct  } from './productAPI';
 
 const initialState={
-    CreateProduct:"",
-    UpdateProduct:"",
-    GetProducts:"",
-    GetProductById:"",
-    DeleteProduct:"",
-    AllProducts:[]
+    tabproduits:[],
+    createProduit:"",
+    updateProduit:"",
+    getAllProduits:"",
+    getProduitById:"",
+    deleteProduit:""
 }
-export const createProduct = createAsyncThunk(
-    'product/CreateProduct',
+export const CreateProduit = createAsyncThunk(
+    'produits/createProduit',
     async (values)=>{
         const response = await CreateProduct(values);
         return response
     }
 )
-export const updateProduct = createAsyncThunk(
-    'product/UpdateProduct',
+export const updateProduit = createAsyncThunk(
+    'produits/updateProduit',
     async (data)=>{
         const response = await UpdateProduct(data);
-        return response
+        return response.data
     }
 )
-export const getProductById = createAsyncThunk(
-    'product/GetProductById',
+export const GetProduitById = createAsyncThunk(
+    'produits/getProduitById',
     async (id)=>{
         const response = await GetProductById(id);
         return response.data
     }
 )
-export const deleteProduct = createAsyncThunk(
-    'product/DeleteProduct',
+export const DeleteProduit = createAsyncThunk(
+    'produits/deleteProduit',
     async (id)=>{
         const response = await DeleteProduct(id);
         return response
     }
 )
-export const getProducts = createAsyncThunk(
-    'product/GetProducts',
+export const GetAllProduits = createAsyncThunk(
+    'produits/GetProducts',
     async ()=>{
         const response = await GetProducts();
         return response.data
     }
 )
-export const productSlice= createSlice({
-    name:'product',
+export const produitSlice = createSlice({
+    name:'produits',
     initialState,
-    reducers :{},
+    reducers :{
+
+    },
     extraReducers: (builder)=>{
         builder
-        //get all products
-            .addCase(getProducts.pending, (state)=>{
+        //add new produit
+            .addCase(CreateProduit.pending, (state)=>{
+                state.createProduit='loading'
+            })
+            .addCase(CreateProduit.fulfilled, (state, action)=>{
+               state.createProduit='success'
+               console.log(action.payload)
+            })
+            .addCase(CreateProduit.rejected, (state) => {
+                state.createProduit='failed'
+            })
+
+        //get all produits
+            .addCase(GetAllProduits.pending, (state)=>{
+                state.getAllCategories='loading'
+            })
+            .addCase(GetAllProduits.fulfilled, (state, action)=>{
+                state.getAllProduits= 'success'
+                console.log('payload', action.payload)
+                state.tabproduits= action.payload
+            })
+            .addCase(GetAllProduits.rejected, (state)=>{
+                state.getAllCategories='failed'
 
             })
-            .addCase(getProducts.fulfilled, (state, action)=>{
-                console.log('payload', action.payload.data)
-                state.AllProducts= action.payload.data
-            })
-            .addCase(getProducts.rejected, (state, action)=>{
+        //delete one produit
+            .addCase(DeleteProduit.pending, (state)=>{
 
             })
-        //delete one product
-            .addCase(deleteProduct.pending, (state)=>{
-
-            })
-            .addCase(deleteProduct.fulfilled, (state, action)=>{
+            .addCase(DeleteProduit.fulfilled, (state, action)=>{
                 console.log('payload', action)
-                state.AllProducts = state.AllProducts.filter(p=> p._id !==action.payload)
+                state.tabproduits = state.tabproduits.filter(p=> p._id !== action.payload)
             })
-            .addCase(deleteProduct.rejected, (state, action)=>{
+            .addCase(DeleteProduit.rejected, (state, action)=>{
 
             })
-        //get product by ID
-            .addCase(getProductById.pending, (state)=>{
+        //get produit by ID
+            .addCase(GetProduitById.pending, (state)=>{
 
             })
-            .addCase(getProductById.fulfilled, (state, action)=>{
+            .addCase(GetProduitById.fulfilled, (state, action)=>{
                 console.log(action.payload);
-                state.GetProductById= action.payload.data
+                state.getProduitById= action.payload.data
             })
-            .addCase(getProductById.rejected, (state, action)=>{
+            .addCase(GetProduitById.rejected, (state, action)=>{
 
             })
-        //update product
-            .addCase(updateProduct.pending, (state, action)=>{
-                state.UpdateProduct= 'loading'
+        //update produit
+            .addCase(updateProduit.pending, (state)=>{
+                state.updateProduit= 'loading'
             })
-            .addCase(updateProduct.fulfilled, (state, action)=>{
-                state.UpdateProduct='success'
-            })
-            .addCase(updateProduct.rejected, (state, action)=>{
-                state.UpdateProduct = 'failure'
+            .addCase(updateProduit.fulfilled, (state, action)=>{
+
+                console.log("update produit payload",action.payload)
+                state.updateProduit='success'
+            
+                    
+              
+                })
+            .addCase(updateProduit.rejected, (state, action)=>{
+                state.updateProduit = 'failure'
             })
 
     }
 })
-export const { } = productSlice.actions;
 
-export const selectCreateProduct= (state)=> state.product.createProduct;
-export const selectUpdateProduct= (state)=> state.product.UpdateProduct;
-export const selectGetProducts= (state)=> state.product.GetProducts;
-export const selectGetProductById= (state)=> state.product.GetProductById;
-export const selectDeleteProduct= (state)=> state.product.DeleteProduct;
-export default productSlice.reducer;
+// eslint-disable-next-line no-empty-pattern
+export const { } = produitSlice.actions;
+export const selectProduit = (state) => state.produits.tabproduits ;
+export default produitSlice.reducer;

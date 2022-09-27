@@ -68,7 +68,7 @@ function App() {
   }, []);
   const [tabUsers, setListeUsers] = useState([]);
   useEffect(() => {
-    fetch("/api/auth/all-users")
+    fetch("http://localhost:4000/api/auth/all-users")
       .then((res) => {
         return res.json();
       })

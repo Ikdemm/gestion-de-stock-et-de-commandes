@@ -10,7 +10,6 @@ export const directionCtx = createContext({
 });
 
 function AddNewDirectionContextProvider(props) {
-
   const [tabDirections, setTabDirections] = useState([]);
   function addNewDirection(newDirection) {
     fetch("/api/directions", {
@@ -19,7 +18,6 @@ function AddNewDirectionContextProvider(props) {
       headers: { "Content-Type": "application/json" },
     })
       .then((res) => {
-
         console.log("la Direction est bien ajoutée");
         console.log(res);
       })
@@ -37,38 +35,32 @@ function AddNewDirectionContextProvider(props) {
       headers: { "Content-Type": "application/json" },
     })
       .then((res) => {
-        console.log("la Direction et tout les employés y inclus sont supprimés avec succès! ");
+        console.log(
+          "la Direction et tout les employés y inclus sont supprimés avec succès! "
+        );
         console.log(res);
-
-
       })
       .catch((err) => {
         console.log("erreur removeOneDirection");
         console.log(err);
       });
- 
-        getAllDirections()
-  
-    ;
+
+    getAllDirections();
   }
   function getDirectionById(id) {
     fetch(`/api/directions/${id}`, {
       method: "GET",
       body: JSON.stringify(),
       headers: { "Content-Type": "application/json" },
-    })
+    });
     return tabDirections.find((c) => c._id === id);
   }
   function getAllDirections() {
-
-
     fetch("/api/directions", {
       method: "GET",
       headers: { "Content-Type": "application/json" },
     })
       .then((res) => {
-
-
         return res.json();
       })
       .then((data) => setTabDirections(data));
@@ -79,19 +71,17 @@ function AddNewDirectionContextProvider(props) {
       method: "PUT",
       body: JSON.stringify(updatedC),
       headers: { "Content-Type": "application/json" },
-    }).then((res) => {
-        getAllDirections()
+    })
+      .then((res) => {
+        getAllDirections();
         console.log("la Direction est modifiée");
-        console.log('res', res)
-
+        console.log("res", res);
       })
       .catch((err) => {
         console.log("erreur inconnue");
-        console.log('err', err)
-
+        console.log("err", err);
       });
-
-    }
+  }
   const context = {
     tabDirections: tabDirections,
     addNewDirection: addNewDirection,
@@ -101,10 +91,9 @@ function AddNewDirectionContextProvider(props) {
     getAllDirections: getAllDirections,
   };
   return (
-   <directionCtx.Provider value={context}>
+    <directionCtx.Provider value={context}>
       {props.children}
-
-   </directionCtx.Provider>
+    </directionCtx.Provider>
   );
 }
 export default AddNewDirectionContextProvider;

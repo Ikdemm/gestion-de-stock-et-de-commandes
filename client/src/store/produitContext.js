@@ -10,7 +10,6 @@ export const produitCtx = createContext({
 });
 
 function AddNewProduitContextProvider(props) {
-
   const [tabProduits, setTabProduits] = useState([]);
   function addNewProduit(newProduit) {
     fetch("/api/produits", {
@@ -19,14 +18,12 @@ function AddNewProduitContextProvider(props) {
       headers: { "Content-Type": "application/json" },
     })
       .then((res) => {
-
         //console.log("le produit est bien ajouté");
-        console.log('le produit est bien ajouté', res)
+        console.log("le produit est bien ajouté", res);
       })
       .catch((err) => {
         //console.log("erreur inconnue");
-        console.log('erreur inconnue', err)
-
+        console.log("erreur inconnue", err);
       });
     setTabProduits((prev) => {
       return [...prev, newProduit];
@@ -36,35 +33,29 @@ function AddNewProduitContextProvider(props) {
     fetch(`/api/produits/${id}`, {
       method: "DELETE",
       headers: { "Content-Type": "application/json" },
-    
-    }).then((res) => {
+    })
+      .then((res) => {
         getAllProduits();
-        console.log("le produit est supprimé")
-    }).catch((err) => {
+        console.log("le produit est supprimé");
+      })
+      .catch((err) => {
         console.log("erreur inconnue!");
       });
- 
-  
-    ;
   }
   function getProduitById(id) {
     fetch(`/api/produits/${id}`, {
       method: "GET",
       body: JSON.stringify(),
       headers: { "Content-Type": "application/json" },
-    })
+    });
     return tabProduits.find((c) => c._id === id);
   }
   function getAllProduits() {
-
-
     fetch("/api/produits", {
       method: "GET",
       headers: { "Content-Type": "application/json" },
     })
       .then((res) => {
-
-
         return res.json();
       })
       .then((data) => setTabProduits(data));
@@ -82,8 +73,7 @@ function AddNewProduitContextProvider(props) {
       .catch((err) => {
         console.log("erreur inconnue");
       });
-
-    }
+  }
   const context = {
     tabProduits: tabProduits,
     addNewProduit: addNewProduit,
@@ -93,10 +83,7 @@ function AddNewProduitContextProvider(props) {
     getAllProduits: getAllProduits,
   };
   return (
-   <produitCtx.Provider value={context}>
-      {props.children}
-
-   </produitCtx.Provider>
+    <produitCtx.Provider value={context}>{props.children}</produitCtx.Provider>
   );
 }
 export default AddNewProduitContextProvider;

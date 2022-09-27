@@ -1,4 +1,4 @@
-import axios from "axios";
+import axios from "../../../Services/instance";
 import "moment/locale/fr";
 import React, { useContext, useEffect, useRef, useState } from "react";
 import { useTranslation } from "react-i18next";

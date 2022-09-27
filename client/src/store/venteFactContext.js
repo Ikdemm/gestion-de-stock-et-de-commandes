@@ -9,7 +9,6 @@ export const venteFactCtx = createContext({
 });
 
 function AddNewVenteFactContextProvider(props) {
-
   const [tabVenteFacts, setTabVenteFacts] = useState([]);
   function addNewVenteFact(newVenteFact) {
     fetch("/api/factures/vente", {
@@ -18,7 +17,6 @@ function AddNewVenteFactContextProvider(props) {
       headers: { "Content-Type": "application/json" },
     })
       .then((res) => {
-
         console.log("la facture est bien ajoutée");
         console.log(res);
       })
@@ -36,19 +34,15 @@ function AddNewVenteFactContextProvider(props) {
       method: "GET",
       body: JSON.stringify(),
       headers: { "Content-Type": "application/json" },
-    })
+    });
     return tabVenteFacts.find((c) => c._id === id);
   }
   function getAllVenteFacts() {
-
-
     fetch("/api/factures/vente", {
       method: "GET",
       headers: { "Content-Type": "application/json" },
     })
       .then((res) => {
-
-
         return res.json();
       })
       .then((data) => setTabVenteFacts(data));
@@ -67,8 +61,8 @@ function AddNewVenteFactContextProvider(props) {
         console.log("erreur inconnue");
       });
 
-        getAllVenteFacts()
-    }
+    getAllVenteFacts();
+  }
   const context = {
     tabVenteFacts: tabVenteFacts,
     addNewVenteFact: addNewVenteFact,
@@ -77,10 +71,9 @@ function AddNewVenteFactContextProvider(props) {
     getAllVenteFacts: getAllVenteFacts,
   };
   return (
-   <venteFactCtx.Provider value={context}>
+    <venteFactCtx.Provider value={context}>
       {props.children}
-
-   </venteFactCtx.Provider>
+    </venteFactCtx.Provider>
   );
 }
 export default AddNewVenteFactContextProvider;

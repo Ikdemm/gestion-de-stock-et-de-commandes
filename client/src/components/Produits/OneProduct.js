@@ -13,7 +13,7 @@ import {
   FcRating,
   FcSalesPerformance,
 } from "react-icons/fc";
-import axios from "axios";
+import axios from "../../Services/instance";
 import swal from "sweetalert";
 
 const style = {

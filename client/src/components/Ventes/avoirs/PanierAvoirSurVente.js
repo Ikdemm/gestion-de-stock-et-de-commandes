@@ -2,7 +2,7 @@ import Box from "@mui/material/Box";
 import Button from "@mui/material/Button";
 import Modal from "@mui/material/Modal";
 import Typography from "@mui/material/Typography";
-import axios from "axios";
+import axios from "../../../Services/instance";
 import moment from "moment";
 import "moment/locale/fr";
 import React, { useContext, useEffect, useRef, useState } from "react";
@@ -10,6 +10,7 @@ import { FaSpinner } from "react-icons/fa";
 import { useNavigate } from "react-router-dom";
 import { ligneAvoirSurVenteCtx } from "../../../store/ligneAvoirVenteContext";
 import ListeAvoirVente from "./ListeAvoirVente";
+import { useTranslation } from "react-i18next";
 
 const style = {
   position: "absolute",
@@ -23,6 +24,8 @@ const style = {
   p: 4,
 };
 export default function PanierAvoirSurVente() {
+  const { t } = useTranslation();
+
   let navigate = useNavigate();
   let ligneCtx = useContext(ligneAvoirSurVenteCtx);
   const [open, setOpen] = React.useState(false);

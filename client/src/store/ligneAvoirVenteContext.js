@@ -10,7 +10,6 @@ export const ligneAvoirSurVenteCtx = createContext({
 });
 
 function LigneAvoirSurVenteContextProvider(props) {
-
   const [tabLigneAvoirSurVentes, setTabLigneAvoirSurVentes] = useState([]);
   function addNewLigneAvoirSurVente(newLigneAvoirSurVente) {
     fetch("/api/avoirSurvente/addToInvoice", {
@@ -19,7 +18,6 @@ function LigneAvoirSurVenteContextProvider(props) {
       headers: { "Content-Type": "application/json" },
     })
       .then((res) => {
-
         console.log("la LigneAvoirSurVente est bien ajoutée");
         console.log(res);
       })
@@ -40,36 +38,28 @@ function LigneAvoirSurVenteContextProvider(props) {
       .then((res) => {
         console.log("la LigneAvoirSurVente est bien supprimée");
         console.log(res);
-
-
       })
       .catch((err) => {
         console.log("erreur removeOneLigneAvoirSurVente");
         console.log(err);
       });
- 
-        getAllLigneAvoirSurVentes()
-  
-    ;
+
+    getAllLigneAvoirSurVentes();
   }
   function getLigneAvoirSurVenteById(id) {
     fetch(`/api/avoirSurvente/addToInvoice/${id}`, {
       method: "GET",
       body: JSON.stringify(),
       headers: { "Content-Type": "application/json" },
-    })
+    });
     return tabLigneAvoirSurVentes.find((c) => c._id === id);
   }
   function getAllLigneAvoirSurVentes() {
-
-
     fetch("/api/avoirSurvente/addToInvoice", {
       method: "GET",
       headers: { "Content-Type": "application/json" },
     })
       .then((res) => {
-
-
         return res.json();
       })
       .then((data) => setTabLigneAvoirSurVentes(data));
@@ -88,8 +78,8 @@ function LigneAvoirSurVenteContextProvider(props) {
         console.log("erreur inconnue");
       });
 
-        getAllLigneAvoirSurVentes()
-    }
+    getAllLigneAvoirSurVentes();
+  }
   const context = {
     tabLigneAvoirSurVentes: tabLigneAvoirSurVentes,
     addNewLigneAvoirSurVente: addNewLigneAvoirSurVente,
@@ -99,10 +89,9 @@ function LigneAvoirSurVenteContextProvider(props) {
     getAllLigneAvoirSurVentes: getAllLigneAvoirSurVentes,
   };
   return (
-   <ligneAvoirSurVenteCtx.Provider value={context}>
+    <ligneAvoirSurVenteCtx.Provider value={context}>
       {props.children}
-
-   </ligneAvoirSurVenteCtx.Provider>
+    </ligneAvoirSurVenteCtx.Provider>
   );
 }
 export default LigneAvoirSurVenteContextProvider;

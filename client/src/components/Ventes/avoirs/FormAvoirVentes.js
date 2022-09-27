@@ -1,4 +1,4 @@
-import axios from "axios";
+import axios from "../../../Services/instance";
 import React, { useContext, useEffect, useRef, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { FaBan, FaSave } from "react-icons/fa";

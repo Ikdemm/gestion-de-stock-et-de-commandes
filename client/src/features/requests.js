@@ -1,5 +1,5 @@
-const port = 4000
-const serverurl = 'http://localhost:' + port
+//const port = 4000
+const serverurl = 'http://localhost:4000'
 export const requests = {
     userAPI: serverurl +'/api/auth',
     staffAPI: serverurl+ '/api/staff',

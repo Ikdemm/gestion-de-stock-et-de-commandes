@@ -10,7 +10,6 @@ export const ligneVenteCtx = createContext({
 });
 
 function LigneVenteContextProvider(props) {
-
   const [tabLigneVentes, setTabLigneVentes] = useState([]);
   function addNewLigneVente(newLigneVente) {
     fetch("/api/vente/addToInvoice", {
@@ -19,7 +18,6 @@ function LigneVenteContextProvider(props) {
       headers: { "Content-Type": "application/json" },
     })
       .then((res) => {
-
         console.log("la LigneVente est bien ajoutée");
         console.log(res);
       })
@@ -40,36 +38,28 @@ function LigneVenteContextProvider(props) {
       .then((res) => {
         console.log("la LigneVente est bien supprimée");
         console.log(res);
-
-
       })
       .catch((err) => {
         console.log("erreur removeOneLigneVente");
         console.log(err);
       });
- 
-        getAllLigneVentes()
-  
-    ;
+
+    getAllLigneVentes();
   }
   function getLigneVenteById(id) {
     fetch(`/api/vente/addToInvoice/${id}`, {
       method: "GET",
       body: JSON.stringify(),
       headers: { "Content-Type": "application/json" },
-    })
+    });
     return tabLigneVentes.find((c) => c._id === id);
   }
   function getAllLigneVentes() {
-
-
     fetch("/api/vente/addToInvoice", {
       method: "GET",
       headers: { "Content-Type": "application/json" },
     })
       .then((res) => {
-
-
         return res.json();
       })
       .then((data) => setTabLigneVentes(data));
@@ -88,8 +78,8 @@ function LigneVenteContextProvider(props) {
         console.log("erreur inconnue");
       });
 
-        getAllLigneVentes()
-    }
+    getAllLigneVentes();
+  }
   const context = {
     tabLigneVentes: tabLigneVentes,
     addNewLigneVente: addNewLigneVente,
@@ -99,10 +89,9 @@ function LigneVenteContextProvider(props) {
     getAllLigneVentes: getAllLigneVentes,
   };
   return (
-   <ligneVenteCtx.Provider value={context}>
+    <ligneVenteCtx.Provider value={context}>
       {props.children}
-
-   </ligneVenteCtx.Provider>
+    </ligneVenteCtx.Provider>
   );
 }
 export default LigneVenteContextProvider;

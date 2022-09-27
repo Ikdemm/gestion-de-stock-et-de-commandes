@@ -23,7 +23,7 @@ export default function Login() {
     event.preventDefault();
     const {email, password} = user;
     try {
-      const res = await fetch('/api/auth/login', {
+      const res = await fetch('http://localhost:4000/api/auth/login', {
         method : "POST",
         headers : {
           "Content-Type" : "application/json"

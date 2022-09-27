@@ -1,12 +1,14 @@
-import axios from "axios";
+import axios from "../../../Services/instance";
 import React, { useEffect, useState } from "react";
 import { FaBan, FaSave, FaSpinner } from "react-icons/fa";
 import { Link, useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 import { validPhoneNumber, validCIN } from "../../../regex";
+import { useTranslation } from "react-i18next";
 
 export default function NewEmployeForm() {
   let navigate = useNavigate();
+  const { t } = useTranslation();
 
   const [nom, setNom] = useState("");
   const [prenom, setPrenom] = useState("");

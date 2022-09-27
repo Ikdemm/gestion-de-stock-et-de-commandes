@@ -12,7 +12,6 @@ export const demandeCtx = createContext({
 });
 
 function AddNewDemandeContextProvider(props) {
-
   const [tabDemandes, setTabDemandes] = useState([]);
   function addNewDemande(newDemande) {
     fetch("/api/demandes", {
@@ -21,7 +20,6 @@ function AddNewDemandeContextProvider(props) {
       headers: { "Content-Type": "application/json" },
     })
       .then((res) => {
-
         console.log("la Demande est bien ajoutée");
         console.log(res);
       })
@@ -42,64 +40,48 @@ function AddNewDemandeContextProvider(props) {
       .then((res) => {
         console.log("la Demande est bien supprimée");
         console.log(res);
-
-
       })
       .catch((err) => {
         console.log("erreur removeOneDemande");
         console.log(err);
       });
- 
-        getAllDemandes()
-  
-    ;
+
+    getAllDemandes();
   }
   function getDemandeById(id) {
     fetch(`/api/demandes/${id}`, {
       method: "GET",
       body: JSON.stringify(),
       headers: { "Content-Type": "application/json" },
-    })
+    });
     return tabDemandes.find((c) => c._id === id);
   }
   function getAllDemandes() {
-
-
     fetch("/api/demandes", {
       method: "GET",
       headers: { "Content-Type": "application/json" },
     })
       .then((res) => {
-
-
         return res.json();
       })
       .then((data) => setTabDemandes(data));
   }
   function getAllDemandesNonTraites() {
-
-
     fetch("/api/demandes/nonTraitees", {
       method: "GET",
       headers: { "Content-Type": "application/json" },
     })
       .then((res) => {
-
-
         return res.json();
       })
       .then((data) => setTabDemandes(data));
   }
   function getAllDemandeParEmployee() {
-
-
     fetch("/api/demandes/employee", {
       method: "GET",
       headers: { "Content-Type": "application/json" },
     })
       .then((res) => {
-
-
         return res.json();
       })
       .then((data) => setTabDemandes(data));
@@ -118,8 +100,8 @@ function AddNewDemandeContextProvider(props) {
         console.log("erreur inconnue");
       });
 
-        getAllDemandes()
-    }
+    getAllDemandes();
+  }
   const context = {
     tabDemandes: tabDemandes,
     addNewDemande: addNewDemande,
@@ -131,10 +113,7 @@ function AddNewDemandeContextProvider(props) {
     getAllDemandeParEmployee: getAllDemandeParEmployee,
   };
   return (
-   <demandeCtx.Provider value={context}>
-      {props.children}
-
-   </demandeCtx.Provider>
+    <demandeCtx.Provider value={context}>{props.children}</demandeCtx.Provider>
   );
 }
 export default AddNewDemandeContextProvider;
