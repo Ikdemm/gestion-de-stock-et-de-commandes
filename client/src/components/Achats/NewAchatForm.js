@@ -1,29 +1,29 @@
-import axios from "../../Services/instance"; 
-import React, { useContext, useEffect, useRef, useState } from "react";
+import React, { useEffect, useRef } from "react";
 import { useTranslation } from "react-i18next";
 import { FaBan, FaSave, FaSpinner } from "react-icons/fa";
+import { useDispatch, useSelector } from "react-redux";
 import { Link, useNavigate } from "react-router-dom";
-import { achatFactCtx } from "./../../store/achatFactContext";
+import { createFactureAchat, getFactureAchats, selectTabFacturesAchat } from "../../features/factures_ordinaires/achat/factures/factAchatSlice";
+import { GetAllFournisseurs, selectFournisseur } from "../../features/supplier/fournisseurSlice";
 const _ = require("lodash");
 
 export default function NewAchatForm() {
   const { t } = useTranslation();
+  const dispatch = useDispatch();
 
-  let ctx = useContext(achatFactCtx);
-  const [tabFrs, setTabFrs] = useState([]);
-  useEffect(() => {
-    axios.get(`/api/fournisseurs`).then((response) => {
-      setTabFrs(response.data);
-    });
-  }, []);
+  //let ctx = useContext(achatFactCtx);
+  const tabAchatFacts = useSelector(selectTabFacturesAchat);
 
-  const [tabAchatFacts, setTabAchatFacts] = useState([]);
+  const tabFrs = useSelector(selectFournisseur);
+
   const tabNotFiltred = _.map(tabAchatFacts, "numFacture");
 
+
   useEffect(() => {
-    axios.get(`/api/factures/achat`).then((response) => {
-      setTabAchatFacts(response.data);
-    });
+    dispatch(getFactureAchats());
+    dispatch(GetAllFournisseurs());
+
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
   let navigate = useNavigate();
 
@@ -51,7 +51,8 @@ export default function NewAchatForm() {
         "Ce numéro de facture existe déjà, veuillez entrer un numéro différent"
       );
     } else if (!tabNotFiltred.includes(newInvoice.numFacture)) {
-      ctx.addNewAchatFact(newInvoice);
+      dispatch(createFactureAchat(newInvoice))
+      //ctx.addNewAchatFact(newInvoice);
       setTimeout(() => {
         alert("Vous allez être rediriger dans 3secondes, merci de patientez");
         navigate("/facture-achat/panier");

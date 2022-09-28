@@ -1,5 +1,5 @@
-import axios from "../../Services/instance"; 
-import React, { useEffect, useState } from "react";
+import React, { useEffect } from "react";
+import { useTranslation } from "react-i18next";
 import { CgDanger } from "react-icons/cg";
 import {
   FcCalculator,
@@ -8,19 +8,20 @@ import {
   FcMultipleSmartphones,
   FcPlus,
   FcSearch,
-  FcViewDetails,
+  FcViewDetails
 } from "react-icons/fc";
+import { useDispatch, useSelector } from "react-redux";
 import { Link } from "react-router-dom";
-import { useTranslation } from "react-i18next";
+import { getAllProduits, selectProduit } from "../../features/product/productSlice";
 
 export default function Achats() {
   const { t } = useTranslation();
-  const [tabProduits, settabProduits] = useState([]);
+  const tabProduits = useSelector(selectProduit);
+  const dispatch = useDispatch();
 
   useEffect(() => {
-    axios.get(`/api/produits`).then((response) => {
-      settabProduits(response.data);
-    });
+    dispatch(getAllProduits());
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
   var tabAlertes = tabProduits.filter(
     (p) => p.stock_final >= p.stock_max || p.stock_final <= p.stock_min

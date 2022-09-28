@@ -2,14 +2,17 @@ import Box from "@mui/material/Box";
 import Button from "@mui/material/Button";
 import Modal from "@mui/material/Modal";
 import Typography from "@mui/material/Typography";
-import axios from "../../Services/instance"; 
 import moment from "moment";
 import "moment/locale/fr";
-import React, { useContext, useEffect, useRef, useState } from "react";
+import React, { useEffect, useRef } from "react";
 import { useTranslation } from "react-i18next";
 import { FaSpinner } from "react-icons/fa";
+import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
-import { ligneAchatCtx } from "../../store/ligneAchatContext";
+import { getFactureAchats, selectTabFacturesAchat } from "../../features/factures_ordinaires/achat/factures/factAchatSlice";
+import { getAllLignesAchatsOridinaires,createLigneAchatOrdinaire ,selectTabAllLignesAchatsOridinaires } from "../../features/factures_ordinaires/achat/lines/ligneAchatOrdinaireSlice";
+import { getAllProduits, selectProduit } from "../../features/product/productSlice";
+import { selectFournisseur , GetAllFournisseurs } from "../../features/supplier/fournisseurSlice";
 import ListeAchats from "./ListeAchats";
 
 const style = {
@@ -27,41 +30,32 @@ export default function AddToInvoice() {
   const { t } = useTranslation();
 
   let navigate = useNavigate();
-  let ligneCtx = useContext(ligneAchatCtx);
+  //let ligneCtx = useContext(ligneAchatCtx);
   const [open, setOpen] = React.useState(false);
   const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
   /*PRODUITS OK*/
-
-  const [tabProduits, setTabProduits] = useState([]);
+  const dispatch = useDispatch();
+  const tabProduits = useSelector(selectProduit);
   useEffect(() => {
-    axios.get(`/api/produits`).then((response) => {
-      setTabProduits(response.data);
-    });
+    dispatch(getAllProduits());
+    dispatch(getFactureAchats());
+    dispatch(getAllLignesAchatsOridinaires());
+    dispatch(GetAllFournisseurs());
+
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   /*FACTURES OK*/
-  const [tabAchatFacts, setTabAchatFacts] = useState([]);
-  useEffect(() => {
-    axios.get(`/api/factures/achat`).then((response) => {
-      setTabAchatFacts(response.data);
-    });
-  }, []);
+  const tabAchatFacts = useSelector(selectTabFacturesAchat);
+  
+  
+  
+  /*LIGNES OK*/ 
+  const tabLignes = useSelector(selectTabAllLignesAchatsOridinaires);
+  const tabFrs = useSelector(selectFournisseur);
 
-  /*LIGNES OK*/
-
-  const [tabLignes, setTabLignes] = useState([]);
-  useEffect(() => {
-    axios.get(`/api/achat/addToInvoice`).then((response) => {
-      setTabLignes(response.data);
-    });
-  }, []);
-  const [tabFrs, setTabFrs] = useState([]);
-  useEffect(() => {
-    axios.get(`/api/fournisseurs`).then((response) => {
-      setTabFrs(response.data);
-    });
-  }, []);
+  
   var lastF = tabAchatFacts.at(tabAchatFacts.length - 1);
   console.log("lastF", lastF);
   var fournisseur = tabFrs.find((f) => f._id === lastF.fournisseur_id);
@@ -77,7 +71,8 @@ export default function AddToInvoice() {
       facture_id: lastF._id,
       article_id: c._id,
     };
-    ligneCtx.addNewLigneAchat(newLigne);
+    dispatch(createLigneAchatOrdinaire(newLigne))
+    //ligneCtx.addNewLigneAchat(newLigne);
     e.target.reset();
     handleClose();
     window.location.reload();
@@ -136,19 +131,17 @@ export default function AddToInvoice() {
                 <thead>
                   <tr>
                     <th scope="col">Produit</th>
-                    <th scope="col">Prix Unitaire</th>
+                    <th scope="col">PU HT</th>
                     <th scope="col">Quantité</th>
-                    <th scope="col">Total</th>
+                    <th scope="col">Total HT</th>
+                    <th scope="col">TVA</th>
+                    <th scope="col">Total TTC</th>
                     <th scope="col">Modifier</th>
                     <th scope="col">{t("buttons.delete")}</th>
                   </tr>
                 </thead>
                 <tbody>
-                  {/*      {
-                   tabLignesFiltred && tabLignesFiltred.map((l)=>{
-                        return <OneLigneFactureAchat ligne={l}></OneLigneFactureAchat>
-                    })
-                }   */}
+           
                   <ListeAchats listeOfAchats={tabLignesFiltred}></ListeAchats>
                 </tbody>
               </table>
@@ -156,9 +149,14 @@ export default function AddToInvoice() {
             <hr />
             <div className="row my-2 container">
               <div className="d-flex align-items-center">
-                <div className="col-5"></div>
+                <div className="col-5">
+                </div>
                 <div className="col-6 mx-2">
-                  Frais de livraison: {lastF.frais_de_livraison} dt
+                  Net commercial HT:{lastF.net_commercial_HT}
+                  <br></br>
+                  Total TVA: {lastF.TVA_deductibles}
+                  <br></br>
+                  Frais de livraison: {lastF.frais_de_livraison}
                   <br></br>
                   {tabLignesFiltred.length ? (
                     <b className="fs-4">Net à payer: {lastF.net_a_payer} DT</b>

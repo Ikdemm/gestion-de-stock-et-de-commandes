@@ -1,5 +1,5 @@
 import axios from "axios";
-import { requests } from "../requests";
+import { requests } from "../../../requests";
 
 export async function CreateLigneAchatOrdinaire(values) {
   try {

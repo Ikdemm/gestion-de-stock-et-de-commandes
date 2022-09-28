@@ -30,6 +30,7 @@ try{
     facture.somme_a_recevoir=facture.calculNetaPayer()
     article.quantite_entree-=saved_Line.quantite_a;
     article.stock_final= article.calculStockFinal()
+    article.etat= article.actualiserEtat()
     await facture.save();
     await article.save()
     res.status(201).json({ message: 'La nouvelle ligne est bien ajoutée !', saved_Line})
@@ -61,6 +62,7 @@ exports.deleteOneLine = async(req,res)=>{
         invoice.somme_a_recevoir=invoice.calculNetaPayer();
         article.quantite_entree+=line.quantite_a;
         article.stock_final=article.calculStockFinal()
+        article.etat= article.actualiserEtat()
         await article.save()
         await invoice.save();
         //console.log('invoice2',invoice)
@@ -86,6 +88,8 @@ exports.updateOneLine= async (req, res)=>{
     console.log("old_article", old_article)
     old_article.quantite_entree+=line.quantite_a;
     old_article.stock_final=old_article.calculStockFinal();
+    old_article.etat= old_article.actualiserEtat()
+
     await old_article.save()
     produit= await Produit.findById(req.body.article_id)
     console.log("new_produit", produit)
@@ -111,6 +115,7 @@ exports.updateOneLine= async (req, res)=>{
         invoice.save()
         produit.quantite_entree-=saved_Line.quantite_a;
         produit.stock_final=produit.calculStockFinal();
+        produit.etat=produit.actualiserEtat();
         await produit.save()
         res.status(200).json({message: " Vous avez bien changé le produit à acheter"})
        } catch (err) {
@@ -136,12 +141,15 @@ exports.updateOneLine= async (req, res)=>{
         if (ecart>0){
             old_article.quantite_entree-=ecart
             old_article.stock_final=old_article.calculStockFinal();
+            produit.old_article=old_article.actualiserEtat();
             line.total+=(old_article.price_a*ecart)
             line.total=line.calculTotal()
             console.log('line.total1',line.total)            
         }else if(ecart<0){
             old_article.quantite_entree-=ecart
             old_article.stock_final=old_article.calculStockFinal();
+            produit.old_article=old_article.actualiserEtat();
+
             line.total+=(old_article.price_a*ecart)
             line.total=line.calculTotal()
             console.log('line.total2',line.total)            

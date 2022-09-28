@@ -57,7 +57,7 @@ export default function AddClientForm() {
     if (!verifyPhoneNumber(refTel.current.value)) {
       swal({
         title: "Echec",
-        text: "Mauvais format de {t('generalInformations.phone')}!",
+        text: `Mauvais format de ${t('generalInformations.phone')}!`,
         icon: "error",
       });
       return;

@@ -1,20 +1,21 @@
-import React, { useContext, useEffect, useState } from "react";
-import { FaEdit, FaRegEye, FaSpinner, FaTrash } from "react-icons/fa";
-import { Link } from "react-router-dom";
-import { produitCtx } from "../../store/produitContext";
 import Box from "@mui/material/Box";
 import Button from "@mui/material/Button";
 import Modal from "@mui/material/Modal";
 import Typography from "@mui/material/Typography";
+import React, { useEffect } from "react";
+import { FaEdit, FaRegEye, FaSpinner, FaTrash } from "react-icons/fa";
 import {
   FcInfo,
-  FcMoneyTransfer,
-  FcPackage,
-  FcRating,
-  FcSalesPerformance,
+  FcMoneyTransfer, FcRating,
+  FcSalesPerformance
 } from "react-icons/fc";
-import axios from "../../Services/instance";
+import { useDispatch, useSelector } from "react-redux";
+import { Link } from "react-router-dom";
 import swal from "sweetalert";
+import {
+  GetCategories, selectCategorie
+} from "../../features/category/categorySlice";
+import { deleteProduit } from "../../features/product/productSlice";
 
 const style = {
   position: "absolute",
@@ -31,17 +32,17 @@ export default function OneProduct(props) {
   const [open, setOpen] = React.useState(false);
   const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
-  const [tabCategories, seTabCategories] = useState([]);
+  const dispatch = useDispatch();
+  const tabCategories = useSelector(selectCategorie);
   useEffect(() => {
-    axios.get(`/api/categories`).then((response) => {
-      seTabCategories(response.data);
-    });
+    dispatch(GetCategories());
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
   var category = tabCategories.find(
     (c) => c._id === props.produit.categorie.categorie_id
   );
   console.log("category", category);
-  let ctx = useContext(produitCtx);
+  //let ctx = useContext(produitCtx);
   function removeC() {
     swal({
       title: "Suppression",
@@ -51,7 +52,8 @@ export default function OneProduct(props) {
       dangerMode: true,
     }).then((willDelete) => {
       if (willDelete) {
-        ctx.removeOneProduit(props.produit._id);
+        dispatch(deleteProduit(props.produit._id))
+        //ctx.removeOneProduit(props.produit._id);
         swal("Produit supprimé avec succès", {
           icon: "success",
         });
@@ -67,21 +69,12 @@ export default function OneProduct(props) {
     return (
       <div className="row mb-1 mr-0 custom-border ">
         <div className="col-md-2 custom-border-right p-1 text-center">
-          {props.produit.image ? (
             <img
-              src={props.produit.image}
+              src={props.produit.image ? props.produit.image : require("../../assets/images/box.jpg")}
               alt="article from DB"
               width="100px"
               height="100px"
             />
-          ) : (
-            <img
-              src={require("../../assets/images/box.jpg")}
-              alt="article static"
-              width="100px"
-              height="100px"
-            />
-          )}
         </div>
         {/* détails produit */}
 
@@ -112,18 +105,20 @@ export default function OneProduct(props) {
                 Prix de vente: {props.produit.price_v} dt
               </div>
             </div>
+      {/*         
             <div className="row">
               <div className="col-md-1">
-                {" "}
+             
                 <FcPackage></FcPackage>
               </div>
-              <div className="col-11">
+      <div className="col-11">
                 Etat:
                 {props.produit.stock_final > 0
                   ? (props.produit.etat = "en stock")
                   : (props.produit.etat = "en rupture de stock")}
-              </div>
+              </div> 
             </div>
+              */}
           </div>
         </div>
 
@@ -178,7 +173,7 @@ export default function OneProduct(props) {
             >
               {props.produit.title}
             </Typography>
-            <Typography id="keep-mounted-modal-description" sx={{ mt: 2 }}>
+            <div id="keep-mounted-modal-description">
               {props.produit.description} <hr />
               <ul>
                 <li> En stock: {props.produit.stock_final}</li>
@@ -191,7 +186,7 @@ export default function OneProduct(props) {
                   Stock MAX: {props.produit.stock_max}
                 </li>
               </ul>
-            </Typography>
+            </div>
           </Box>
         </Modal>
       </div>

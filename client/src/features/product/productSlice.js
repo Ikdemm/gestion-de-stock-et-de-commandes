@@ -1,16 +1,16 @@
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
-import {CreateProduct,UpdateProduct,  GetProducts , GetProductById, DeleteProduct  } from './productAPI';
+import {CreateProduct, UpdateProduct ,  GetProducts , GetProductById, DeleteProduct  } from './productAPI';
 
 const initialState={
-    tabproduits:[],
-    createProduit:"",
-    updateProduit:"",
-    getAllProduits:"",
-    getProduitById:"",
-    deleteProduit:""
+    allProduits:[],
+    CreateProduct:"",
+    UpdateProduct:"",
+    GetProducts:"",
+    GetProductById:"",
+    DeleteProduct:""
 }
-export const CreateProduit = createAsyncThunk(
-    'produits/createProduit',
+export const createProduit = createAsyncThunk(
+    'produits/CreateProduct',
     async (values)=>{
         const response = await CreateProduct(values);
         return response
@@ -23,21 +23,21 @@ export const updateProduit = createAsyncThunk(
         return response.data
     }
 )
-export const GetProduitById = createAsyncThunk(
+export const getProduitById = createAsyncThunk(
     'produits/getProduitById',
     async (id)=>{
         const response = await GetProductById(id);
         return response.data
     }
 )
-export const DeleteProduit = createAsyncThunk(
+export const deleteProduit = createAsyncThunk(
     'produits/deleteProduit',
     async (id)=>{
         const response = await DeleteProduct(id);
         return response
     }
 )
-export const GetAllProduits = createAsyncThunk(
+export const getAllProduits = createAsyncThunk(
     'produits/GetProducts',
     async ()=>{
         const response = await GetProducts();
@@ -53,66 +53,66 @@ export const produitSlice = createSlice({
     extraReducers: (builder)=>{
         builder
         //add new produit
-            .addCase(CreateProduit.pending, (state)=>{
-                state.createProduit='loading'
+            .addCase(createProduit.pending, (state)=>{
+                state.CreateProduct='loading'
             })
-            .addCase(CreateProduit.fulfilled, (state, action)=>{
-               state.createProduit='success'
+            .addCase(createProduit.fulfilled, (state, action)=>{
+               state.CreateProduct='success'
                console.log(action.payload)
             })
-            .addCase(CreateProduit.rejected, (state) => {
-                state.createProduit='failed'
+            .addCase(createProduit.rejected, (state) => {
+                state.CreateProduct='failed'
             })
 
         //get all produits
-            .addCase(GetAllProduits.pending, (state)=>{
-                state.getAllCategories='loading'
+            .addCase(getAllProduits.pending, (state)=>{
+                state.GetProducts='loading'
             })
-            .addCase(GetAllProduits.fulfilled, (state, action)=>{
-                state.getAllProduits= 'success'
+            .addCase(getAllProduits.fulfilled, (state, action)=>{
+                state.GetProducts= 'success'
                 console.log('payload', action.payload)
-                state.tabproduits= action.payload
+                state.allProduits= action.payload
             })
-            .addCase(GetAllProduits.rejected, (state)=>{
-                state.getAllCategories='failed'
+            .addCase(getAllProduits.rejected, (state)=>{
+                state.GetProducts='failed'
 
             })
         //delete one produit
-            .addCase(DeleteProduit.pending, (state)=>{
+            .addCase(deleteProduit.pending, (state)=>{
 
             })
-            .addCase(DeleteProduit.fulfilled, (state, action)=>{
+            .addCase(deleteProduit.fulfilled, (state, action)=>{
                 console.log('payload', action)
-                state.tabproduits = state.tabproduits.filter(p=> p._id !== action.payload)
+                state.allProduits = state.allProduits.filter(p=> p._id !== action.payload)
             })
-            .addCase(DeleteProduit.rejected, (state, action)=>{
+            .addCase(deleteProduit.rejected, (state, action)=>{
 
             })
         //get produit by ID
-            .addCase(GetProduitById.pending, (state)=>{
+            .addCase(getProduitById.pending, (state)=>{
 
             })
-            .addCase(GetProduitById.fulfilled, (state, action)=>{
+            .addCase(getProduitById.fulfilled, (state, action)=>{
                 console.log(action.payload);
-                state.getProduitById= action.payload.data
+                state.GetProductById= action.payload.data
             })
-            .addCase(GetProduitById.rejected, (state, action)=>{
+            .addCase(getProduitById.rejected, (state, action)=>{
 
             })
         //update produit
             .addCase(updateProduit.pending, (state)=>{
-                state.updateProduit= 'loading'
+                state.UpdateProduct= 'loading'
             })
             .addCase(updateProduit.fulfilled, (state, action)=>{
 
                 console.log("update produit payload",action.payload)
-                state.updateProduit='success'
+                state.UpdateProduct='success'
             
                     
               
                 })
             .addCase(updateProduit.rejected, (state, action)=>{
-                state.updateProduit = 'failure'
+                state.UpdateProduct = 'failure'
             })
 
     }
@@ -120,5 +120,5 @@ export const produitSlice = createSlice({
 
 // eslint-disable-next-line no-empty-pattern
 export const { } = produitSlice.actions;
-export const selectProduit = (state) => state.produits.tabproduits ;
+export const selectProduit = (state) => state.produits.allProduits ;
 export default produitSlice.reducer;

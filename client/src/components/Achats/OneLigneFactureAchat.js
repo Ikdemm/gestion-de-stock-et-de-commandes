@@ -6,6 +6,9 @@ import Typography from "@mui/material/Typography";
 import axios from 'axios';
 import React, { useContext, useEffect, useState } from 'react';
 import { FaEdit, FaSpinner, FaTrash } from 'react-icons/fa';
+import { useDispatch, useSelector } from "react-redux";
+import { getAllLignesAchatsOridinaires,deleteOneLigneAchatOrdinaire ,selectTabAllLignesAchatsOridinaires , updateLigneAchatOrdinaire } from "../../features/factures_ordinaires/achat/lines/ligneAchatOrdinaireSlice";
+import { getAllProduits, selectProduit } from "../../features/product/productSlice";
 import { ligneAchatCtx } from '../../store/ligneAchatContext';
 const style = {
   position: "absolute",
@@ -22,20 +25,19 @@ export default function OneLigneFactureAchat(props) {
   const [open, setOpen] = React.useState(false);
   const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false); 
-  const [tabProduits, setTabProduits] = useState([]);
-  useEffect(() => {
-    axios.get(`/api/produits`).then((response) => {
-      setTabProduits(response.data);
-    });
-  }, []);
-  const [tabLignes, setTabLignes] = useState([]);
-  useEffect(() => {
-    axios.get(`/api/achat/addToInvoice`).then((response) => {
-      setTabLignes(response.data);
-    });
-  }, []); 
-//let navigate=useNavigate()
+  const dispatch = useDispatch();
 
+  const tabProduits = useSelector(selectProduit);
+  const tabLignes = useSelector(selectTabAllLignesAchatsOridinaires);
+
+
+//let navigate=useNavigate()
+useEffect(() => {
+  dispatch(getAllProduits());
+  dispatch(getAllLignesAchatsOridinaires());
+
+// eslint-disable-next-line react-hooks/exhaustive-deps
+}, []);
 let articleId=props.ligne.article.article_id;
 console.log('articleId', articleId)
 let a=tabProduits.find((p)=>p._id===articleId);
@@ -46,14 +48,14 @@ function handleInputChange ( event) {
 
   setLine({ ...line, [name]: value })
 }
-let ligneCtx=useContext(ligneAchatCtx)
+//let ligneCtx=useContext(ligneAchatCtx)
 function removeC(){
   // eslint-disable-next-line no-restricted-globals
   var result =  confirm('Etes-vous sûr de bien vouloir effectuer la suppression?');
 
   if(result){
-
-    ligneCtx.removeOneLigneAchat(props.ligne._id)
+dispatch(deleteOneLigneAchatOrdinaire(props.ligne._id))
+    //ligneCtx.removeOneLigneAchat(props.ligne._id)
     window.location.reload()
   }
 
@@ -66,7 +68,9 @@ function removeC(){
           <td>{a.title}</td>
           <td className='text-center'>{a.price_a}</td>  
           <td className='text-center'>{props.ligne.quantite_a}</td> 
-          <td>{props.ligne.total}</td> 
+          <td className='text-center'>{props.ligne.total_HT}</td> 
+          <td className='text-center'>{props.ligne.TVA}</td> 
+          <td>{props.ligne.total_TTC}</td> 
           <td >
           <Button className=' btn btn-outline-dark mx-1'  onClick={handleOpen}>
             <FaEdit/>
@@ -93,7 +97,12 @@ function removeC(){
             </Typography>
             <form onSubmit={event => {
                event.preventDefault()
-               ligneCtx.updateLigneAchat(props.ligne._id,line);
+               let data={
+                id: props.ligne._id, 
+                data:line 
+               }
+               dispatch(updateLigneAchatOrdinaire(data))
+               //ligneCtx.updateLigneAchat(props.ligne._id,line);
               window.location.reload() }}>
 
             

@@ -66,7 +66,7 @@ export const clientSlice = createSlice({
 
         //get all clients
             .addCase(GetAllClients.pending, (state)=>{
-                state.getAllCategories='loading'
+                state.getAllClients='loading'
             })
             .addCase(GetAllClients.fulfilled, (state, action)=>{
                 state.getAllClients= 'success'
@@ -74,7 +74,7 @@ export const clientSlice = createSlice({
                 state.tabclients= action.payload
             })
             .addCase(GetAllClients.rejected, (state)=>{
-                state.getAllCategories='failed'
+                state.getAllClients='failed'
 
             })
         //delete one client

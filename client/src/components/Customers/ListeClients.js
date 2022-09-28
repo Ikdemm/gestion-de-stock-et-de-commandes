@@ -15,8 +15,8 @@ export default function ListeClients() {
 
   useEffect(() => {
     dispatch(GetAllClients())
-
-  }, [dispatch]);
+    // eslint-disable-next-line
+  }, []);
 
   if (tabClients) {
     return (

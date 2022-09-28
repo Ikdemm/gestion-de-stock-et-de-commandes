@@ -1,21 +1,21 @@
-import axios from "../../Services/instance";
-import React, { useEffect, useState } from "react";
+import React, { useEffect } from "react";
 import { useTranslation } from "react-i18next";
 import { BiAddToQueue } from "react-icons/bi";
 import { FaSpinner } from "react-icons/fa";
+import { useDispatch, useSelector } from "react-redux";
 import { Link } from "react-router-dom";
+import { getAllProduits, selectProduit } from "../../features/product/productSlice";
 import "../Form.module.css";
 import OneProduct from "./OneProduct";
 
 export default function ListeProduits() {
   const { t } = useTranslation();
-
-  const [tabProduits, settabProduits] = useState([]);
+  const dispatch = useDispatch();
+  const tabProduits = useSelector(selectProduit);
 
   useEffect(() => {
-    axios.get(`/api/produits`).then((response) => {
-      settabProduits(response.data);
-    });
+    dispatch(getAllProduits());
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   if (tabProduits) {

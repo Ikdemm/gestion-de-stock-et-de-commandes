@@ -28,7 +28,7 @@ exports.createProduit = async (req, res) => {
     stock_final: req.body.stock_final,
     stock_min: req.body.stock_min,
     stock_max: req.body.stock_max,
-
+    taxe_sur_la_valeur_ajoutee:req.body.taxe_sur_la_valeur_ajoutee,
     categorie: {
       categorie_id: categorie._id,
     },

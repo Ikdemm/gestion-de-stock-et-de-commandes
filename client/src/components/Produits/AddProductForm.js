@@ -1,23 +1,28 @@
-import axios from "../../Services/instance";
-import React, { useContext, useEffect, useRef, useState } from "react";
-import { FaBan, FaSave, FaSpinner } from "react-icons/fa";
-import { Link, useNavigate } from "react-router-dom";
-import { produitCtx } from "../../store/produitContext";
-import swal from "sweetalert";
+/* eslint-disable react-hooks/exhaustive-deps */
+import React, { useEffect, useRef } from "react";
 import { useTranslation } from "react-i18next";
+import { FaBan, FaSave, FaSpinner } from "react-icons/fa";
+import { useDispatch, useSelector } from "react-redux";
+import { Link, useNavigate } from "react-router-dom";
+import swal from "sweetalert";
+import { GetCategories, selectCategorie } from "../../features/category/categorySlice";
+import { createProduit, selectProduit } from "../../features/product/productSlice";
+
 const _ = require("lodash");
 
 export default function AddProductForm() {
   const { t } = useTranslation();
+  const dispatch = useDispatch();
 
-  let pctx = useContext(produitCtx);
-  const tabNotFiltred = _.map(pctx.tabProduits, "title");
+  const tabCat = useSelector(selectCategorie);
+  const tabProduits = useSelector(selectProduit);
 
-  const [tabCat, setTtabCat] = useState([]);
+  //let pctx = useContext(produitCtx);
+  const tabNotFiltred = _.map(tabProduits, "title");
+
   useEffect(() => {
-    axios.get(`/api/categories`).then((response) => {
-      setTtabCat(response.data);
-    });
+    dispatch(GetCategories());
+
   }, []);
 
   let navigate = useNavigate();
@@ -32,6 +37,7 @@ export default function AddProductForm() {
   let refQS = useRef("");
   let refSMax = useRef("");
   let refImage = useRef("");
+  let refTVA = useRef("");
   function submitHandler(e) {
     e.preventDefault();
     const c = tabCat.find((p) => p.name === refC.current.value);
@@ -47,6 +53,7 @@ export default function AddProductForm() {
       quantite_entree: refQE.current.value,
       quantite_sortie: refQS.current.value,
       image: refImage.current.value,
+      taxe_sur_la_valeur_ajoutee: refTVA.current.value,
     };
     if (tabNotFiltred.includes(newProduct.title)) {
       swal({
@@ -55,7 +62,8 @@ export default function AddProductForm() {
         icon: "error",
       });
     } else {
-      pctx.addNewProduit(newProduct);
+      dispatch(createProduit(newProduct))
+      //pctx.addNewProduit(newProduct);
       swal({
         title: "Opération réussie!",
         text: "Le produit est bien ajouté!",
@@ -155,6 +163,8 @@ export default function AddProductForm() {
                     type="number"
                     name="stock_min"
                     ref={refSM}
+                    defaultValue={20}
+
                     className="form-control"
                   />
                 </div>
@@ -164,6 +174,8 @@ export default function AddProductForm() {
                     type="number"
                     name="stock_max"
                     ref={refSMax}
+                    defaultValue={100}
+
                     className="form-control"
                   />
                 </div>
@@ -190,7 +202,8 @@ export default function AddProductForm() {
                   />
                 </div>
               </div>
-
+              <div className="row">
+                <div className="col-md-6">
               <label htmlFor="stock_initial">Stock Initial</label>
               <input
                 type="number"
@@ -199,7 +212,19 @@ export default function AddProductForm() {
                 className="form-control"
                 defaultValue={0}
               />
-
+</div>
+<div className="col-md-6">
+              <label htmlFor="stock_initial">Taux de TVA appliqué</label>
+              <input
+                type="number"
+                name="taxe_sur_la_valeur_ajoutee"
+                ref={refTVA}
+                className="form-control"
+                placeholder="exp taux de TVA = 7% veuillez entrer 7 "
+                defaultValue={19}
+              />
+</div>
+</div>
               <div className="d-flex flex-row-reverse">
                 <div className="p-2">
                   <button className="btn bg-green my-2 " type="submit">

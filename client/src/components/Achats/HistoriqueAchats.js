@@ -1,15 +1,18 @@
-import axios from "../../Services/instance"; 
-import React, { useEffect, useState } from "react";
+import React, { useEffect } from "react";
 import { FaSpinner } from "react-icons/fa";
+import { useDispatch, useSelector } from "react-redux";
+import { getFactureAchats, selectTabFacturesAchat } from "../../features/factures_ordinaires/achat/factures/factAchatSlice";
 import AchatList from "./AchatList";
 
 export default function HistoriqueAchats() {
-  const [tabAchatFacts, setTabAchatFacts] = useState([]);
+  const tabAchatFacts = useSelector(selectTabFacturesAchat);
+  const dispatch = useDispatch();
+
 
   useEffect(() => {
-    axios.get(`/api/factures/achat`).then((response) => {
-      setTabAchatFacts(response.data);
-    });
+    dispatch(getFactureAchats());
+
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
   if (tabAchatFacts) {
     return (

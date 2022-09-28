@@ -9,28 +9,36 @@ exports.createLigneAchat= async(req, res)=>{
     let facture = await Facture.findById(factureId);
     //console.log('L2', facture)
     let articleId = req.body.article_id;
-    console.log('L3', articleId)
     let article = await Produit.findById(articleId)
-    console.log('L4', article.price_a)
     let prixDachat= article.price_a
-  
+    let TVA_deductible = article.taxe_sur_la_valeur_ajoutee /100 ;
+    const quantite_a= req.body.quantite_a; 
+    const total_HT= prixDachat * quantite_a 
+    const TVA = total_HT* TVA_deductible;
+    const total_TTC = total_HT+ TVA;
+
     if(!facture)
     return res.status(404).send("Cet Id de facture d'achat n'existe pas")
    var newLigne = new Ligne({
     article:{
         article_id: article._id,
            },
-    quantite_a:req.body.quantite_a,
-    total: prixDachat * req.body.quantite_a,
-    facture_id:req.body.facture_id
+    quantite_a: quantite_a,
+    total_HT: total_HT ,
+    TVA: TVA,
+    total_TTC:total_TTC ,
+    facture_id:facture._id
 })
 try{
     const saved_Line= await newLigne.save();
     facture.articles.push(saved_Line);
+    facture.net_commercial_HT=facture.calculTotalHT()
+    facture.TVA_deductibles=facture.calculTotalTVA()
     facture.net_a_payer=facture.calculNetaPayer()
+    await facture.save();
     article.quantite_entree+=saved_Line.quantite_a;
     article.stock_final= article.calculStockFinal()
-    await facture.save();
+    article.etat= article.actualiserEtat()
     await article.save()
     res.status(201).json({ message: 'La nouvelle ligne est bien ajoutée à la facture !', saved_Line})
    
@@ -62,8 +70,12 @@ exports.deleteOneLine = async(req,res)=>{
         var index = invoice.articles.indexOf(ligne=>ligne.id==_id);
         invoice.articles.splice(index);
         invoice.net_a_payer=invoice.calculNetaPayer();
+        invoice.net_commercial_HT=invoice.calculTotalHT();
+        invoice.TVA_deductibles=invoice.calculNetaPayer();
         article.quantite_entree-=line.quantite_a;
         article.stock_final=article.calculStockFinal()
+        article.etat= article.actualiserEtat()
+
         await article.save()
         await invoice.save();
         await line.remove();
@@ -100,16 +112,17 @@ exports.updateOneLine= async (req, res)=>{
     try{
         const invoice =await Facture.findById(line.facture_id);
         console.log('net a payer', invoice.net_a_payer)
-        console.log('total 1',line.total)
+        console.log('total_HT 1',line.total_HT)
         line.article.article_id=produit
-        line.total=0;
-        line.total=produit.price_a*line.quantite_a
+        line.total_HT=0;
+        line.total_HT=produit.price_a*line.quantite_a
         var saved_Line = await line.save()
         var indexOfLine= invoice.articles.findIndex((l) => l.id == saved_Line._id)
         console.log('indexOfLine',indexOfLine)
-        invoice.articles[indexOfLine].total=saved_Line.total
-        console.log('invoice.articles[indexOfLine].total' ,invoice.articles[indexOfLine].total)
-        
+        invoice.articles[indexOfLine].total_HT=saved_Line.total_HT
+        console.log('invoice.articles[indexOfLine].total_HT' ,invoice.articles[indexOfLine].total_HT)
+        invoice.net_commercial_HT=invoice.calculTotalHT()
+        invoice.TVA_deductibles=invoice.calculTotalTVA()
         invoice.net_a_payer=invoice.calculNetaPayer()
         console.log('invoice.net_a_payer A', invoice.net_a_payer)
     
@@ -142,13 +155,13 @@ exports.updateOneLine= async (req, res)=>{
         if (ecart>0){
             old_article.quantite_entree+=ecart
             old_article.stock_final=old_article.calculStockFinal();
-            line.total+=(old_article.price_a*ecart)
-            console.log('line.total1',line.total)            
+            line.total_HT+=(old_article.price_a*ecart)
+            console.log('line.total1',line.total_HT)            
         }else{ if(ecart<0){
             old_article.quantite_entree+=ecart
             old_article.stock_final=old_article.calculStockFinal();
-            line.total+=(old_article.price_a*ecart)
-            console.log('line.total2',line.total)}            
+            line.total_HT+=(old_article.price_a*ecart)
+            console.log('line.total2',line.total_HT)}            
         } 
         console.log('ecart2',ecart)            
         old_article.save()
@@ -156,7 +169,9 @@ exports.updateOneLine= async (req, res)=>{
         var saved_Line= await line.save()
         const invoice =await Facture.findById(line.facture_id);
         var indexOfLine= invoice.articles.findIndex((l) => l.id == saved_Line._id)
-        invoice.articles[indexOfLine].total=saved_Line.total
+        invoice.articles[indexOfLine].total_HT=saved_Line.total_HT
+        invoice.net_commercial_HT=invoice.calculTotalHT()
+        invoice.TVA_deductibles=invoice.calculTotalTVA()
         invoice.net_a_payer=invoice.calculNetaPayer()
         invoice.save()
         res.status(200).json({message: " Vous avez bien changé la quantité à acheter"})

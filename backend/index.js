@@ -26,6 +26,7 @@ const AvoirLigneVenteRoutes= require('./routers/LigneAvoirVente');
 //const cmdFrsRoutes= require('./routers/commandeFournisseurs');
 const userRoutes=require('./routers/users');
 //const authenticate= require('./middlewares/is-auth')
+var wkhtmltopdf = require('wkhtmltopdf');
 
 var cors = require('cors');
 
@@ -81,7 +82,10 @@ app.use('/api/avoirSurvente/addToInvoice',AvoirLigneVenteRoutes);
 //app.use('/auth', authenticate, (req,res)=>{
 
 //}) 
+/* wkhtmltopdf("/api/factures/achat/:id/pdf",{
+  pageSize: 'letter'
 
+}); */
 app.use((error, req, res, next) => {
   console.log("-----", error);
   const status = error.statusCode || 500;

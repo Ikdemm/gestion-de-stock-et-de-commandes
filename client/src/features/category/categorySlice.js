@@ -117,6 +117,7 @@ export const categorySlice = createSlice({
     }
 })
 
+// eslint-disable-next-line no-empty-pattern
 export const { } = categorySlice.actions;
 export const selectCategorie = (state) => state.categories.allCategories ;
 export default categorySlice.reducer;

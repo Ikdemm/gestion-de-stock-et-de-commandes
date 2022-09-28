@@ -1,23 +1,20 @@
 const Employe = require ("../models/Employe");
 const Direction = require("../models/Direction");
-const Joi = require('joi');
 const fs = require('fs');
 const _ = require('lodash');
-var ObjectId = require('mongoose').Types.ObjectId
 const cloudinary = require('../utils/cloudinary');
 
 //creer un nouveau employé
 exports.createEmploye = async (req, res , next ) => {
   
+  const {nom, prenom, imageUrl, adresse, date_de_naissance , date_de_recrutement , numCIN ,numTel , poste , direction_id  } = req.body;
 
   let directionId= req.body.direction_id;
-  ObjectId.isValid(directionId);
   console.log("directionId",directionId)
   let direction =await Direction.findById(directionId);
   console.log("direction",direction)
   if(!direction)
   return  res.status(400).send('Direction Id not Found'); 
-  const {nom, prenom, imageUrl, adresse, date_de_naissance , date_de_recrutement , numCIN ,numTel , poste , direction_id  } = req.body;
 try{
   const result = await cloudinary.uploader.upload(imageUrl, {
     folder: "NSM-employees",
@@ -38,7 +35,7 @@ const newEmploye = await Employe.create({
   numCIN ,
   numTel ,
   poste ,
-  direction_id:direction._id, 
+  direction_id : direction._id, 
 })
  /*   var newEmploye = new Employe({
     nom: req.body.nom,

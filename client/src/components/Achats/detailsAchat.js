@@ -1,81 +1,73 @@
-import axios from 'axios';
 import moment from "moment";
 import "moment/locale/fr";
-import React, { useEffect, useState } from 'react';
+import React, { useEffect } from 'react';
 import { FaSpinner } from 'react-icons/fa';
+import { useDispatch, useSelector } from 'react-redux';
 import { useParams } from 'react-router-dom';
-//import { Link, useParams } from 'react-router-dom';
+import { getFactureAchats, selectTabFacturesAchat } from "../../features/factures_ordinaires/achat/factures/factAchatSlice";
+import { getAllLignesAchatsOridinaires, selectTabAllLignesAchatsOridinaires } from "../../features/factures_ordinaires/achat/lines/ligneAchatOrdinaireSlice";
+import { getAllProduits, selectProduit } from "../../features/product/productSlice";
+import { GetAllFournisseurs, selectFournisseur } from "../../features/supplier/fournisseurSlice";
 import DownloadPageAsPdf from '../DownloadPageAsPdf';
 export default function DetailsAchat() {
+  const dispatch = useDispatch();
 
   var {_id}=useParams()
-  const [tabFact, setTtabFact] = useState([]);
-  useEffect(() => {
-    axios.get(`/api/factures/achat`).then((response) => {
-      setTtabFact(response.data);
-    });
-  }, []);
+  const tabProduits = useSelector(selectProduit);
+  const tabFrs = useSelector(selectFournisseur);
+  const tabFact = useSelector(selectTabFacturesAchat);
+  const tabLignes = useSelector(selectTabAllLignesAchatsOridinaires);
+
+
   let selectedFacture=tabFact.find((f)=>f._id===_id)
 
   console.log('selectedFacture', selectedFacture)
-    const [tabLignes, setTabLignes] = useState([]);
-    useEffect(() => {
-      axios.get(`/api/achat/addToInvoice`).then((response) => {
-        setTabLignes(response.data);
-      });
-    }, []);
+ 
     var tabLignesFiltred=tabLignes.filter((l)=>l.facture_id===selectedFacture._id)
-    const [tabFrs, setTabFrs] = useState([]);
-    useEffect(() => {
-      axios.get(`/api/fournisseurs`).then((response) => {
-        setTabFrs(response.data);
-      });
-    }, []);
+ 
     var fournisseur= tabFrs.find((f)=>f._id===selectedFacture.fournisseur_id);
-    const [tabProduits, setTabProduits] = useState([]);
-    useEffect(() => {
-      axios.get(`/api/produits`).then((response) => {
-        setTabProduits(response.data);
-      });
-    }, []);
 
+    useEffect(() => {
+      dispatch(getAllProduits());
+      dispatch(getFactureAchats());
+      dispatch(getAllLignesAchatsOridinaires());
+      dispatch(GetAllFournisseurs());
+  
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, []);
 
 if(selectedFacture && fournisseur &&tabLignesFiltred && tabProduits){
 
 
   return (
     <>
-    <div style={{ display: "flex" }}  id="here">
-    <div className="container">
-    
-      <div className="row my-2 container">
-        <div className="d-flex align-items-center py-3">
-          <div className="col-6">
+    <div style={{ display: "flex",paddingTop:30+"px"}} id="here" >
+    <div className="container px-5"  style={{ width:1800+"px"}}>
+      <div className="row my-2" style={{width: 95+"vh" ,marginTop:60+"px", marginBottom:60+"px"}}>
+       <b style={{   marginBottom:20+"px"}}>Nodes Storage Manager SARL</b> <br/>
+          <div >
             N° de facture:    {selectedFacture.numFacture}    <br />
             Date facture:
            {moment(selectedFacture.dateFacture).locale("fr").format("LL")}   
           </div>
-          <div className="col-6 mx-2">
-            Nom du Fournisseur:  {fournisseur.nom_commercial}   
-          </div>
+          <div style={{ marginLeft:130+"px",  marginTop:20+"px"}} >
+        <b> Nom du Fournisseur:</b>  {fournisseur.nom_commercial}   
         </div>
       </div>
-      <hr />
-      <div className="row my-2">
-          <div className="col-9">
-            <h5 className="fs-4">Articles commandés</h5>
-          </div>
+
+            <h5 style={{ marginTop:20+"px"}} >Articles commandés</h5>
   
-        </div>
      
       
-      <table className="table table-hover mb-5">
+      <table style={{width: 65+"vh" , marginBottom:30+"px"}}>
         <thead>
           <tr>
-            <th scope="col">Produit</th>
-            <th scope="col">Prix Unitaire</th>
-            <th scope="col">Quantité</th>
-            <th scope="col">Total</th>
+            <th style={{textAlign: "left"}} >Article</th>
+            <th style={{textAlign: "center"}}>PU</th>
+            <th style={{textAlign: "center"}}>Q</th>
+            <th style={{textAlign: "center"}}>Total HT</th>
+            <th style={{textAlign: "center"}}>TVA</th>
+            <th style={{textAlign: "center"}}>TTC</th>
          
           </tr>
         </thead>
@@ -87,12 +79,14 @@ if(selectedFacture && fournisseur &&tabLignesFiltred && tabProduits){
                 console.log('first', a)
                 if(a){
 
-                  return (  <tr>
+                  return (  <tr key={l._id}>
 
-                  <td>{a.title}</td>
-                  <td>{a.price_a}</td>
-                  <td>{l.quantite_a} </td>
-                  <td >{l.total}</td>
+                  <td style={{textAlign: "left"}} >{a.title}</td>
+                  <td style={{textAlign: "center", padding: 15+"px"}}>{a.price_a}</td>
+                  <td style={{textAlign: "center", padding: 15+"px"}}>{l.quantite_a} </td>
+                  <td style={{textAlign: "center", padding: 15+"px"}}>{l.total_HT}</td>
+                  <td style={{textAlign: "center", padding: 15+"px"}}>{l.TVA} </td>
+                  <td style={{textAlign: "center", padding: 15+"px"}}>{l.total_TTC}</td>
                   </tr>
           )
                 }else{
@@ -104,33 +98,25 @@ if(selectedFacture && fournisseur &&tabLignesFiltred && tabProduits){
         </tbody>
       </table>
      
-      <hr />
-      <div className="row my-2 container">
-        <div className="d-flex align-items-center">
-          <div className="col-5"></div>
-          <div className="col-6 mx-2">
-            Frais de livraison:  {selectedFacture.frais_de_livraison}  dt
+      <div style={{ marginBottom:40+"px", marginLeft:170+"px"}}>
+          Net commercial HT: {selectedFacture.net_commercial_HT} DT
+                  <br></br>
+                  Total TVA: {selectedFacture.TVA_deductibles} DT
+                  <br></br>
+            Frais de livraison:  {selectedFacture.frais_de_livraison} DT
             <br></br>
               
-                <b className="fs-4">Net à payer:   {selectedFacture.net_a_payer}   DT</b>
+                <b style={{fontSize: "larger"}}>Net à payer:   {selectedFacture.net_a_payer} DT</b>
             
                
-          </div>
-        </div>
       </div>
-      <div className="row my-2 container">
-        <div className="d-flex align-items-center">
+      <div className="row ">
           <div className="col-9">
+          
             Mode de paiement:  {selectedFacture.mode_de_paiement}  <br />
-            Date d'échéance:
-          {moment(selectedFacture.dateEcheance)
-              .locale("fr")
-              .format("LL")}  
+            Date d'échéance: {moment(selectedFacture.dateEcheance).locale("fr").format("LL")}  
           </div>
-          <div className="col-4 mx-2">
- 
-          </div>
-        </div>
+       
       </div>
     </div>
   </div>

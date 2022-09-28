@@ -28,7 +28,8 @@ export default function ListeCategories() {
   console.log("TabCategories", TabCategories);
   useEffect(() => {
     dispatch(GetCategories());
-  }, [dispatch]);
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
   const [open, setOpen] = React.useState(false);
   const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);

@@ -1,32 +1,39 @@
-import axios from "../../Services/instance"; 
 import moment from "moment";
 import "moment/locale/fr";
-import React, { useContext, useEffect, useState } from "react";
+import React, { useEffect } from "react";
 import { BsCardHeading } from "react-icons/bs";
 import { FaCheck, FaSpinner } from "react-icons/fa";
 import { FcCancel } from "react-icons/fc";
+import { useDispatch, useSelector } from "react-redux";
 import { Link } from "react-router-dom";
-import { achatFactCtx } from "../../store/achatFactContext";
+import { updateFactureAchat } from "../../features/factures_ordinaires/achat/factures/factAchatSlice";
+import { getAllLignesAchatsOridinaires, selectTabAllLignesAchatsOridinaires } from "../../features/factures_ordinaires/achat/lines/ligneAchatOrdinaireSlice";
 
 export default function OneFactureAchat(props) {
-  let ctx = useContext(achatFactCtx);
+  //let ctx = useContext(achatFactCtx);
   let date = props.facture.dateFacture;
-  const [tabLignes, setTabLignes] = useState([]);
+  const dispatch = useDispatch();
+
+  const tabLignes = useSelector(selectTabAllLignesAchatsOridinaires);
+
   useEffect(() => {
-    axios.get(`/api/achat/addToInvoice`).then((response) => {
-      setTabLignes(response.data);
-    });
+    dispatch(getAllLignesAchatsOridinaires());
+
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
-  var tabLignesFiltred = tabLignes.filter(
-    (l) => l.facture_id === props.facture._id
-  );
+  var tabLignesFiltred = tabLignes.filter( (l) => l.facture_id === props.facture._id );
   function UpdateFacture() {
     if (props.facture.etat === "non_payee") {
       props.facture.etat = "payee";
     } else {
       props.facture.etat = "non_payee";
     }
-    ctx.updateAchatFact(props.facture._id, props.facture);
+    let data={
+      id: props.facture._id,
+      data:  props.facture
+    }
+    dispatch(updateFactureAchat(data))
+    //ctx.updateAchatFact(props.facture._id, props.facture);
     window.location.reload();
   }
   if (tabLignesFiltred) {
