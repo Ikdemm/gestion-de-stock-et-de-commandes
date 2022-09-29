@@ -62,12 +62,12 @@ if(selectedFacture && fournisseur &&tabLignesFiltred && tabProduits){
       <div className="row my-2 container">
         <div className="d-flex align-items-center py-3">
           <div className="col-6">
-            N° de facture:    {selectedFacture.numFacture}    <br />
-            Date facture:
-           {moment(selectedFacture.dateFacture).locale("fr").format("LL")}   
+           <b> N° de facture:</b>    {selectedFacture.numFacture}    <br />
+           <b> Date facture:
+</b>           {moment(selectedFacture.dateFacture).locale("fr").format("LL")}   
           </div>
           <div className="col-6 mx-2">
-            Nom du Fournisseur:  {fournisseur.nom_commercial}   
+          <b>  Nom du Fournisseur: </b>  {fournisseur.nom_commercial}   
           </div>
         </div>
       </div>
@@ -120,14 +120,14 @@ if(selectedFacture && fournisseur &&tabLignesFiltred && tabProduits){
       </table>
      
       <hr />
-      <div className="row my-2 container">
+      <div className="row my-5 container">
         <div className="d-flex align-items-center">
-          <div className="col-5"></div>
-          <div className="col-6 mx-2">
-            Frais de livraison:  {selectedFacture.frais_de_livraison}  dt  <br></br>
-            Net commercial HT:  {selectedFacture.net_commercial_HT}  dt  <br></br>
-            Total TVA:  {selectedFacture.TVA_deductibles}  dt  <br></br>
-              
+          <div className="col-6"></div>
+          <div className="col-5">
+           <b> Frais de livraison: </b> {selectedFacture.frais_de_livraison}  dt  <br></br>
+          <b>  Net commercial HT: </b> {selectedFacture.net_commercial_HT}  dt  <br></br>
+           <b> Total TVA: </b> {selectedFacture.TVA_deductibles}  dt  <br></br>
+              <hr></hr>
                 <b className="fs-4">Net à payer:   {selectedFacture.net_a_payer}   DT</b>
             
                
@@ -137,8 +137,8 @@ if(selectedFacture && fournisseur &&tabLignesFiltred && tabProduits){
       <div className="row my-2 container">
         <div className="d-flex align-items-center">
           <div className="col-9">
-            Mode de paiement:  {selectedFacture.mode_de_paiement}  <br />
-            Date d'échéance:
+           <b> Mode de paiement:</b>  {selectedFacture.mode_de_paiement}  <br />
+           <b> Date d'échéance:</b>
           {moment(selectedFacture.dateEcheance)
               .locale("fr")
               .format("LL")}  
