@@ -14,6 +14,9 @@ import { getAllLignesAchatsOridinaires,createLigneAchatOrdinaire ,selectTabAllLi
 import { getAllProduits, selectProduit } from "../../features/product/productSlice";
 import { selectFournisseur , GetAllFournisseurs } from "../../features/supplier/fournisseurSlice";
 import ListeAchats from "./ListeAchats";
+import { saveAs } from 'file-saver';
+import axios from '../../Services/instance';
+//import axios from 'axios';
 
 const style = {
   position: "absolute",
@@ -85,8 +88,17 @@ export default function AddToInvoice() {
     );
 
     if (result) {
+     var state = {fournisseur, lastF , tabLignesFiltred }
+      axios.post(`/api/factures/achat/${lastF._id}/create-pdf`, state)
+      .then(() => axios.get(`/api/factures/achat/${lastF._id}/fetch-pdf`, { responseType: 'blob' }))
+      .then((res) => {
+        const pdfBlob = new Blob([res.data], { type: 'application/pdf' });
+
+        saveAs(pdfBlob,  `Facture-Achat-N°-${lastF.numFacture}`);
+       
       navigate("/historique-achat");
-    }
+    })
+  }
   }
   var tabLignesFiltred = tabLignes.filter((l) => l.facture_id === lastF._id);
 
@@ -158,7 +170,7 @@ export default function AddToInvoice() {
                   <br></br>
                   Frais de livraison: {lastF.frais_de_livraison}
                   <br></br>
-                  {tabLignesFiltred.length ? (
+                  {tabLignesFiltred.length>1 ? (
                     <b className="fs-4">Net à payer: {lastF.net_a_payer} DT</b>
                   ) : (
                     ""
