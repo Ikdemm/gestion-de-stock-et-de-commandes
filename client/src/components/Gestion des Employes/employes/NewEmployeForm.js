@@ -1,159 +1,273 @@
-import axios from 'axios';
-import React, { useEffect, useState } from 'react';
-import { FaBan, FaSave, FaSpinner } from 'react-icons/fa';
-import { Link, useNavigate } from 'react-router-dom';
+import axios from "../../../Services/instance";
+import React, { useEffect, useState } from "react";
+import { FaBan, FaSave, FaSpinner } from "react-icons/fa";
+import { Link, useNavigate } from "react-router-dom";
+import { toast } from "react-toastify";
+import { validPhoneNumber, validCIN } from "../../../regex";
+import { useTranslation } from "react-i18next";
 
 export default function NewEmployeForm() {
+  let navigate = useNavigate();
+  const { t } = useTranslation();
+
+  const [nom, setNom] = useState("");
+  const [prenom, setPrenom] = useState("");
+  const [imageUrl, setImageUrl] = useState(null);
+  const [numCIN, setNumCIN] = useState("");
+  const [numTel, setNumTel] = useState("");
+  const [adresse, setAdresse] = useState("");
+  const [date_de_naissance, setDate_de_naissance] = useState("");
+  const [date_de_recrutement, setDate_de_recrutement] = useState("");
+  const [poste, setPoste] = useState("");
+  const [direction_id, setDirection_id] = useState("");
+  const [phoneNbrErr, setPhoneNbrErr] = useState(false);
+  const [CINErr, setCinErr] = useState(false);
+
+  //directions from the backend
   const [listeDirections, setTlisteDirections] = useState([]);
 
-
   useEffect(() => {
-   axios.get(`/api/directions`).then((response) => {
-    setTlisteDirections(response.data);
-   });
- }, []); 
+    axios.get(`/api/directions`).then((response) => {
+      setTlisteDirections(response.data);
+    });
+  }, []);
 
-let navigate= useNavigate()
- 
-   const [Employee, setEmployee] = useState({
-    nom: '',
-    prenom: '',
-    numCIN: '',
-    numTel: '',
-    adresse: '',
-    date_de_naissance: '',
-    date_de_recrutement: '',
-    poste: '',
-    direction_id: '',
-
-    })
-    const [imageUrl, setimageUrl] = useState(null)
-
-    const handleChange = e => {
-      const { name, value } = e.target;
-      setEmployee(prevState => ({
-          ...prevState,
-          [name]: value
-      }));
-      console.log(e.target.value)
+  //handle and convert it in base 64
+  const handleImage = (e) => {
+    const file = e.target.files[0];
+    setFileToBase(file);
+    console.log(file);
   };
 
-  const handleEmployee =async (e) => {
+  const setFileToBase = (file) => {
+    const reader = new FileReader();
+    reader.readAsDataURL(file);
+    reader.onloadend = () => {
+      setImageUrl(reader.result);
+    };
+  };
+
+  //submit the form
+  const submitForm = async (e) => {
     e.preventDefault();
+    try {
+      if (!validPhoneNumber.test(numTel) && !validPhoneNumber.test(numTel)) {
+        setPhoneNbrErr(true);
+        setCinErr(true);
 
-    console.log('Employee', Employee)
-    let data = new FormData();
-    data.append("nom",Employee.nom);
-    data.append("prenom",Employee.prenom);
-    data.append("imageUrl",imageUrl);
-    data.append("numCIN",Employee.numCIN);
-    data.append("numTel",Employee.numTel);
-    data.append("adresse",Employee.adresse);
-    data.append("date_de_naissance",Employee.date_de_naissance);
-    data.append("date_de_recrutement",Employee.date_de_recrutement);
-    data.append("poste",Employee.poste);
-    data.append("direction_id",Employee.direction_id);
-    console.log('data', data)
-  await  fetch('/api/staff',{
-      method: 'POST',
-      body: data,
-    })
-    alert('employé ajouté')
-    navigate('/employes')
+        return;
+      }
+      if (!validPhoneNumber.test(numTel)) {
+        setPhoneNbrErr(true);
+        return;
+      }
+      if (!validCIN.test(numCIN)) {
+        setCinErr(true);
+        return;
+      }
+      const { data } = await axios.post("/api/staff", {
+        nom,
+        prenom,
+        adresse,
+        direction_id,
+        imageUrl,
+        date_de_naissance,
+        date_de_recrutement,
+        numCIN,
+        numTel,
+        poste,
+      });
+      console.log("data", data);
+      if (data.success === true) {
+        setNom("");
+        setPrenom("");
+        setNumCIN("");
+        setNumTel("");
+        setAdresse("");
+        setDate_de_naissance("");
+        setDate_de_recrutement("");
+        setPoste("");
+        setDirection_id("");
+        setImageUrl(null);
+        setPhoneNbrErr(false);
+        setCinErr(false);
+        toast.success("L'employé est bien ajouté!");
+      }
+      navigate("/employes");
+      console.log(data);
+    } catch (error) {
+      console.log(error);
+    }
+  };
 
-}
-if(listeDirections){
-
-  return (
-    <div className="container">
-    <div style={{ display: "flex" }}>
-  <div className="container-fluid">
-      <h6 className="display-6 mb-4"> Ajouter un employé </h6>
-      <hr />
-   <form method="post" className="container shadow p-4 bg-light">  
-    <div className='row mb-2'>
-    <div className="col-md-6">
-    <label htmlFor="numCIN">N° de CIN</label>
-        <input className='form-control' type="number" name='numCIN' onChange={handleChange}  ></input>
-    </div>
-    <div className="col-md-6">
-    <label htmlFor="imageUrl">Photo</label>
-        <input className='form-control' type="file" name='imageUrl' onChange={(e) => setimageUrl(e.target.files[0]) } /* console.log("hedhy",e.target.files[0].name) } */  accept="image/*" ></input> 
-   
-    </div>
-    </div>
-    <div className='row mb-2'>
-    <div className="col-md-6">
-    <label htmlFor='prenom'>Prénom</label>
-        <input className='form-control' type="text" name='prenom' onChange={handleChange} ></input>
-    </div>
-    <div className="col-md-6">
-    <label htmlFor='nom'>Nom</label>
-        <input className='form-control' type="text" name='nom' onChange={handleChange} ></input>
-    </div>
-    </div>
-    <div className='row mb-2'>
-    <div className="col-md-6">
-    <label htmlFor='date_de_naissance'>Date de naissance</label>
-        <input className='form-control' type="date" name='date_de_naissance' onChange={handleChange} ></input>
-    </div>
-    <div className="col-md-6">
-    <label htmlFor='adresse'>Adresse</label>
-        <input className='form-control' type="text" name='adresse' onChange={handleChange} ></input>
-    </div>
-    </div>
-    <div className='row mb-2'>
-    <div className="col-md-6">
-
-    <label htmlFor='date_de_recrutement'>Date de recrutement</label>
-        <input className='form-control' type="date" name='date_de_recrutement' onChange={handleChange} ></input>
-    </div>
-    <div className="col-md-6">
-
-    <label htmlFor='direction_id'>Direction</label>
-        <select name="direction_id" className="form-select"  onChange={handleChange} >
-          <option > -- Veuillez choisir la direction --</option>
-          {listeDirections.map((f) => {
-            return <option  key={f._id} value={f._id}>{f.name}</option>;
-          })}
-        </select>
-    </div>
-    </div>
-    <div className='row mb-2'>
-    <div className="col-md-6">
-    <label htmlFor='poste'>Poste</label>
-        <input className='form-control' type="text"  name='poste' onChange={handleChange} ></input>
-    </div>
-    <div className="col-md-6">
-    <label htmlFor='numTel'>Numéro de téléphone</label>
-        <input className='form-control' type="number"  name='numTel' onChange={handleChange} ></input>
-     
-    </div>
-    </div>
-
-       
-    <div className='d-flex flex-row-reverse'>
-                <div className='p-2'>
-             <button className="btn bg-green my-2 " type="submit" onClick={handleEmployee}>Confirmer <FaSave></FaSave></button>    
+  if (listeDirections) {
+    return (
+      <div className="container">
+        <div style={{ display: "flex" }}>
+          <div className="container-fluid">
+            <h6 className="display-6 mb-4"> {t("buttons.new")} un employé </h6>
+            <hr />
+            <form
+              method="post"
+              className="container shadow p-4 bg-light"
+              onSubmit={submitForm}
+              encType="multipart/form-data"
+            >
+              <div className="row mb-2">
+                <div className="col-md-6">
+                  <label htmlFor="numCIN">N° de CIN</label>
+                  <input
+                    onChange={(e) => setNumCIN(e.target.value)}
+                    className="form-control"
+                    type="number"
+                    name="numCIN"
+                    value={numCIN}
+                  ></input>
+                  {CINErr && (
+                    <p className="alert alert-danger" role="alert">
+                      Le N° de la CIN est invalide
+                    </p>
+                  )}
                 </div>
-                <div className='p-2'>
-             <Link to="/employes" className="btn btn-danger my-2 mr-2">Annuler <FaBan></FaBan> </Link>
+                <div className="col-md-6">
+                  <label htmlFor="imageUrl">Photo</label>
+                  <input
+                    className="form-control"
+                    type="file"
+                    name="imageUrl"
+                    onChange={handleImage}
+                    accept="image/*"
+                  ></input>
                 </div>
-                
-               </div>
-      
-      
-      </form>
-    </div>
-    </div>
-    </div>
-  )
-}else
-{
-  return (
-    <div className="fetching">      
-    <FaSpinner className="spinner"></FaSpinner>
+              </div>
+              <div className="row mb-2">
+                <div className="col-md-6">
+                  <label htmlFor="prenom">Prénom</label>
+                  <input
+                    onChange={(e) => setPrenom(e.target.value)}
+                    className="form-control"
+                    type="text"
+                    name="prenom"
+                    value={prenom}
+                  ></input>
+                </div>
+                <div className="col-md-6">
+                  <label htmlFor="nom">Nom</label>
+                  <input
+                    className="form-control"
+                    type="text"
+                    name="nom"
+                    onChange={(e) => setNom(e.target.value)}
+                    value={nom}
+                  ></input>
+                </div>
+              </div>
+              <div className="row mb-2">
+                <div className="col-md-6">
+                  <label htmlFor="date_de_naissance">Date de naissance</label>
+                  <input
+                    className="form-control"
+                    type="date"
+                    name="date_de_naissance"
+                    onChange={(e) => setDate_de_naissance(e.target.value)}
+                    value={date_de_naissance}
+                  ></input>
+                </div>
+                <div className="col-md-6">
+                  <label htmlFor="adresse">Adresse</label>
+                  <input
+                    className="form-control"
+                    type="text"
+                    name="adresse"
+                    onChange={(e) => setAdresse(e.target.value)}
+                    value={adresse}
+                  ></input>
+                </div>
+              </div>
+              <div className="row mb-2">
+                <div className="col-md-6">
+                  <label htmlFor="date_de_recrutement">
+                    Date de recrutement
+                  </label>
+                  <input
+                    className="form-control"
+                    type="date"
+                    name="date_de_recrutement"
+                    onChange={(e) => setDate_de_recrutement(e.target.value)}
+                    value={date_de_recrutement}
+                  ></input>
+                </div>
+                <div className="col-md-6">
+                  <label htmlFor="direction_id">Direction</label>
+                  <select
+                    name="direction_id"
+                    className="form-select"
+                    onChange={(e) => setDirection_id(e.target.value)}
+                    value={direction_id}
+                  >
+                    <option> -- Veuillez choisir la direction --</option>
+                    {listeDirections.map((f) => {
+                      return (
+                        <option key={f._id} value={f._id}>
+                          {f.name}
+                        </option>
+                      );
+                    })}
+                  </select>
+                </div>
+              </div>
+              <div className="row mb-2">
+                <div className="col-md-6">
+                  <label htmlFor="poste">Poste</label>
+                  <input
+                    className="form-control"
+                    type="text"
+                    name="poste"
+                    onChange={(e) => setPoste(e.target.value)}
+                    value={poste}
+                  ></input>
+                </div>
+                <div className="col-md-6">
+                  <label htmlFor="numTel">
+                    {t("generalInformations.phone")}
+                  </label>
+                  <input
+                    className="form-control"
+                    type="number"
+                    name="numTel"
+                    onChange={(e) => setNumTel(e.target.value)}
+                    value={numTel}
+                  ></input>
+                  {phoneNbrErr && (
+                    <p className="alert alert-danger" role="alert">
+                      Le N° de téléphone est invalide
+                    </p>
+                  )}
+                </div>
+              </div>
+
+              <div className="d-flex flex-row-reverse">
+                <div className="p-2">
+                  <button className="btn bg-green my-2 " type="submit">
+                    {t("buttons.confirm")} <FaSave></FaSave>
+                  </button>
+                </div>
+                <div className="p-2">
+                  <Link to="/employes" className="btn btn-danger my-2 mr-2">
+                    {t("buttons.cancel")} <FaBan></FaBan>{" "}
+                  </Link>
+                </div>
+              </div>
+            </form>
           </div>
-  )
-}
+        </div>
+      </div>
+    );
+  } else {
+    return (
+      <div className="fetching">
+        <FaSpinner className="spinner"></FaSpinner>
+      </div>
+    );
+  }
 }

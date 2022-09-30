@@ -1,0 +1,48 @@
+{
+    "home": "Page d'accueil",
+    "dashboard": "Tableau de bord",
+    "inventaire": "Inventaire",
+    "categories": "Catégories des produits",
+    "produits": "Produits",
+    "clients": "Clients",
+    "fournisseurs": "Fournisseurs",
+    "ventes": "Ventes",
+    "achats": "Achats",
+    "directions": "Directions",
+    "employes": "Employés",
+    "g-demandes": "Gestion des Demandes des Employés",
+    "demandes": "Demandes",
+    "g-users": "Gestion des profiles des utilisateurs",
+    "logout": "Se Déconnecter",
+    "buttons":{
+        "new": "Ajouter",
+        "confirm":"Confirmer",
+        "cancel":"Annuler",
+        "update":"Mettre à jour",
+        "delete":"Supprimer"
+    },
+    "generalInformations":{
+        "phone":"Numéro de téléphone"
+   
+    },
+    "page": {
+        "clients": {
+            "list": "Liste des clients",
+            "fetch":"Les données sont en cours de chargement... veuillez patienter",
+            "form":{
+                "add":"Ajouter un client",
+                "name":"Nom Complet du Client",
+                "adress":"Adresse de livraison"
+            }
+        },
+        "fournisseurs": {
+                "list": "Liste des fournisseurs",
+                "form":{
+                    "add":"Ajouter un fournisseur",
+                    "name":"Nom Complet du Client",
+                    "adress":"Adresse"
+                }
+        }
+     }
+ 
+}

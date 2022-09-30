@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import axios from "axios";
+import axios from "../Services/instance";
 import LineChart from "./charts/LineChart/LineChart";
 
 export default function DashbordHolder() {
@@ -8,7 +8,7 @@ export default function DashbordHolder() {
     axios.get(`/api/produits`).then((response) => {
       settabProduits(response.data);
     });
-  }, []); 
+  }, []);
   const [TabCategories, setTabCategories] = useState([]);
   useEffect(() => {
     axios.get(`/api/categories`).then((response) => {
@@ -20,14 +20,14 @@ export default function DashbordHolder() {
     axios.get(`/api/clients`).then((response) => {
       setTabClients(response.data);
     });
-  }, []); 
+  }, []);
 
   const [tabF, setTabFournisseurs] = useState([]);
   useEffect(() => {
     axios.get(`/api/fournisseurs`).then((response) => {
       setTabFournisseurs(response.data);
     });
-  }, []); 
+  }, []);
   const [tabDirections, setTabDirections] = useState([]);
   useEffect(() => {
     axios.get(`/api/directions`).then((response) => {
@@ -39,13 +39,13 @@ export default function DashbordHolder() {
     axios.get(`/api/factures/achat`).then((response) => {
       setTabAchatFacts(response.data);
     });
-  }, []); 
+  }, []);
   const [tabVenteFacts, setTabVenteFacts] = useState([]);
   useEffect(() => {
     axios.get(`/api/factures/vente`).then((response) => {
       setTabVenteFacts(response.data);
     });
-  }, []); 
+  }, []);
   const [APIData, setAPIData] = useState([]);
   useEffect(() => {
     axios.get(`/api/staff`).then((response) => {

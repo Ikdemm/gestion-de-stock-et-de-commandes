@@ -9,20 +9,16 @@ export const achatFactCtx = createContext({
 });
 
 function AddNewAchatFactContextProvider(props) {
-
   const [tabAchatFacts, setTabAchatFacts] = useState([]);
   function addNewAchatFact(newAchatFact) {
-
     fetch("/api/factures/achat", {
       method: "POST",
       body: JSON.stringify(newAchatFact),
-      headers: { "Content-Type": "application/json"
-      },
+      headers: { "Content-Type": "application/json" },
     })
       .then((res) => {
-
         alert("la facture est bien ajoutée");
-        getAllAchatFacts()
+        getAllAchatFacts();
         console.log(res);
       })
       .catch((err) => {
@@ -38,21 +34,20 @@ function AddNewAchatFactContextProvider(props) {
       method: "GET",
       body: JSON.stringify(),
       headers: { "Content-Type": "application/json" },
-    })
+    });
     return tabAchatFacts.find((c) => c._id === id);
   }
   function getAllAchatFacts() {
-
- fetch("/api/factures/achat", {
-  method: "GET",
-  headers: { "Content-Type": "application/json" },
-})
-  .then((res) =>  res.json())
-  .then((data) => {
-    console.log(data);
-    setTabAchatFacts(data)
-  });
-}
+    fetch("/api/factures/achat", {
+      method: "GET",
+      headers: { "Content-Type": "application/json" },
+    })
+      .then((res) => res.json())
+      .then((data) => {
+        console.log(data);
+        setTabAchatFacts(data);
+      });
+  }
 
   function updateAchatFact(id, updatedC) {
     fetch(`/api/factures/achat/${id}`, {
@@ -67,9 +62,7 @@ function AddNewAchatFactContextProvider(props) {
       .catch((err) => {
         alert("erreur inconnue");
       });
-
-     
-    }
+  }
   const context = {
     tabAchatFacts: tabAchatFacts,
     addNewAchatFact: addNewAchatFact,
@@ -78,10 +71,9 @@ function AddNewAchatFactContextProvider(props) {
     getAllAchatFacts: getAllAchatFacts,
   };
   return (
-   <achatFactCtx.Provider value={context}>
+    <achatFactCtx.Provider value={context}>
       {props.children}
-
-   </achatFactCtx.Provider>
+    </achatFactCtx.Provider>
   );
 }
 export default AddNewAchatFactContextProvider;

@@ -1,13 +1,20 @@
 import React from "react";
+import { useTranslation } from "react-i18next";
 import {
-  FcCalculator, FcCalendar, FcHighPriority,
-  FcPlus, FcSearch, FcViewDetails
+  FcCalculator,
+  FcCalendar,
+  FcHighPriority,
+  FcPlus,
+  FcSearch,
+  FcViewDetails,
 } from "react-icons/fc";
 import { Link } from "react-router-dom";
 export default function HolderVentes() {
+  const { t } = useTranslation();
+
   return (
     <div>
-        <h1 className="display-3">Vente</h1> <hr />
+      <h1 className="display-3">Vente</h1> <hr />
       <div className="container">
         <div className="row card  my-4 p-4 shadow">
           <div className="d-flex align-items-center">
@@ -20,7 +27,8 @@ export default function HolderVentes() {
 
             <div className="col-2">
               <Link to="/historique-ventes" className="nav-link">
-                <FcViewDetails size={50}> </FcViewDetails><br/>
+                <FcViewDetails size={50}> </FcViewDetails>
+                <br />
                 Historique
               </Link>
             </div>
@@ -28,7 +36,7 @@ export default function HolderVentes() {
               <Link to="/ajout-facture-vente" className="nav-link">
                 <FcPlus size={50}></FcPlus>
                 <br />
-                Ajouter
+                {t("buttons.new")}
               </Link>
             </div>
           </div>
@@ -44,7 +52,8 @@ export default function HolderVentes() {
             </div>
             <div className="col-2">
               <Link to="/historique-avoir-vente" className="nav-link">
-                <FcViewDetails size={50}> </FcViewDetails><br/>
+                <FcViewDetails size={50}> </FcViewDetails>
+                <br />
                 Historique
               </Link>
             </div>
@@ -52,30 +61,30 @@ export default function HolderVentes() {
               <Link to="/ajout-avoir-vente" className="nav-link">
                 <FcPlus size={50}></FcPlus>
                 <br />
-                Ajouter
+                {t("buttons.new")}
               </Link>
             </div>
           </div>
         </div>
 
-          <div className="row card  my-4 p-4 shadow">
-            <div className="d-flex align-items-center">
-              <div className="col-2">
-                <FcCalendar size={70}></FcCalendar>
-              </div>
-              <div className="col-7">
-                <h3 className="display-4">Suivi de paiement</h3>
-              </div>
-              <div className="col-3">
+        <div className="row card  my-4 p-4 shadow">
+          <div className="d-flex align-items-center">
+            <div className="col-2">
+              <FcCalendar size={70}></FcCalendar>
+            </div>
+            <div className="col-7">
+              <h3 className="display-4">Suivi de paiement</h3>
+            </div>
+            <div className="col-3">
               <Link to="/echeances-vente" className="nav-link">
-                <FcSearch size={50}> </FcSearch><br/>
+                <FcSearch size={50}> </FcSearch>
+                <br />
                 Voir
               </Link>
             </div>
-            </div>
           </div>
-     
+        </div>
       </div>
     </div>
-  )
+  );
 }

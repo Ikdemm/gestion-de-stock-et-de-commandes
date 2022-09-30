@@ -1,28 +1,32 @@
-import axios from "axios";
-import React, { useEffect, useState } from "react";
+import React, { useEffect } from "react";
+import { useTranslation } from "react-i18next";
 import { BiAddToQueue } from "react-icons/bi";
 import { FaSpinner } from "react-icons/fa";
+import { useDispatch, useSelector } from "react-redux";
 import { Link } from "react-router-dom";
+import { GetAllClients, selectClient } from "../../features/customer/customerSlice";
 import "../Form.module.css";
 import OneCustomer from "./OneCustomer";
 
 export default function ListeClients() {
-  const [tabClients, setTabClients] = useState([]);
+  const {t} = useTranslation()
+  const dispatch = useDispatch()
+  const tabClients = useSelector(selectClient)
+
   useEffect(() => {
-    axios.get(`/api/clients`).then((response) => {
-      setTabClients(response.data);
-    });
+    dispatch(GetAllClients())
+    // eslint-disable-next-line
   }, []);
 
   if (tabClients) {
     return (
       <div>
       <div className="row d-flex">
-        <h6 className="col-md-9 flex-fill display-4">Liste des clients</h6>
+        <h6 className="col-md-9 flex-fill display-4">{t('page.clients.list')}</h6>
 
         <div className="col-md-2">
           <Link to="/addClient" className="btn bg-blue m-4 p-2">
-            Ajouter <BiAddToQueue></BiAddToQueue>
+          {t('buttons.new')} <BiAddToQueue></BiAddToQueue>
           </Link>
         </div>
       </div>
@@ -46,7 +50,7 @@ export default function ListeClients() {
     return (
       <div>
         <div className="text-success display-6">
-          Les données sont en cours de chargement... veuillez patienter !
+        {t('page.clients.fetch')}
           <div className="fetching">
             <FaSpinner className="spinner"></FaSpinner>
           </div>

@@ -1,45 +1,56 @@
-import axios from 'axios';
 import moment from "moment";
 import "moment/locale/fr";
-import React, { useEffect, useState } from 'react';
+import React, { useEffect } from 'react';
 import { FaSpinner } from 'react-icons/fa';
+import { VscFilePdf } from "react-icons/vsc";
+import { useDispatch, useSelector } from 'react-redux';
 import { useParams } from 'react-router-dom';
-//import { Link, useParams } from 'react-router-dom';
-import DownloadPage from '../DownloadPage';
+import { getFactureAchats, selectTabFacturesAchat } from "../../features/factures_ordinaires/achat/factures/factAchatSlice";
+import { getAllLignesAchatsOridinaires, selectTabAllLignesAchatsOridinaires } from "../../features/factures_ordinaires/achat/lines/ligneAchatOrdinaireSlice";
+import { getAllProduits, selectProduit } from "../../features/product/productSlice";
+import { GetAllFournisseurs, selectFournisseur } from "../../features/supplier/fournisseurSlice";
+import axios from '../../Services/instance';
+import { saveAs } from 'file-saver';
+
 export default function DetailsAchat() {
+  const dispatch = useDispatch();
 
   var {_id}=useParams()
-  const [tabFact, setTtabFact] = useState([]);
-  useEffect(() => {
-    axios.get(`/api/factures/achat`).then((response) => {
-      setTtabFact(response.data);
-    });
-  }, []);
+  const tabProduits = useSelector(selectProduit);
+  const tabFrs = useSelector(selectFournisseur);
+  const tabFact = useSelector(selectTabFacturesAchat);
+  const tabLignes = useSelector(selectTabAllLignesAchatsOridinaires);
+
+
   let selectedFacture=tabFact.find((f)=>f._id===_id)
 
   console.log('selectedFacture', selectedFacture)
-    const [tabLignes, setTabLignes] = useState([]);
-    useEffect(() => {
-      axios.get(`/api/achat/addToInvoice`).then((response) => {
-        setTabLignes(response.data);
-      });
-    }, []);
+ 
     var tabLignesFiltred=tabLignes.filter((l)=>l.facture_id===selectedFacture._id)
-    const [tabFrs, setTabFrs] = useState([]);
-    useEffect(() => {
-      axios.get(`/api/fournisseurs`).then((response) => {
-        setTabFrs(response.data);
-      });
-    }, []);
+ 
     var fournisseur= tabFrs.find((f)=>f._id===selectedFacture.fournisseur_id);
-    const [tabProduits, setTabProduits] = useState([]);
+
     useEffect(() => {
-      axios.get(`/api/produits`).then((response) => {
-        setTabProduits(response.data);
-      });
+      dispatch(getAllProduits());
+      dispatch(getFactureAchats());
+      dispatch(getAllLignesAchatsOridinaires());
+      dispatch(GetAllFournisseurs());
+  
+    // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
-
-
+    function downloadFileDocument() {
+ 
+       var state = {fournisseur, selectedFacture , tabLignesFiltred , tabProduits }
+        axios.post(`/api/factures/achat/${selectedFacture._id}/create-pdf`, state)
+        .then(() => axios.get(`/api/factures/achat/${selectedFacture._id}/fetch-pdf`, { responseType: 'blob' }))
+        .then((res) => {
+          const pdfBlob = new Blob([res.data], { type: 'application/pdf' });
+  
+          saveAs(pdfBlob,  `Facture-Achat-N°-${selectedFacture.numFacture}`);
+         
+      })
+    }
+    
 if(selectedFacture && fournisseur &&tabLignesFiltred && tabProduits){
 
 
@@ -51,12 +62,12 @@ if(selectedFacture && fournisseur &&tabLignesFiltred && tabProduits){
       <div className="row my-2 container">
         <div className="d-flex align-items-center py-3">
           <div className="col-6">
-            N° de facture:    {selectedFacture.numFacture}    <br />
-            Date facture:
-           {moment(selectedFacture.dateFacture).locale("fr").format("LL")}   
+           <b> N° de facture:</b>    {selectedFacture.numFacture}    <br />
+           <b> Date facture:
+</b>           {moment(selectedFacture.dateFacture).locale("fr").format("LL")}   
           </div>
           <div className="col-6 mx-2">
-            Nom du Fournisseur:  {fournisseur.nom_commercial}   
+          <b>  Nom du Fournisseur: </b>  {fournisseur.nom_commercial}   
           </div>
         </div>
       </div>
@@ -73,9 +84,11 @@ if(selectedFacture && fournisseur &&tabLignesFiltred && tabProduits){
         <thead>
           <tr>
             <th scope="col">Produit</th>
-            <th scope="col">Prix Unitaire</th>
+            <th scope="col">Prix Unitaire HT</th>
             <th scope="col">Quantité</th>
-            <th scope="col">Total</th>
+            <th scope="col">Total HT</th>
+            <th scope="col">TVA</th>
+            <th scope="col">Total TTC</th>
          
           </tr>
         </thead>
@@ -92,7 +105,9 @@ if(selectedFacture && fournisseur &&tabLignesFiltred && tabProduits){
                   <td>{a.title}</td>
                   <td>{a.price_a}</td>
                   <td>{l.quantite_a} </td>
-                  <td >{l.total}</td>
+                  <td >{l.total_HT}</td>
+                  <td >{l.TVA}</td>
+                  <td >{l.total_TTC}</td>
                   </tr>
           )
                 }else{
@@ -105,13 +120,14 @@ if(selectedFacture && fournisseur &&tabLignesFiltred && tabProduits){
       </table>
      
       <hr />
-      <div className="row my-2 container">
+      <div className="row my-5 container">
         <div className="d-flex align-items-center">
-          <div className="col-5"></div>
-          <div className="col-6 mx-2">
-            Frais de livraison:  {selectedFacture.frais_de_livraison}  dt
-            <br></br>
-              
+          <div className="col-6"></div>
+          <div className="col-5">
+           <b> Frais de livraison: </b> {selectedFacture.frais_de_livraison}  dt  <br></br>
+          <b>  Net commercial HT: </b> {selectedFacture.net_commercial_HT}  dt  <br></br>
+           <b> Total TVA: </b> {selectedFacture.TVA_deductibles}  dt  <br></br>
+              <hr></hr>
                 <b className="fs-4">Net à payer:   {selectedFacture.net_a_payer}   DT</b>
             
                
@@ -121,8 +137,8 @@ if(selectedFacture && fournisseur &&tabLignesFiltred && tabProduits){
       <div className="row my-2 container">
         <div className="d-flex align-items-center">
           <div className="col-9">
-            Mode de paiement:  {selectedFacture.mode_de_paiement}  <br />
-            Date d'échéance:
+           <b> Mode de paiement:</b>  {selectedFacture.mode_de_paiement}  <br />
+           <b> Date d'échéance:</b>
           {moment(selectedFacture.dateEcheance)
               .locale("fr")
               .format("LL")}  
@@ -140,8 +156,10 @@ if(selectedFacture && fournisseur &&tabLignesFiltred && tabProduits){
     
   </div>
   <div className="col-4">
-    
-    <DownloadPage rootElementId={"here"} dowloadFileName={`Facture-Achat-N°${selectedFacture.numFacture}`}></DownloadPage>
+  <button onClick={downloadFileDocument} className="m-5 btn  fs-5 bg-blue">
+        <VscFilePdf></VscFilePdf>Télécharger en Pdf
+      </button> 
+  {/*   <DownloadPageAsPdf rootElementId={"here"} dowloadFileName={`Facture-Achat-N°${selectedFacture.numFacture}`}></DownloadPageAsPdf> */}
   </div>
 </div>
  </>

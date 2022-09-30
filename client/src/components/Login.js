@@ -1,11 +1,9 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
-//import { LoginContext } from "../store/LoginContext";
 import swal from 'sweetalert';
 
 export default function Login() {
   let navigate = useNavigate();
- // const LogCtx = useContext(LoginContext);
 
   const [user, setUser] = useState({
     email: "",
@@ -20,32 +18,12 @@ export default function Login() {
     setUser({ ...user, [name]: value });
   };
 
-  // Handle Login
-/*   const handleSubmit =  (event) => {
-    event.preventDefault();
-    // eslint-disable-next-line no-unused-vars
-    const { email, password } = user;
-    LogCtx.seConnecter(user)
-    .then(res => {
-        return res.json()
-    }).then((data) => {
-        localStorage.setItem('token', data['token']);
-        localStorage.setItem('email', email);
-        console.log("Utilisateur Authentifié");
-        navigate('/welcome-page');
-        window.location.reload()
-    }).catch(err => {
-        //console.log("erreuuuuuuur");
-        event.target.reset()
-      
-    })
 
-  }; */
   const handleSubmit = async (event) =>{
     event.preventDefault();
     const {email, password} = user;
     try {
-      const res = await fetch('/api/auth/login', {
+      const res = await fetch('http://localhost:4000/api/auth/login', {
         method : "POST",
         headers : {
           "Content-Type" : "application/json"

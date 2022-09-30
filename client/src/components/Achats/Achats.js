@@ -1,32 +1,44 @@
-import axios from "axios";
-import React, { useEffect, useState } from "react";
+import React, { useEffect } from "react";
+import { useTranslation } from "react-i18next";
 import { CgDanger } from "react-icons/cg";
 import {
-  FcCalculator, FcHighPriority, FcMoneyTransfer, FcMultipleSmartphones, FcPlus, FcSearch, FcViewDetails
+  FcCalculator,
+  FcHighPriority,
+  FcMoneyTransfer,
+  FcMultipleSmartphones,
+  FcPlus,
+  FcSearch,
+  FcViewDetails
 } from "react-icons/fc";
+import { useDispatch, useSelector } from "react-redux";
 import { Link } from "react-router-dom";
+import { getAllProduits, selectProduit } from "../../features/product/productSlice";
+
 export default function Achats() {
-  const [tabProduits, settabProduits] = useState([]);
+  const { t } = useTranslation();
+  const tabProduits = useSelector(selectProduit);
+  const dispatch = useDispatch();
 
   useEffect(() => {
-    axios.get(`/api/produits`).then((response) => {
-      settabProduits(response.data);
-    });
+    dispatch(getAllProduits());
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
-  var tabAlertes=tabProduits.filter((p)=>p.stock_final>=p.stock_max ||p.stock_final<=p.stock_min )
+  var tabAlertes = tabProduits.filter(
+    (p) => p.stock_final >= p.stock_max || p.stock_final <= p.stock_min
+  );
   return (
     <>
-    <div className="row d-flex">
-      <div className="col-md-8">
-      <h1 className="display-3">Achats</h1>
-              </div>
-              <div className="col-md-4">
-                <Link to="/alertes" className="btn btn-danger mt-4"><CgDanger></CgDanger> Alertes
-              <span className="badge">({tabAlertes.length})</span>
-                </Link>
-                
-              </div>
-    </div>
+      <div className="row d-flex">
+        <div className="col-md-8">
+          <h1 className="display-3">Achats</h1>
+        </div>
+        <div className="col-md-4">
+          <Link to="/alertes" className="btn btn-danger mt-4">
+            <CgDanger></CgDanger> Alertes
+            <span className="badge">({tabAlertes.length})</span>
+          </Link>
+        </div>
+      </div>
       <div className="container">
         <div className="row card  my-2 p-4 shadow">
           <div className="d-flex align-items-center">
@@ -39,7 +51,8 @@ export default function Achats() {
 
             <div className="col-2">
               <Link to="/historique-achat" className="nav-link">
-                <FcViewDetails size={50}> </FcViewDetails><br/>
+                <FcViewDetails size={50}> </FcViewDetails>
+                <br />
                 Historique
               </Link>
             </div>
@@ -47,7 +60,7 @@ export default function Achats() {
               <Link to="/ajout-facture-achat" className="nav-link">
                 <FcPlus size={50}></FcPlus>
                 <br />
-                Ajouter
+                {t("buttons.new")}
               </Link>
             </div>
           </div>
@@ -63,7 +76,8 @@ export default function Achats() {
             </div>
             <div className="col-2">
               <Link to="/historique-avoir-achat" className="nav-link">
-                <FcViewDetails size={50}> </FcViewDetails><br/>
+                <FcViewDetails size={50}> </FcViewDetails>
+                <br />
                 Historique
               </Link>
             </div>
@@ -71,39 +85,41 @@ export default function Achats() {
               <Link to="/ajout-avoir-achat" className="nav-link">
                 <FcPlus size={50}></FcPlus>
                 <br />
-                Ajouter
+                {t("buttons.new")}
               </Link>
             </div>
           </div>
         </div>
 
-          <div className="row card  my-2 p-4 shadow">
-            <div className="d-flex align-items-center">
-              <div className="col-2">
-                <FcMoneyTransfer size={70}></FcMoneyTransfer>
-              </div>
-              <div className="col-7">
-                <h3 className="display-4"> Suivi de paiement</h3>
-              </div>
-              <div className="col-3">
+        <div className="row card  my-2 p-4 shadow">
+          <div className="d-flex align-items-center">
+            <div className="col-2">
+              <FcMoneyTransfer size={70}></FcMoneyTransfer>
+            </div>
+            <div className="col-7">
+              <h3 className="display-4"> Suivi de paiement</h3>
+            </div>
+            <div className="col-3">
               <Link to="/echeances" className="nav-link">
-                <FcSearch size={50}> </FcSearch><br/>
+                <FcSearch size={50}> </FcSearch>
+                <br />
                 Voir
               </Link>
             </div>
-            </div>
           </div>
-          <div className="row card  my-2 p-4 shadow">
-            <div className="d-flex align-items-center">
-              <div className="col-2">
-                <FcMultipleSmartphones size={70}></FcMultipleSmartphones>
-              </div>
-              <div className="col-6">
-                <h3 className="display-4"> Appels d'offre</h3>
-              </div>
-              <div className="col-2">
+        </div>
+        <div className="row card  my-2 p-4 shadow">
+          <div className="d-flex align-items-center">
+            <div className="col-2">
+              <FcMultipleSmartphones size={70}></FcMultipleSmartphones>
+            </div>
+            <div className="col-6">
+              <h3 className="display-4"> Appels d'offre</h3>
+            </div>
+            <div className="col-2">
               <Link to="/historique-appel-doffre" className="nav-link">
-                <FcViewDetails size={50}> </FcViewDetails><br/>
+                <FcViewDetails size={50}> </FcViewDetails>
+                <br />
                 Historique
               </Link>
             </div>
@@ -111,11 +127,11 @@ export default function Achats() {
               <Link to="/ajout-appel-doffre" className="nav-link">
                 <FcPlus size={50}></FcPlus>
                 <br />
-                Ajouter
+                {t("buttons.new")}
               </Link>
             </div>
-            </div>
           </div>
+        </div>
       </div>
     </>
   );

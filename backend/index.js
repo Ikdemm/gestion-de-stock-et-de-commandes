@@ -6,6 +6,7 @@ const path = require('path');
 //const passport= require('passport');
 //session = require('express-session')
 require('./db/connect')
+require('dotenv').config()
 const staffRoutes = require('./routers/employes');
 const directionRoutes = require('./routers/directions');
 const demandesRoutes = require('./routers/demandes');
@@ -25,6 +26,9 @@ const AvoirLigneVenteRoutes= require('./routers/LigneAvoirVente');
 //const cmdFrsRoutes= require('./routers/commandeFournisseurs');
 const userRoutes=require('./routers/users');
 //const authenticate= require('./middlewares/is-auth')
+//var wkhtmltopdf = require('wkhtmltopdf');
+const pdf = require('html-pdf');
+const factAchatpdfTemplate = require('./documents/facture_achat_ordinaire');
 
 var cors = require('cors');
 
@@ -80,7 +84,22 @@ app.use('/api/avoirSurvente/addToInvoice',AvoirLigneVenteRoutes);
 //app.use('/auth', authenticate, (req,res)=>{
 
 //}) 
+/* wkhtmltopdf("/api/factures/achat/:id/pdf",{
+  pageSize: 'letter'
 
+}); */
+app.post('/api/factures/achat/:id/create-pdf', (req, res) => {
+  pdf.create(factAchatpdfTemplate(req.body), {}).toFile('result.pdf', (err) => {
+      if(err) {
+          res.send(Promise.reject());
+      }
+
+      res.send(Promise.resolve());
+  });
+});
+app.get('/api/factures/achat/:id/fetch-pdf', (req, res) => {
+  res.sendFile(`${__dirname}/result.pdf`)
+})
 app.use((error, req, res, next) => {
   console.log("-----", error);
   const status = error.statusCode || 500;

@@ -1,10 +1,13 @@
-import axios from "axios";
+import axios from "../../Services/instance";
 import React, { useEffect, useState } from "react";
+import { useTranslation } from "react-i18next";
 import { BiAddToQueue } from "react-icons/bi";
 import { FaSpinner } from "react-icons/fa";
 import { Link } from "react-router-dom";
 
 export default function UsersList(props) {
+  const { t } = useTranslation();
+
   const [tabStaff, setTabStaff] = useState([]);
   useEffect(() => {
     axios.get(`/api/staff`).then((response) => {
@@ -22,7 +25,7 @@ export default function UsersList(props) {
 
           <div className="col-md-2">
             <Link to="/register-form" className="btn bg-blue m-4 p-2">
-              Ajouter <BiAddToQueue></BiAddToQueue>
+              {t("buttons.new")} <BiAddToQueue></BiAddToQueue>
             </Link>
           </div>
         </div>
@@ -40,8 +43,20 @@ export default function UsersList(props) {
               return (
                 <tr key={u._id}>
                   <td>
-                  <img src={`http://localhost:4000/getfile/${employee.imageUrl}`} alt="avatar"  className="avatar" />
-                  {employee.prenom} {employee.nom}
+                    {employee.imageUrl.url ? (
+                      <img
+                        src={employee.imageUrl.url}
+                        alt="employee avatar from cloud"
+                        className="avatar"
+                      />
+                    ) : (
+                      <img
+                        src={`http://localhost:4000/getfile/${employee.imageUrl}`}
+                        alt="employee avatar from server"
+                        className="avatar"
+                      />
+                    )}
+                    {employee.prenom} {employee.nom}
                   </td>
                   <td className="py-2">{u.email} </td>
                   <td className="py-2"> {u.role} </td>

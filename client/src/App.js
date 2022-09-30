@@ -68,7 +68,7 @@ function App() {
   }, []);
   const [tabUsers, setListeUsers] = useState([]);
   useEffect(() => {
-    fetch("/api/auth/all-users")
+    fetch("http://localhost:4000/api/auth/all-users")
       .then((res) => {
         return res.json();
       })
@@ -89,7 +89,6 @@ function App() {
       <Routes>
         <Route path="/" element={<Login />} />
         <Route path="*" element={<Login />} />
-
       </Routes>
     );
   } else if (isLogged && connectedUser?.role === "admin") {
@@ -212,7 +211,7 @@ function App() {
           <Route path="/echeances-vente" element={<VenteEcheances />} />
 
           {/************************ GESTION DES DEMANDES *************************/}
-     {/*      <Route path="/demandes" element={<HolderDemande />} /> */}
+          {/*      <Route path="/demandes" element={<HolderDemande />} /> */}
 
           <Route path="/gestion-demandes" element={<HolderGestionDemandes />} />
 
@@ -265,8 +264,7 @@ function App() {
         </Routes>
       </>
     );
-   
-} else if (isLogged && connectedUser?.role === "chef_serv_achat") {
+  } else if (isLogged && connectedUser?.role === "chef_serv_achat") {
     return (
       <>
         <div className="sticky-top">
@@ -281,8 +279,8 @@ function App() {
             path="/fournisseurs/:_id/edit"
             element={<UpdateFournisseur />}
           />
-                    {/************************ GESTION DES FACTURES ACHAT *************************/}
-                    <Route path="/achat" element={<Achats />} />
+          {/************************ GESTION DES FACTURES ACHAT *************************/}
+          <Route path="/achat" element={<Achats />} />
           <Route path="/alertes" element={<AlertesSurAchat />} />
 
           {/* //*Ordinaires**/}
@@ -321,8 +319,7 @@ function App() {
         </Routes>
       </>
     );
-  
-} else if (isLogged && connectedUser?.role === "chef_serv_vente") {
+  } else if (isLogged && connectedUser?.role === "chef_serv_vente") {
     return (
       <>
         <div className="sticky-top">
@@ -334,7 +331,7 @@ function App() {
           <Route path="/addClient" element={<AddClientForm />} />
 
           <Route path="/clients/:_id/edit" element={<UpdateCustomer />} />
-   {/************************ GESTION DES FACTURES VENTE *************************/}
+          {/************************ GESTION DES FACTURES VENTE *************************/}
           <Route path="/ventes" element={<HolderVentes />} />
 
           {/*  //*Ordinaires**/}
@@ -367,8 +364,7 @@ function App() {
         </Routes>
       </>
     );
-  }
- else if (isLogged && connectedUser?.role === "directeur_direction") {
+  } else if (isLogged && connectedUser?.role === "directeur_direction") {
     return (
       <>
         <div className="sticky-top">
@@ -378,17 +374,16 @@ function App() {
           <Route path="/welcome-page" element={<WelcomePage />} />
           <Route path="/dashboard" element={<DashbordHolder />} />
 
-      <Route path="/profiles" element={<HolderProfiles />} />
+          <Route path="/profiles" element={<HolderProfiles />} />
 
-      <Route path="/register-form" element={<RegisterForm />} />
+          <Route path="/register-form" element={<RegisterForm />} />
 
-      <Route path="/all-users" element={<AllUsers />} />
-      <Route path="*" element={<NotFoundPage />} />
+          <Route path="/all-users" element={<AllUsers />} />
+          <Route path="*" element={<NotFoundPage />} />
         </Routes>
       </>
     );
-  }
- else if (isLogged && connectedUser?.role === "employe") {
+  } else if (isLogged && connectedUser?.role === "employe") {
     return (
       <>
         <div className="sticky-top">

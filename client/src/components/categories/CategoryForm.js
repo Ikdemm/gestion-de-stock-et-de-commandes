@@ -1,12 +1,17 @@
-import React, { useContext, useRef } from "react";
-import { categorieCtx } from "../../store/categoryContext";
+import React, { useRef } from "react";
+import { useDispatch, useSelector } from "react-redux";
 import swal from 'sweetalert';
+import { CreateCategory, selectCategorie } from "../../features/category/categorySlice";
 const _ = require("lodash");
 
 export default function CategoryForm() {
-  const catCtx = useContext(categorieCtx);
+  //const { t } = useTranslation();
+  const dispatch = useDispatch()
+  const tabCategories = useSelector(selectCategorie)
+
+  //const catCtx = useContext(categorieCtx);
   const refName = useRef("");
-  const tabNotFiltred = _.map(catCtx.tabCategories, "name");
+  const tabNotFiltred = _.map(tabCategories, "name");
   console.log(tabNotFiltred);
 
   function submitHandler(e) {
@@ -23,7 +28,8 @@ export default function CategoryForm() {
    
     } else
      {
-      catCtx.addNewCategorie(NewCategory);
+      dispatch(CreateCategory(NewCategory))
+      //catCtx.addNewCategorie(NewCategory);
       swal({
         title: "Opération réussie!",
         text: "La catégorie est bien ajoutée!",

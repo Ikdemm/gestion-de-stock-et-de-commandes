@@ -10,7 +10,6 @@ export const appelOffreCtx = createContext({
 });
 
 function AddNewAppelOffreContextProvider(props) {
-
   const [tabAppelOffres, setTabAppelOffres] = useState([]);
   function addNewAppelOffre(newAppelOffre) {
     fetch("/api/appelDoffres", {
@@ -19,16 +18,13 @@ function AddNewAppelOffreContextProvider(props) {
       headers: { "Content-Type": "application/json" },
     })
       .then((res) => {
-
         console.log("l'appel d'Offre est bien ajouté");
         getAllAppelOffres();
         console.log(res);
-
       })
       .catch((err) => {
         console.log("erreur avec addNewAppelOffre");
         console.log(err);
-
       });
     setTabAppelOffres((prev) => {
       return [...prev, newAppelOffre];
@@ -46,29 +42,23 @@ function AddNewAppelOffreContextProvider(props) {
       .catch((err) => {
         console.log("erreur inconnue");
       });
- 
-        getAllAppelOffres()
-  
-    ;
+
+    getAllAppelOffres();
   }
   function getAppelOffreById(id) {
     fetch(`/api/appelDoffres/${id}`, {
       method: "GET",
       body: JSON.stringify(),
       headers: { "Content-Type": "application/json" },
-    })
+    });
     return tabAppelOffres.find((c) => c._id === id);
   }
   function getAllAppelOffres() {
-
-
     fetch("/api/appelDoffres", {
       method: "GET",
       headers: { "Content-Type": "application/json" },
     })
       .then((res) => {
-
-
         return res.json();
       })
       .then((data) => setTabAppelOffres(data));
@@ -87,8 +77,8 @@ function AddNewAppelOffreContextProvider(props) {
         console.log("erreur inconnue");
       });
 
-        getAllAppelOffres()
-    }
+    getAllAppelOffres();
+  }
   const context = {
     tabAppelOffres: tabAppelOffres,
     addNewAppelOffre: addNewAppelOffre,
@@ -98,10 +88,9 @@ function AddNewAppelOffreContextProvider(props) {
     getAllAppelOffres: getAllAppelOffres,
   };
   return (
-   <appelOffreCtx.Provider value={context}>
+    <appelOffreCtx.Provider value={context}>
       {props.children}
-
-   </appelOffreCtx.Provider>
+    </appelOffreCtx.Provider>
   );
 }
 export default AddNewAppelOffreContextProvider;

@@ -9,7 +9,6 @@ export const venteAvoirCtx = createContext({
 });
 
 function VenteAvoirContextProvider(props) {
-
   const [tabVenteAvoirs, setTabVenteAvoirs] = useState([]);
   function addNewVenteAvoir(newVenteAvoir) {
     fetch("/api/avoirs/vente", {
@@ -18,7 +17,6 @@ function VenteAvoirContextProvider(props) {
       headers: { "Content-Type": "application/json" },
     })
       .then((res) => {
-
         console.log("la facture est bien ajoutée");
         console.log(res);
       })
@@ -36,19 +34,15 @@ function VenteAvoirContextProvider(props) {
       method: "GET",
       body: JSON.stringify(),
       headers: { "Content-Type": "application/json" },
-    })
+    });
     return tabVenteAvoirs.find((c) => c._id === id);
   }
   function getAllVenteAvoirs() {
-
-
     fetch("/api/avoirs/vente", {
       method: "GET",
       headers: { "Content-Type": "application/json" },
     })
       .then((res) => {
-
-
         return res.json();
       })
       .then((data) => setTabVenteAvoirs(data));
@@ -67,8 +61,8 @@ function VenteAvoirContextProvider(props) {
         console.log("erreur inconnue");
       });
 
-        getAllVenteAvoirs()
-    }
+    getAllVenteAvoirs();
+  }
   const context = {
     tabVenteAvoirs: tabVenteAvoirs,
     addNewVenteAvoir: addNewVenteAvoir,
@@ -77,10 +71,9 @@ function VenteAvoirContextProvider(props) {
     getAllVenteAvoirs: getAllVenteAvoirs,
   };
   return (
-   <venteAvoirCtx.Provider value={context}>
+    <venteAvoirCtx.Provider value={context}>
       {props.children}
-
-   </venteAvoirCtx.Provider>
+    </venteAvoirCtx.Provider>
   );
 }
 export default VenteAvoirContextProvider;

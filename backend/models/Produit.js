@@ -16,6 +16,7 @@ const productSchema = mongoose.Schema({
   },
   price_a: { type: Number, required: true },
   price_v: { type: Number, required: true },
+  taxe_sur_la_valeur_ajoutee: { type: Number, required: true },
   image: { type: String, required: false },
 
   stock_initial: { type: Number, required: false, default: 0 },
@@ -57,6 +58,11 @@ productSchema.methods.calculStockFinal = function () {
   SF=SI + E - S
   console.log("SF", SF);
   return SF;
+};
+productSchema.methods.actualiserEtat = function () {
+ if(this.stock_final>0){
+  return this.etat = "en stock"
+ } else return this.etat= "en rupture de stock"
 };
 productSchema.plugin(uniqueValidator);
 module.exports = mongoose.model("Produit", productSchema);

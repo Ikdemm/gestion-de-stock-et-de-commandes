@@ -10,7 +10,6 @@ export const fournisseurtCtx = createContext({
 });
 
 function AddNewFournisseurContextProvider(props) {
-
   const [tabFrs, setTabFrs] = useState([]);
   function addNewFournisseur(newFournisseur) {
     fetch("/api/fournisseurs", {
@@ -19,17 +18,16 @@ function AddNewFournisseurContextProvider(props) {
       headers: { "Content-Type": "application/json" },
     })
       .then((res) => {
-
         console.log("le fournisseur est bien ajouté", res);
       })
       .catch((err) => {
-        console.log("erreur inconnue",err);
+        console.log("erreur inconnue", err);
       });
-      setTabFrs((prev) => {
+    setTabFrs((prev) => {
       return [...prev, newFournisseur];
     });
   }
-   function removeOneFournisseur(id) {
+  function removeOneFournisseur(id) {
     fetch(`/api/fournisseurs/${id}`, {
       method: "DELETE",
       body: JSON.stringify(),
@@ -41,29 +39,23 @@ function AddNewFournisseurContextProvider(props) {
       .catch((err) => {
         console.log("erreur inconnue");
       });
- 
-        getAllFournisseurs()
-  
-    ;
-  } 
+
+    getAllFournisseurs();
+  }
   function getFournisseurById(id) {
     fetch(`/api/fournisseurs/${id}`, {
       method: "GET",
       body: JSON.stringify(),
       headers: { "Content-Type": "application/json" },
-    })
+    });
     return tabFrs.find((c) => c._id === id);
   }
   function getAllFournisseurs() {
-
-
     fetch("/api/fournisseurs", {
       method: "GET",
       headers: { "Content-Type": "application/json" },
     })
       .then((res) => {
-
-
         return res.json();
       })
       .then((data) => setTabFrs(data));
@@ -82,8 +74,8 @@ function AddNewFournisseurContextProvider(props) {
         console.log("erreur inconnue");
       });
 
-        getAllFournisseurs()
-    } 
+    getAllFournisseurs();
+  }
   const context = {
     tabFournisseurs: tabFrs,
     addNewFournisseur: addNewFournisseur,
@@ -93,10 +85,9 @@ function AddNewFournisseurContextProvider(props) {
     getAllFournisseurs: getAllFournisseurs,
   };
   return (
-   <fournisseurtCtx.Provider value={context}>
+    <fournisseurtCtx.Provider value={context}>
       {props.children}
-
-   </fournisseurtCtx.Provider>
+    </fournisseurtCtx.Provider>
   );
 }
 export default AddNewFournisseurContextProvider;

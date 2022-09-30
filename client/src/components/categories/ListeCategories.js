@@ -1,12 +1,15 @@
 import Box from "@mui/material/Box";
 import Modal from "@mui/material/Modal";
-import axios from "axios";
-import React, { useEffect, useState } from "react";
+import React, { useEffect } from "react";
+import { useTranslation } from "react-i18next";
 import { BiAddToQueue } from "react-icons/bi";
 import { FaSpinner } from "react-icons/fa";
+import { useDispatch, useSelector } from "react-redux";
+import {
+  GetCategories, selectCategorie
+} from "../../features/category/categorySlice";
 import CategoryForm from "./CategoryForm";
 import OneCategory from "./OneCategory";
-
 const style = {
   position: "absolute",
   top: "50%",
@@ -18,18 +21,18 @@ const style = {
   boxShadow: 24,
   p: 4,
 };
-
 export default function ListeCategories() {
+  const { t } = useTranslation();
+  const dispatch = useDispatch();
+  const TabCategories = useSelector(selectCategorie);
+  console.log("TabCategories", TabCategories);
+  useEffect(() => {
+    dispatch(GetCategories());
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
   const [open, setOpen] = React.useState(false);
   const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
-  const [TabCategories, setTabCategories] = useState([]);
-
-  useEffect(() => {
-    axios.get(`/api/categories`).then((response) => {
-      setTabCategories(response.data);
-    });
-  }, []);
 
   if (TabCategories) {
     return (
@@ -39,19 +42,24 @@ export default function ListeCategories() {
 
           <div className="col-md-2">
             <button onClick={handleOpen} className="btn bg-blue m-4 p-2">
-              Ajouter <BiAddToQueue></BiAddToQueue>
+              {t("buttons.new")} <BiAddToQueue></BiAddToQueue>
             </button>
           </div>
         </div>
-        {
-      TabCategories.length>0?  
-        <div className="card col m-3 px-2">
-          {TabCategories.map((p) => {
-            return <OneCategory categorie={p} key={p._id}></OneCategory>;
-          })}
-        </div>
-        : <div className='text-center'><img src={require("../../assets/images/nothing.png")} alt="nothing to display"/> </div>
-      }
+        {TabCategories.length > 0 ? (
+          <div className="card col m-3 px-2">
+            {TabCategories.map((p) => {
+              return <OneCategory categorie={p} key={p._id}></OneCategory>;
+            })}
+          </div>
+        ) : (
+          <div className="text-center">
+            <img
+              src={require("../../assets/images/nothing.png")}
+              alt="nothing to display"
+            />{" "}
+          </div>
+        )}
         <Modal
           keepMounted
           open={open}
@@ -60,7 +68,7 @@ export default function ListeCategories() {
           aria-describedby="keep-mounted-modal-description"
         >
           <Box sx={style}>
-            <div >
+            <div>
               <CategoryForm></CategoryForm>
             </div>
           </Box>

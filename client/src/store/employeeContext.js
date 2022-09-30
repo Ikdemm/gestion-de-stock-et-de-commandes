@@ -8,33 +8,28 @@ export const employeeCtx = createContext({
   updateEmployee: () => {},
   getAllEmployees: () => {},
   updateImageEmployee: () => {},
-  
 });
 
 function AddNewEmployeeContextProvider(props) {
-
   const [tabEmployees, setTabEmployees] = useState([]);
-  function addNewEmployee  (newEmployee) {
-      fetch("/api/staff", {
-        method: "POST",
-        body: JSON.stringify(newEmployee),
-        headers: { "Content-Type": "application/json"},
+  function addNewEmployee(newEmployee) {
+    fetch("/api/staff", {
+      method: "POST",
+      body: JSON.stringify(newEmployee),
+      headers: { "Content-Type": "application/json" },
+    })
+      .then((res) => {
+        console.log("l'employé est bien ajouté");
+        console.log(res);
       })
-        .then((res) => {
-          
-          console.log("l'employé est bien ajouté");
-          console.log(res);
-        })
-        .catch((err) => {
-          
-          console.log("erreur inconnue");
-          console.log(err);
-
-        });
-        setTabEmployees((prev) => {
-        return [...prev, newEmployee];
+      .catch((err) => {
+        console.log("erreur inconnue");
+        console.log(err);
       });
-    }
+    setTabEmployees((prev) => {
+      return [...prev, newEmployee];
+    });
+  }
   function removeOneEmployee(id) {
     fetch(`/api/staff/${id}`, {
       method: "DELETE",
@@ -44,36 +39,28 @@ function AddNewEmployeeContextProvider(props) {
       .then((res) => {
         console.log("l'employé est bien supprimé");
         console.log(res);
-
-
       })
       .catch((err) => {
         console.log("erreur removeOneEmployee");
         console.log(err);
       });
- 
-        getAllEmployees()
-  
-    ;
+
+    getAllEmployees();
   }
   function getEmployeeById(id) {
     fetch(`/api/staff/${id}`, {
       method: "GET",
       body: JSON.stringify(),
       headers: { "Content-Type": "multipart/form-data" },
-    })
+    });
     return tabEmployees.find((c) => c._id === id);
   }
   function getAllEmployees() {
-
-
     fetch("/api/staff", {
       method: "GET",
-      headers: { "Content-Type": "multipart/form-data"},
+      headers: { "Content-Type": "multipart/form-data" },
     })
       .then((res) => {
-
-
         return res.json();
       })
       .then((data) => setTabEmployees(data));
@@ -83,7 +70,7 @@ function AddNewEmployeeContextProvider(props) {
     fetch(`/api/staff/${id}`, {
       method: "PUT",
       body: JSON.stringify(updatedC),
-   /*    headers: {  "Content-Type": "multipart/form-data" }, */
+      /*    headers: {  "Content-Type": "multipart/form-data" }, */
     })
       .then((res) => {
         console.log("l'employé est modifié");
@@ -92,13 +79,13 @@ function AddNewEmployeeContextProvider(props) {
         console.log("erreur inconnue");
       });
 
-        getAllEmployees()
-    }
+    getAllEmployees();
+  }
   function updateImageEmployee(id, updatedC) {
     fetch(`/api/staff/${id}/image`, {
       method: "PUT",
       body: JSON.stringify(updatedC),
-   /*    headers: {  "Content-Type": "multipart/form-data" }, */
+      /*    headers: {  "Content-Type": "multipart/form-data" }, */
     })
       .then((res) => {
         console.log("l'employé est modifié");
@@ -107,8 +94,8 @@ function AddNewEmployeeContextProvider(props) {
         console.log("erreur inconnue");
       });
 
-        getAllEmployees()
-    }
+    getAllEmployees();
+  }
 
   const context = {
     tabEmployees: tabEmployees,
@@ -120,10 +107,9 @@ function AddNewEmployeeContextProvider(props) {
     updateImageEmployee: updateImageEmployee,
   };
   return (
-   <employeeCtx.Provider value={context}>
+    <employeeCtx.Provider value={context}>
       {props.children}
-
-   </employeeCtx.Provider>
+    </employeeCtx.Provider>
   );
 }
 export default AddNewEmployeeContextProvider;

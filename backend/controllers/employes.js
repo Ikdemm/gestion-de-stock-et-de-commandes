@@ -1,27 +1,49 @@
 const Employe = require ("../models/Employe");
 const Direction = require("../models/Direction");
-const Joi = require('joi');
-
 const fs = require('fs');
 const _ = require('lodash');
-var ObjectId = require('mongoose').Types.ObjectId
+const cloudinary = require('../utils/cloudinary');
 
 //creer un nouveau employé
-exports.createEmploye = async (req, res) => {
+exports.createEmploye = async (req, res , next ) => {
   
+  const {nom, prenom, imageUrl, adresse, date_de_naissance , date_de_recrutement , numCIN ,numTel , poste , direction_id  } = req.body;
 
   let directionId= req.body.direction_id;
-  ObjectId.isValid(directionId);
   console.log("directionId",directionId)
   let direction =await Direction.findById(directionId);
   console.log("direction",direction)
   if(!direction)
   return  res.status(400).send('Direction Id not Found'); 
-
-   var newEmploye = new Employe({
+try{
+  const result = await cloudinary.uploader.upload(imageUrl, {
+    folder: "NSM-employees",
+    // width: 300,
+    // crop: "scale"
+})
+const newEmploye = await Employe.create({
+  nom,
+  prenom,
+  imageUrl :
+      {
+          public_id: result.public_id,
+          url: result.secure_url
+      }, 
+  adresse,
+  date_de_naissance ,
+  date_de_recrutement ,
+  numCIN ,
+  numTel ,
+  poste ,
+  direction_id : direction._id, 
+})
+ /*   var newEmploye = new Employe({
     nom: req.body.nom,
     prenom:req.body.prenom,
-    imageUrl: req.file.filename,
+    imageUrl: {
+      public_id: result.public_id,
+      url: result.secure_url
+  },
     adresse:req.body.adresse,
     date_de_naissance:req.body.date_de_naissance,
     date_de_recrutement:req.body.date_de_recrutement,
@@ -29,7 +51,7 @@ exports.createEmploye = async (req, res) => {
     numTel:req.body.numTel,
     poste :req.body.poste,
     direction_id:direction._id,
-  }) 
+  })  */
 
  try{
 
@@ -42,6 +64,11 @@ exports.createEmploye = async (req, res) => {
 }catch(err){
   console.log("employee not submitted",err)
 
+}   
+} catch (error) {
+  console.log(error);
+  next(error);
+  
 }
 } 
  

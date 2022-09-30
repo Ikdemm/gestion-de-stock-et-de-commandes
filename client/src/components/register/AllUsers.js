@@ -1,12 +1,12 @@
-import React, { useEffect, useState } from 'react';
-import { FaSpinner } from 'react-icons/fa';
-import UsersList from './UsersList';
+import React, { useEffect, useState } from "react";
+import { FaSpinner } from "react-icons/fa";
+import UsersList from "./UsersList";
 
 export default function AllUsers() {
-const [tabUsers, setListeUsers] = useState([]);
+  const [tabUsers, setListeUsers] = useState([]);
 
   useEffect(()=>{
-    fetch('/api/auth/all-users')
+    fetch('http://localhost:4000/api/auth/all-users')
     .then(res => {return res.json()})
     .then(data => {
               
@@ -21,22 +21,17 @@ const [tabUsers, setListeUsers] = useState([]);
    
   },[])
 
- 
-    
-if(tabUsers){
-  return (
-    <div>    
-         
-<UsersList listOfUsers={tabUsers}></UsersList>
-       
-    </div>  
-    )
-
-}else{
-  return (
-    <div className="fetching">
-      <FaSpinner className="spinner"></FaSpinner>
-    </div>
-  );
-}
+  if (tabUsers) {
+    return (
+      <div>
+        <UsersList listOfUsers={tabUsers}></UsersList>
+      </div>
+    );
+  } else {
+    return (
+      <div className="fetching">
+        <FaSpinner className="spinner"></FaSpinner>
+      </div>
+    );
+  }
 }
